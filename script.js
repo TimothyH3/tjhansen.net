@@ -100,6 +100,8 @@
     const act0Container = act0.querySelector('.act-scroll-container');
     const act1Container = act1.querySelector('.act-scroll-container');
     const act2Container = act2.querySelector('.act-scroll-container');
+    const sectionHero = document.getElementById('section-hero');
+    const sectionProfile = document.getElementById('section-profile');
 
     const hudStepCounter = document.getElementById('hud-step-counter');
     const hudStepTitle = document.getElementById('hud-step-title');
@@ -107,9 +109,11 @@
 
     // Dynamic scroll milestone measurements
     let topPauseDist0 = 160;  // Soft cushion buffer at very top of Hero
-    let vDist0 = 650;         // Vertical travel distance Hero -> Profile
+    let vDist0 = 560;         // Vertical travel distance: Section 2 slides up to sit under chips
     let pauseDist0 = 340;     // Rest buffer at bottom of Act 0 before zoom begins (~3-4 clicks)
     let zDist01 = 450;        // Optical zoom transition distance
+    let profileOffsetNeeded = 600; // Distance needed to position Section 2 offscreen below fold
+    let excessHeight0 = 0;         // Container scroll adjustment for shorter screens
 
     let topPauseDist1 = 220;  // Rest buffer at top of Act 1 after zoom completes (~2-3 clicks)
     let vDist1 = 750;         // Vertical travel distance Projects -> Stack
@@ -137,8 +141,16 @@
       const sh0 = act0Container ? act0Container.scrollHeight : 1200;
       const sh1 = act1Container ? act1Container.scrollHeight : 1400;
 
+      // Section 2 (Profile) slide-up metrics:
+      // Offset needed so Section 2 starts fully below the viewport fold before scrolling
+      const profileOffset = sectionProfile ? sectionProfile.offsetTop : 480;
+      profileOffsetNeeded = Math.max(0, vh - profileOffset + 40);
+
+      // Scroll container adjustment: only if total docked content exceeds viewport
+      excessHeight0 = Math.max(0, sh0 - vh);
+
       topPauseDist0 = 160;
-      vDist0 = Math.max(450, sh0 - vh + 80);
+      vDist0 = 560;
       pauseDist0 = 340;
       zDist01 = 450;
 
@@ -244,27 +256,41 @@
     function render(s) {
       // 1. Act 0: Overview & Profile (Top Cushion + Smooth S-Curve Travel + Reading Pause)
       if (s <= M0_BOTTOM_PAUSE_END) {
-        const maxOffset0 = act0Container ? Math.max(0, act0Container.scrollHeight - window.innerHeight) : 0;
-        let translateY = 0;
+        let p = 0;
+        let e = 0;
 
         if (s <= M0_TOP_PAUSE_END) {
-          // At the start: held smoothly at the top of Hero
-          translateY = 0;
+          // At the start: held smoothly at the top of Hero (Section 2 hidden below fold)
+          p = 0;
+          e = 0;
         } else if (s <= M0_VERT_END) {
-          // Smooth travel from Hero down to Profile (soft start + soft stop)
-          const p = (s - M0_TOP_PAUSE_END) / vDist0;
-          translateY = -smoothTravel(p) * maxOffset0;
+          // Smooth travel: Section 2 slides up from below viewport to dock directly under chips
+          p = (s - M0_TOP_PAUSE_END) / vDist0;
+          e = smoothTravel(p);
         } else {
-          // At rest in the bottom pause buffer zone of Profile
-          translateY = -maxOffset0;
+          // At rest in the bottom pause buffer zone of Profile (Section 2 fully docked)
+          p = 1;
+          e = 1;
         }
+
+        // Section 2 slide-up & fade-in: starts below viewport fold, slides up to 0 (docked directly under chips)
+        if (sectionProfile) {
+          const currentProfileOffset = (1 - e) * profileOffsetNeeded;
+          const profileOpacity = Math.min(1, e * 1.8);
+          sectionProfile.style.transform = `translate3d(0, ${currentProfileOffset.toFixed(1)}px, 0)`;
+          sectionProfile.style.opacity = profileOpacity.toFixed(3);
+          sectionProfile.style.pointerEvents = e > 0.6 ? 'auto' : 'none';
+        }
+
+        // Container adjustment: if viewport is shorter than combined Hero + Profile, smoothly adjust
+        const containerY = -e * excessHeight0;
+        if (act0Container) act0Container.style.transform = `translate3d(0, ${containerY.toFixed(1)}px, 0)`;
 
         act0.style.transform = 'translate3d(0, 0, 0) scale(1)';
         act0.style.filter = 'none';
         act0.style.opacity = '1';
         act0.style.pointerEvents = 'auto';
         act0.style.zIndex = '10';
-        if (act0Container) act0Container.style.transform = `translate3d(0, ${translateY.toFixed(1)}px, 0)`;
 
         // Act 1 pre-staged in background
         act1.style.transform = 'translate3d(0, 0, 0) scale(0.55)';
@@ -284,9 +310,12 @@
       else if (s > M1_ZOOM_START && s < M1_ZOOM_END) {
         const t = Math.max(0, Math.min(1, (s - M1_ZOOM_START) / zDist01));
 
-        // Act 0 pinned at bottom of profile, zooming forward into optical bokeh
-        const maxOffset0 = act0Container ? Math.max(0, act0Container.scrollHeight - window.innerHeight) : 0;
-        if (act0Container) act0Container.style.transform = `translate3d(0, -${maxOffset0}px, 0)`;
+        // Act 0 pinned in docked position, zooming forward into optical bokeh
+        if (sectionProfile) {
+          sectionProfile.style.transform = 'translate3d(0, 0, 0)';
+          sectionProfile.style.opacity = '1';
+        }
+        if (act0Container) act0Container.style.transform = `translate3d(0, -${excessHeight0.toFixed(1)}px, 0)`;
 
         const scale0 = 1.0 + t * 1.25;
         const blur0 = Math.pow(t, 1.35) * 32;
