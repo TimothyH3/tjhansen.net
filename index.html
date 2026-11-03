@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timothy Hansen — Software Engineer | ASU Graduate</title>
+
+  <meta name="description"
+    content="Portfolio of Timothy Hansen, graduating from Arizona State University with a B.S. in Software Engineering. Distributed backends, concurrent systems, and modern web applications.">
+  <meta name="author" content="Timothy Hansen">
+  <meta name="keywords"
+    content="Timothy Hansen, Software Engineer, ASU, Arizona State University, Distributed Systems, Web Development, Go, Python, TypeScript">
+
+  <!-- Canonical & Social Metadata -->
+  <link rel="canonical" href="https://tjhansen.net">
+  <meta property="og:title" content="Timothy Hansen — Software Engineer">
+  <meta property="og:description"
+    content="Graduating Spring from Arizona State University with a B.S. in Software Engineering. Building distributed backends, robust APIs, and high-performance web systems.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tjhansen.net">
+
+  <!-- Zero-Flash Theme Script -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('portfolio-theme-mode');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = (saved === 'light' || saved === 'dark') ? saved : (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
+  <!-- Minimal Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css?v=15">
+</head>
+
+<body>
+
+  <!-- Ambient Glow Backgrounds -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="ambient-glow glow-secondary" aria-hidden="true"></div>
+
+  <!-- Minimal Floating HUD (Bottom Center) - 3 Stages -->
+  <nav class="floating-hud" id="hud" aria-label="Portfolio navigation">
+    <div class="hud-pill">
+
+      <!-- Interactive Navigation Dots (3 Acts) -->
+      <div class="hud-dots">
+        <button class="hud-dot active" data-act="0" aria-label="Section 1: Overview &amp; Profile"
+          title="Overview &amp; Profile"></button>
+        <button class="hud-dot" data-act="1" aria-label="Section 2: Work &amp; Stack" title="Work &amp; Stack"></button>
+        <button class="hud-dot" data-act="2" aria-label="Section 3: Contact" title="Contact"></button>
+      </div>
+
+      <span class="hud-divider">/</span>
+
+      <!-- Theme Mode Toggle (Light / Dark) -->
+      <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle color theme (Light / Dark)"
+        title="Switch theme mode">
+        <svg class="theme-icon icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <span class="theme-label font-mono" id="theme-mode-text">DARK</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- FIXED OPTICAL STAGE: 3 Main Acts with 3D Zoom Transitions & Internal Vertical Scroll -->
+  <main class="optical-stage" id="optical-stage">
+
+    <!-- ===================================================================
+         ACT 0: OVERVIEW & PROFILE (Connected via Vertical Scroll)
+         =================================================================== -->
+    <div class="stage-act active" id="act-0" data-act-id="0" data-act-name="Overview &amp; Profile">
+      <div class="act-scroll-container">
+
+        <!-- SECTION 1: HERO / OVERVIEW -->
+        <section class="act-section" id="section-hero">
+          <div class="content-block">
+
+            <h1 class="hero-name" id="hero-title" aria-label="Timothy Hansen">
+              <span class="intro-terminal-line font-mono" id="intro-terminal-line" aria-hidden="true">
+                <span class="intro-prompt" id="intro-prompt">&gt;</span>
+                <span class="intro-text" id="intro-text"></span>
+                <span class="intro-cursor" id="intro-cursor"></span>
+              </span>
+              <span class="hero-real-name" id="hero-real-name">Timothy Hansen</span>
+            </h1>
+
+            <p class="hero-statement">
+              Software Engineer graduating from <strong>Arizona State University</strong> with a B.S. in Software
+              Engineering. Building distributed backends, robust APIs, and high-performance web systems.
+            </p>
+
+            <!-- Quick Signal Badges -->
+            <div class="signal-row">
+              <div class="signal-tag">
+                <span class="signal-label">Focus</span>
+                <span class="signal-value">Distributed Systems &amp; Web</span>
+              </div>
+              <div class="signal-tag">
+                <span class="signal-label">Degree</span>
+                <span class="signal-value">B.S. Software Engineering (ASU)</span>
+              </div>
+              <div class="signal-tag">
+                <span class="signal-label">Status</span>
+                <span class="signal-value text-accent">Graduating Spring</span>
+              </div>
+            </div>
+
+            <!-- Quick Action Links -->
+            <div class="quick-links">
+              <button class="action-link jump-btn" data-target-act="1">
+                <span>Explore Projects</span>
+                <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </button>
+              <a href="resume.pdf" target="_blank" class="action-link secondary">
+                <span>Resume (PDF)</span>
+                <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </a>
+              <button class="action-link secondary jump-btn" data-target-act="2">
+                <span>Get in Touch</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 2: PROFILE & PHILOSOPHY -->
+        <section class="act-section" id="section-profile">
+          <div class="content-block">
+
+            <div class="chapter-header">
+              <span class="font-mono chapter-num">01</span>
+              <span class="chapter-label">Perspective &amp; Engineering Mindset</span>
+            </div>
+
+            <div class="statement-grid">
+              <div class="main-statement">
+                <p class="large-text">
+                  I care about engineering software that is <em>resilient under load</em>, <em>predictable in
+                    failure</em>, and <em>clean to maintain</em>.
+                </p>
+                <div class="asu-quote-badge font-mono">
+                  <span class="asu-dot"></span>
+                  <span>Ira A. Fulton Schools of Engineering • Class of Spring</span>
+                </div>
+              </div>
+
+              <div class="narrative-body">
+                <p>
+                  Completing my Software Engineering degree at Arizona State University gave me a rigorous foundation in
+                  concurrent programming, data structures, and system design.
+                </p>
+                <p>
+                  I spend my time dissecting how systems behave at scale: reducing network roundtrips, managing memory
+                  efficiently, and crafting APIs with clear boundary contracts.
+                </p>
+
+                <div class="stats-strip">
+                  <div class="stat-col">
+                    <span class="stat-val font-mono">Spring</span>
+                    <span class="stat-desc">Graduation Date</span>
+                  </div>
+                  <div class="stat-col">
+                    <span class="stat-val font-mono">ASU</span>
+                    <span class="stat-desc">B.S. Software Eng.</span>
+                  </div>
+                  <div class="stat-col">
+                    <span class="stat-val font-mono">U.S.</span>
+                    <span class="stat-desc">Authorized (No Sponsor)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         ACT 1: WORK & STACK (Connected via Vertical Scroll)
+         =================================================================== -->
+    <div class="stage-act" id="act-1" data-act-id="1" data-act-name="Work &amp; Stack">
+      <div class="act-scroll-container">
+
+        <!-- SECTION 3: SELECTED WORK -->
+        <section class="act-section" id="section-projects">
+          <div class="content-block wide">
+
+            <div class="chapter-header">
+              <span class="font-mono chapter-num">02</span>
+              <span class="chapter-label">Selected Engineering Projects</span>
+            </div>
+
+            <p class="section-intro">
+              Four representative systems solving concrete concurrency, distributed replication, and edge machine
+              learning problems. Click any card or demo button to zoom into interactive simulation demos.
+            </p>
+
+            <!-- Bento Grid for Projects -->
+            <div class="project-bento-grid">
+
+              <!-- Project 1 -->
+              <article class="project-bento-card" data-project-key="apex-queue">
+                <div class="bento-top">
+                  <span class="project-index font-mono">01 // QUEUE</span>
+                  <span class="project-badge font-mono">Go • Redis • gRPC</span>
+                </div>
+                <h3 class="bento-title">ApexQueue</h3>
+                <p class="bento-desc">Distributed High-Throughput Task &amp; Event Stream Broker with partition-aware
+                  routing.</p>
+                <div class="bento-metric font-mono">⚡ 12.4k req/sec • p99 &lt; 14.8ms</div>
+                <div class="bento-actions">
+                  <button class="demo-trigger-btn primary-demo-btn" data-demo="apex-queue">
+                    <span>Live Demo</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </button>
+                  <button class="inspect-btn" data-project="apex-queue">
+                    <span>Specs</span>
+                  </button>
+                  <a href="https://github.com/tjhansen" target="_blank" rel="noopener noreferrer"
+                    class="code-link font-mono">Source ↗</a>
+                </div>
+              </article>
+
+              <!-- Project 2 -->
+              <article class="project-bento-card" data-project-key="cloud-canvas">
+                <div class="bento-top">
+                  <span class="project-index font-mono">02 // COLLAB</span>
+                  <span class="project-badge font-mono">TypeScript • React • CRDT</span>
+                </div>
+                <h3 class="bento-title">CloudCanvas</h3>
+                <p class="bento-desc">Real-Time Collaborative System Modeling Platform with conflict-free state vector
+                  sync.</p>
+                <div class="bento-metric font-mono">⚡ Sub-30ms multi-cursor sync (50+ peers)</div>
+                <div class="bento-actions">
+                  <button class="demo-trigger-btn primary-demo-btn" data-demo="cloud-canvas">
+                    <span>Live Demo</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </button>
+                  <button class="inspect-btn" data-project="cloud-canvas">
+                    <span>Specs</span>
+                  </button>
+                  <a href="https://github.com/tjhansen" target="_blank" rel="noopener noreferrer"
+                    class="code-link font-mono">Source ↗</a>
+                </div>
+              </article>
+
+              <!-- Project 3 -->
+              <article class="project-bento-card" data-project-key="collab-sync">
+                <div class="bento-top">
+                  <span class="project-index font-mono">03 // PROTOCOL</span>
+                  <span class="project-badge font-mono">Rust / C++ • Distributed</span>
+                </div>
+                <h3 class="bento-title">PulseSync Protocol</h3>
+                <p class="bento-desc">Fault-Tolerant Distributed State Replicator for Ephemeral Nodes with vector clock
+                  recovery.</p>
+                <div class="bento-metric font-mono">⚡ Zero drift during 30s split-brain test</div>
+                <div class="bento-actions">
+                  <button class="demo-trigger-btn primary-demo-btn" data-demo="collab-sync">
+                    <span>Live Demo</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </button>
+                  <button class="inspect-btn" data-project="collab-sync">
+                    <span>Specs</span>
+                  </button>
+                  <a href="https://github.com/tjhansen" target="_blank" rel="noopener noreferrer"
+                    class="code-link font-mono">Source ↗</a>
+                </div>
+              </article>
+
+              <!-- Project 4 (ASU Capstone) -->
+              <article class="project-bento-card asu-featured-card" data-project-key="asu-capstone">
+                <div class="bento-top">
+                  <span class="project-index font-mono">04 // CAPSTONE</span>
+                  <span class="project-badge font-mono asu-highlight">ASU Senior Capstone</span>
+                </div>
+                <h3 class="bento-title">SunDevil EdgeML</h3>
+                <p class="bento-desc">Low-Latency Embedded Telemetry &amp; Computer Vision Edge Pipeline with INT8
+                  quantized inference.</p>
+                <div class="bento-metric font-mono">⚡ 120 FPS inference • 4.2ms avg latency</div>
+                <div class="bento-actions">
+                  <button class="demo-trigger-btn primary-demo-btn" data-demo="asu-capstone">
+                    <span>Live Demo</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </button>
+                  <button class="inspect-btn" data-project="asu-capstone">
+                    <span>Specs</span>
+                  </button>
+                  <a href="https://github.com/tjhansen" target="_blank" rel="noopener noreferrer"
+                    class="code-link font-mono">Source ↗</a>
+                </div>
+              </article>
+
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECTION 4: TECHNICAL ARSENAL -->
+        <section class="act-section" id="section-stack">
+          <div class="content-block">
+
+            <div class="chapter-header">
+              <span class="font-mono chapter-num">02.5</span>
+              <span class="chapter-label">Technical Competencies</span>
+            </div>
+
+            <div class="stack-grid">
+
+              <div class="stack-category">
+                <h3 class="stack-cat-title font-mono">01 // Languages</h3>
+                <ul class="stack-items font-mono">
+                  <li>TypeScript / JavaScript</li>
+                  <li>Python (FastAPI, PyTorch)</li>
+                  <li>Go (Golang)</li>
+                  <li>C / C++ 20</li>
+                  <li>SQL (PostgreSQL, SQLite)</li>
+                </ul>
+              </div>
+
+              <div class="stack-category">
+                <h3 class="stack-cat-title font-mono">02 // Systems &amp; Backends</h3>
+                <ul class="stack-items font-mono">
+                  <li>Distributed Systems Architecture</li>
+                  <li>gRPC &amp; RESTful APIs</li>
+                  <li>Redis (Cache &amp; Streams)</li>
+                  <li>Node.js / Express</li>
+                  <li>WebSockets &amp; Real-Time CRDTs</li>
+                </ul>
+              </div>
+
+              <div class="stack-category">
+                <h3 class="stack-cat-title font-mono">03 // Frontend &amp; Platform</h3>
+                <ul class="stack-items font-mono">
+                  <li>React.js &amp; Next.js</li>
+                  <li>Modern Semantic CSS &amp; Tokens</li>
+                  <li>Web Performance &amp; Profiling</li>
+                  <li>State Machines &amp; Client Sync</li>
+                  <li>Accessibility (a11y) Standards</li>
+                </ul>
+              </div>
+
+              <div class="stack-category">
+                <h3 class="stack-cat-title font-mono">04 // DevOps &amp; Cloud</h3>
+                <ul class="stack-items font-mono">
+                  <li>Docker &amp; Containerization</li>
+                  <li>CI/CD (GitHub Actions)</li>
+                  <li>AWS (S3, EC2, IoT Core)</li>
+                  <li>Linux Shell &amp; POSIX APIs</li>
+                  <li>Automated Unit &amp; Integration Tests</li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         ACT 2: CONTACT & CONNECT
+         =================================================================== -->
+    <div class="stage-act" id="act-2" data-act-id="2" data-act-name="Contact">
+      <div class="act-scroll-container">
+
+        <!-- SECTION 5: CONTACT & CONNECT -->
+        <section class="act-section" id="section-contact">
+          <div class="content-block">
+
+            <div class="chapter-header">
+              <span class="font-mono chapter-num">03</span>
+              <span class="chapter-label">Initiate Contact</span>
+            </div>
+
+            <div class="contact-box">
+              <h2 class="contact-headline">
+                Let's discuss opportunities.
+              </h2>
+              <p class="contact-sub">
+                Actively interviewing for full-time Software Engineer positions starting in Spring. Open to relocation
+                across the US and remote roles.
+              </p>
+
+              <div class="contact-interactive">
+                <div class="email-display">
+                  <span class="email-address font-mono" id="email-text">contact@tjhansen.net</span>
+                  <button class="minimal-btn copy-btn" id="copy-email-btn" aria-label="Copy email address">
+                    <span id="copy-btn-text">Copy Email</span>
+                  </button>
+                </div>
+
+                <a href="mailto:contact@tjhansen.net" class="minimal-btn primary-btn">
+                  <span>Write Email ↗</span>
+                </a>
+              </div>
+
+              <!-- Quick Social & Resume Links -->
+              <div class="contact-links-row">
+                <a href="https://github.com/tjhansen" target="_blank" rel="noopener noreferrer"
+                  class="link-item font-mono">
+                  GitHub ↗
+                </a>
+                <span class="link-separator">•</span>
+                <a href="https://www.linkedin.com/in/timothy-hansen" target="_blank" rel="noopener noreferrer"
+                  class="link-item font-mono">
+                  LinkedIn ↗
+                </a>
+                <span class="link-separator">•</span>
+                <a href="resume.pdf" target="_blank" download="Timothy_Hansen_Resume.pdf" class="link-item font-mono">
+                  Download Resume (PDF) ↗
+                </a>
+              </div>
+            </div>
+
+            <footer class="minimal-footer">
+              <span class="font-mono">© <span id="year"></span> Timothy Hansen • tjhansen.net</span>
+              <button class="back-top-link font-mono jump-btn" data-target-act="0">Back to start ↑</button>
+            </footer>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- =====================================================================
+       FULL-SCREEN PROJECT DEMO OVERLAY (Zoom-In On Click, Zoom-Out On Scroll)
+       ===================================================================== -->
+  <aside class="project-demo-overlay" id="project-demo-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="demo-modal" id="demo-modal">
+
+      <!-- Top Bar with Return Action and Scroll Cue -->
+      <div class="demo-top-bar font-mono">
+        <button class="demo-back-btn" id="demo-back-btn" aria-label="Return to projects">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          <span>Return to Projects</span>
+        </button>
+
+        <div class="demo-scroll-pill">
+          <span class="demo-indicator-dot"></span>
+          <span>Scroll wheel or touch to exit</span>
+        </div>
+
+        <button class="demo-close-btn" id="demo-close-btn" aria-label="Close demo">✕</button>
+      </div>
+
+      <!-- Demo Viewport: ApexQueue -->
+      <div class="demo-view" id="demo-apex-queue">
+        <div class="demo-header">
+          <div class="demo-tag font-mono">01 // DISTRIBUTED QUEUE SIMULATOR</div>
+          <h2 class="demo-title">ApexQueue Live Broker Cluster</h2>
+          <p class="demo-intro">High-throughput asynchronous task engine written in Go with partitioned message logs and
+            heartbeat arbitration.</p>
+        </div>
+
+        <div class="demo-stats-grid font-mono">
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">THROUGHPUT</span>
+            <span class="demo-stat-val" id="apex-throughput">12,400 msg/s</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">P99 LATENCY</span>
+            <span class="demo-stat-val" id="apex-latency">14.8 ms</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">CLUSTER HEALTH</span>
+            <span class="demo-stat-val text-green" id="apex-health">3/3 NODES OK</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">COMMITTED TASKS</span>
+            <span class="demo-stat-val" id="apex-tasks">84,120</span>
+          </div>
+        </div>
+
+        <div class="demo-interactive-stage">
+          <div class="demo-controls-bar">
+            <button class="minimal-btn primary-btn font-mono" id="apex-burst-btn">⚡ Emit 2,000 Tasks Burst</button>
+            <button class="minimal-btn font-mono" id="apex-rebalance-btn">Simulate Consumer Failover</button>
+          </div>
+
+          <div class="demo-terminal font-mono" id="apex-log">
+            <div class="term-line text-dim">[16:08:01.102] [CLUSTER] Ring buffer initialized across 3 partitions (WAL
+              synced).</div>
+            <div class="term-line">[16:08:01.450] [NODE-01] Leader heartbeat ACK from Node-02, Node-03. Latency 1.2ms.
+            </div>
+            <div class="term-line text-green">[16:08:02.012] [BROKER] Partition 0, 1, 2 processing stream batches @
+              12.4k req/sec.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo Viewport: CloudCanvas -->
+      <div class="demo-view" id="demo-cloud-canvas">
+        <div class="demo-header">
+          <div class="demo-tag font-mono">02 // REAL-TIME CRDT TOPOLOGY</div>
+          <h2 class="demo-title">CloudCanvas Multi-Peer Session</h2>
+          <p class="demo-intro">Real-time collaborative diagramming platform with conflict-free state vector
+            synchronization across distributed peers.</p>
+        </div>
+
+        <div class="demo-stats-grid font-mono">
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">ACTIVE PEERS</span>
+            <span class="demo-stat-val text-green">3 Connected</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">SYNC LATENCY</span>
+            <span class="demo-stat-val" id="canvas-ping">24 ms</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">CRDT STATE VECTOR</span>
+            <span class="demo-stat-val" id="canvas-clock">v52.4</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">CONFLICTS</span>
+            <span class="demo-stat-val">0 (Resolved)</span>
+          </div>
+        </div>
+
+        <div class="demo-interactive-stage">
+          <div class="demo-controls-bar">
+            <button class="minimal-btn primary-btn font-mono" id="canvas-node-btn">➕ Add Microservice Node</button>
+            <button class="minimal-btn font-mono" id="canvas-sync-btn">Broadcast Concurrent Edit</button>
+          </div>
+
+          <div class="simulated-canvas-viewport" id="canvas-board">
+            <!-- Simulated Collaborative Diagram Nodes -->
+            <div class="canvas-node node-gw">API Gateway :8080</div>
+            <div class="canvas-node node-auth">Auth Service (JWT)</div>
+            <div class="canvas-node node-db">PostgreSQL Primary</div>
+            <!-- Simulated Remote Cursors -->
+            <div class="peer-cursor peer-1" id="peer-cursor-1">
+              <span class="cursor-pointer">▲</span>
+              <span class="cursor-label font-mono">Alex @ Phoenix</span>
+            </div>
+            <div class="peer-cursor peer-2" id="peer-cursor-2">
+              <span class="cursor-pointer">▲</span>
+              <span class="cursor-label font-mono">Elena @ Seattle</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo Viewport: PulseSync Protocol -->
+      <div class="demo-view" id="demo-collab-sync">
+        <div class="demo-header">
+          <div class="demo-tag font-mono">03 // DISTRIBUTED REPLICATION ENGINE</div>
+          <h2 class="demo-title">PulseSync Partition &amp; Healing Visualizer</h2>
+          <p class="demo-intro">Fault-tolerant distributed state replicator for ephemeral nodes with vector clock Merkle
+            tree reconciliation.</p>
+        </div>
+
+        <div class="demo-stats-grid font-mono">
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">NETWORK STATUS</span>
+            <span class="demo-stat-val text-green" id="sync-network-status">CONNECTED (Full Mesh)</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">STATE DRIFT</span>
+            <span class="demo-stat-val" id="sync-drift">0.00%</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">QUORUM</span>
+            <span class="demo-stat-val">4 / 4 Nodes</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">PROTOCOL</span>
+            <span class="demo-stat-val">Anti-Entropy Merkle</span>
+          </div>
+        </div>
+
+        <div class="demo-interactive-stage">
+          <div class="demo-controls-bar">
+            <button class="minimal-btn primary-btn font-mono" id="sync-partition-btn">⚡ Split Network (Simulate Island
+              Partition)</button>
+            <button class="minimal-btn font-mono" id="sync-heal-btn">🩹 Heal &amp; Merkle Sync</button>
+          </div>
+
+          <div class="cluster-nodes-row font-mono" id="cluster-nodes-box">
+            <div class="cluster-node-card active-node" id="cnode-a">
+              <div class="cnode-title">Node A</div>
+              <div class="cnode-clock" id="clock-a">[A:18, B:18]</div>
+              <div class="cnode-status text-green">ONLINE</div>
+            </div>
+            <div class="cluster-node-card active-node" id="cnode-b">
+              <div class="cnode-title">Node B</div>
+              <div class="cnode-clock" id="clock-b">[A:18, B:18]</div>
+              <div class="cnode-status text-green">ONLINE</div>
+            </div>
+            <div class="cluster-node-card active-node" id="cnode-c">
+              <div class="cnode-title">Node C</div>
+              <div class="cnode-clock" id="clock-c">[C:18, D:18]</div>
+              <div class="cnode-status text-green">ONLINE</div>
+            </div>
+            <div class="cluster-node-card active-node" id="cnode-d">
+              <div class="cnode-title">Node D</div>
+              <div class="cnode-clock" id="clock-d">[C:18, D:18]</div>
+              <div class="cnode-status text-green">ONLINE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo Viewport: SunDevil EdgeML (ASU Capstone) -->
+      <div class="demo-view" id="demo-asu-capstone">
+        <div class="demo-header">
+          <div class="demo-tag font-mono asu-highlight">04 // ASU SENIOR CAPSTONE</div>
+          <h2 class="demo-title">SunDevil EdgeML Telemetry Pipeline</h2>
+          <p class="demo-intro">Arizona State University Senior Capstone: Edge-optimized sensor telemetry and computer
+            vision inference pipeline for constrained hardware.</p>
+        </div>
+
+        <div class="demo-stats-grid font-mono">
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">INFERENCE SPEED</span>
+            <span class="demo-stat-val text-green" id="edgeml-fps">120.4 FPS</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">AVG LATENCY</span>
+            <span class="demo-stat-val" id="edgeml-lat">4.2 ms</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">RAM FOOTPRINT</span>
+            <span class="demo-stat-val" id="edgeml-ram">18.4 MB</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">QUANTIZATION</span>
+            <span class="demo-stat-val text-accent" id="edgeml-mode">INT8 TensorRT</span>
+          </div>
+        </div>
+
+        <div class="demo-interactive-stage">
+          <div class="demo-controls-bar">
+            <button class="minimal-btn primary-btn font-mono" id="edgeml-toggle-btn">⚙️ Toggle Mode: Compare INT8 vs
+              FP32</button>
+          </div>
+
+          <div class="edgeml-feed-box font-mono">
+            <div class="feed-overlay-hud">
+              <div class="hud-tag">CAM_01 // 1920x1080 @ 120Hz</div>
+              <div class="hud-box-tracker">
+                <span class="box-label">Object_A [98.4%] INT8</span>
+              </div>
+              <div class="hud-status">MQTT Uplink: 14 packets/sec • SQLite WAL OK</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo Footer Details -->
+      <div class="demo-footer-strip font-mono">
+        <a href="https://github.com/tjhansen" target="_blank" rel="noopener noreferrer"
+          class="minimal-btn primary-btn">View Code on GitHub ↗</a>
+        <button class="minimal-btn copy-btn" id="demo-bottom-close">Return to Portfolio</button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- Spec Drawer (Technical Architecture Deep Dive) -->
+  <aside class="spec-drawer-backdrop" id="spec-drawer-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="spec-drawer" id="spec-drawer">
+      <div class="drawer-header">
+        <span class="drawer-tag font-mono" id="drawer-file-tag">ARCH_SPEC.md</span>
+        <button class="drawer-close" id="drawer-close-btn" aria-label="Close specifications">✕</button>
+      </div>
+      <div class="drawer-content" id="drawer-content">
+        <!-- Injected via script.js -->
+      </div>
+    </div>
+  </aside>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="font-mono" id="toast-text">Email copied to clipboard</span>
+  </div>
+
+  <script src="script.js?v=15"></script>
+</body>
+
+</html>
