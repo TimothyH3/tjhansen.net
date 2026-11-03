@@ -41,7 +41,7 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=18">
+  <link rel="stylesheet" href="style.css?v=27">
 </head>
 
 <body>
@@ -133,7 +133,7 @@
             </div>
 
             <!-- Quick Action Links -->
-            <div class="quick-links">
+            <div class="quick-links" id="hero-quick-links">
               <button class="action-link jump-btn" data-target-act="1">
                 <span>Explore Projects</span>
                 <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -159,12 +159,12 @@
         <section class="act-section" id="section-profile">
           <div class="content-block">
 
-            <div class="chapter-header">
-              <span class="font-mono chapter-num">01</span>
-              <span class="chapter-label">Perspective &amp; Engineering Mindset</span>
+            <div class="chapter-header" id="act0-chapter-header">
+              <span class="font-mono chapter-num" id="act0-chapter-num">&gt;</span>
+              <span class="chapter-label" id="act0-chapter-label">Perspective &amp; Engineering Mindset</span>
             </div>
 
-            <div class="statement-grid">
+            <div class="statement-grid" id="act0-statement-grid">
               <div class="main-statement">
                 <p class="large-text">
                   I care about engineering software that is <em>resilient under load</em>, <em>predictable in
@@ -219,18 +219,18 @@
         <section class="act-section" id="section-projects">
           <div class="content-block wide">
 
-            <div class="chapter-header">
-              <span class="font-mono chapter-num">02</span>
+            <div class="chapter-header" id="act1-chapter-header">
+              <span class="font-mono chapter-num">></span>
               <span class="chapter-label">Selected Engineering Projects</span>
             </div>
 
-            <p class="section-intro">
+            <p class="section-intro" id="act1-section-intro">
               Four representative systems solving concrete concurrency, distributed replication, and edge machine
               learning problems. Click any card or demo button to zoom into interactive simulation demos.
             </p>
 
             <!-- Bento Grid for Projects -->
-            <div class="project-bento-grid">
+            <div class="project-bento-grid" id="project-bento-grid">
 
               <!-- Project 1 -->
               <article class="project-bento-card" data-project-key="apex-queue">
@@ -342,7 +342,7 @@
           <div class="content-block">
 
             <div class="chapter-header">
-              <span class="font-mono chapter-num">02.5</span>
+              <span class="font-mono chapter-num">></span>
               <span class="chapter-label">Technical Competencies</span>
             </div>
 
@@ -410,7 +410,7 @@
           <div class="content-block">
 
             <div class="chapter-header">
-              <span class="font-mono chapter-num">03</span>
+              <span class="font-mono chapter-num">></span>
               <span class="chapter-label">Initiate Contact</span>
             </div>
 
@@ -425,13 +425,13 @@
 
               <div class="contact-interactive">
                 <div class="email-display">
-                  <span class="email-address font-mono" id="email-text">contact@tjhansen.net</span>
+                  <span class="email-address font-mono" id="email-text">t.hansen@tjhansen.net</span>
                   <button class="minimal-btn copy-btn" id="copy-email-btn" aria-label="Copy email address">
                     <span id="copy-btn-text">Copy Email</span>
                   </button>
                 </div>
 
-                <a href="mailto:contact@tjhansen.net" class="minimal-btn primary-btn">
+                <a href="mailto:t.hansen@tjhansen.net" class="minimal-btn primary-btn">
                   <span>Write Email ↗</span>
                 </a>
               </div>
@@ -721,7 +721,7 @@
     <span class="font-mono" id="toast-text">Email copied to clipboard</span>
   </div>
 
-  <script src="script.js?v=18"></script>
+  <script src="script.js?v=27"></script>
 </body>
 
 </html>

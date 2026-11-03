@@ -4,11 +4,11 @@
  * 1. Safe Theme Auto-Detection + One-Click Dark/Light Mode
  * 2. 3-Stage Optical Engine:
  *    - Act 0 (Overview & Profile): Connected via continuous vertical scroll
- *    - Optical Zoom Transition (Act 0 -> Act 1): Fully scrubbable & pausable
+ *    - Title Slide & Card Cascade Transition (Act 0 -> Act 1): Fully scrubbable & pausable
  *    - Act 1 (Work & Stack): Connected via continuous vertical scroll
  *    - Optical Zoom Transition (Act 1 -> Act 2): Fully scrubbable & pausable
  *    - Act 2 (Contact): Centered connect stage
- * 3. 3-Stage Navigation HUD with live dot indicators and progress counter
+ * 3. 3-Stage Navigation HUD with live dot indicators and theme mode switcher
  * 4. Interactive Project Demo Pages: Zoom-in on click, zoom-out on click or scroll
  * 5. Interactive Simulation Toys for each demo (ApexQueue, CloudCanvas, PulseSync, SunDevil EdgeML)
  * 6. Copy Email Toast & Fallback
@@ -100,41 +100,95 @@
     const act0Container = act0.querySelector('.act-scroll-container');
     const act1Container = act1.querySelector('.act-scroll-container');
     const act2Container = act2.querySelector('.act-scroll-container');
-    const sectionHero = document.getElementById('section-hero');
     const sectionProfile = document.getElementById('section-profile');
 
-    const hudStepCounter = document.getElementById('hud-step-counter');
-    const hudStepTitle = document.getElementById('hud-step-title');
+    // Morphing transition elements between Act 0 and Act 1
+    const act0Header = document.getElementById('act0-chapter-header');
+    const act0Label = document.getElementById('act0-chapter-label');
+    const act1Header = document.getElementById('act1-chapter-header');
+    const heroQuickLinks = document.getElementById('hero-quick-links');
+    const heroStatement = document.querySelector('#section-hero .hero-statement');
+    const heroSignalRow = document.querySelector('#section-hero .signal-row');
+    const heroTitle = document.getElementById('hero-title');
+    const act0StatementGrid = document.getElementById('act0-statement-grid');
+    const act1Intro = document.getElementById('act1-section-intro');
+    const projectCards = Array.from(document.querySelectorAll('#section-projects .project-bento-card'));
+
     const hudDots = Array.from(document.querySelectorAll('.hud-dot'));
 
     // Dynamic scroll milestone measurements
     let topPauseDist0 = 160;  // Soft cushion buffer at very top of Hero
     let vDist0 = 560;         // Vertical travel distance: Section 2 slides up to sit under chips
-    let pauseDist0 = 340;     // Rest buffer at bottom of Act 0 before zoom begins (~3-4 clicks)
-    let zDist01 = 450;        // Optical zoom transition distance
+    let pauseDist0 = 340;     // Rest buffer at bottom of Act 0 before transition begins (~3-4 clicks)
+    let tDist01 = 920;        // Title slide & staggered cards transition distance Act 0 -> Act 1
     let profileOffsetNeeded = 600; // Distance needed to position Section 2 offscreen below fold
     let excessHeight0 = 0;         // Container scroll adjustment for shorter screens
 
-    let topPauseDist1 = 220;  // Rest buffer at top of Act 1 after zoom completes (~2-3 clicks)
+    let topPauseDist1 = 220;  // Rest buffer at top of Act 1 after transition completes (~2-3 clicks)
     let vDist1 = 750;         // Vertical travel distance Projects -> Stack
     let pauseDist1 = 340;     // Rest buffer at bottom of Act 1 before zoom begins (~3-4 clicks)
-    let zDist12 = 450;        // Optical zoom transition distance
+    let zDist12 = 450;        // Optical zoom transition distance Act 1 -> Act 2
 
     let M0_START = 0;
     let M0_TOP_PAUSE_END = topPauseDist0;
     let M0_VERT_END = M0_TOP_PAUSE_END + vDist0;
     let M0_BOTTOM_PAUSE_END = M0_VERT_END + pauseDist0;
 
-    let M1_ZOOM_START = M0_BOTTOM_PAUSE_END;
-    let M1_ZOOM_END = M1_ZOOM_START + zDist01;
+    let M1_TRANS_START = M0_BOTTOM_PAUSE_END;
+    let M1_TRANS_END = M1_TRANS_START + tDist01;
 
-    let M1_TOP_PAUSE_END = M1_ZOOM_END + topPauseDist1;
+    let M1_TOP_PAUSE_END = M1_TRANS_END + topPauseDist1;
     let M1_VERT_END = M1_TOP_PAUSE_END + vDist1;
     let M1_BOTTOM_PAUSE_END = M1_VERT_END + pauseDist1;
 
     let M2_ZOOM_START = M1_BOTTOM_PAUSE_END;
     let M2_ZOOM_END = M2_ZOOM_START + zDist12;
     let TOTAL_SCROLL = M2_ZOOM_END;
+
+    // Dynamic coordinate delta from act0Header to act1Header
+    let headerDeltaX = 0;
+    let headerDeltaY = 0;
+
+    function updateHeaderDeltas() {
+      if (!act0Header || !act1Header || !act0 || !act1) return;
+      const prevAct0T = act0.style.transform;
+      const prevAct1T = act1.style.transform;
+      const prevAct0O = act0.style.opacity;
+      const prevAct1O = act1.style.opacity;
+      const prevT0 = act0Header.style.transform;
+      const prevT1 = act1Header.style.transform;
+      const prevProfT = sectionProfile ? sectionProfile.style.transform : '';
+      const prevC0 = act0Container ? act0Container.style.transform : '';
+      const prevC1 = act1Container ? act1Container.style.transform : '';
+
+      // Force true 1:1 scale and clear transforms for exact coordinate measurement
+      act0.style.transform = 'translate3d(0, 0, 0) scale(1)';
+      act1.style.transform = 'translate3d(0, 0, 0) scale(1)';
+      act0.style.filter = 'none';
+      act1.style.filter = 'none';
+
+      act0Header.style.transform = 'none';
+      act1Header.style.transform = 'none';
+
+      if (sectionProfile) sectionProfile.style.transform = 'translate3d(0, 0, 0)';
+      if (act0Container) act0Container.style.transform = `translate3d(0, -${excessHeight0.toFixed(1)}px, 0)`;
+      if (act1Container) act1Container.style.transform = 'translate3d(0, 0, 0)';
+
+      const r0 = act0Header.getBoundingClientRect();
+      const r1 = act1Header.getBoundingClientRect();
+      headerDeltaX = r1.left - r0.left;
+      headerDeltaY = r1.top - r0.top;
+
+      act0.style.transform = prevAct0T;
+      act1.style.transform = prevAct1T;
+      act0.style.opacity = prevAct0O;
+      act1.style.opacity = prevAct1O;
+      act0Header.style.transform = prevT0;
+      act1Header.style.transform = prevT1;
+      if (sectionProfile) sectionProfile.style.transform = prevProfT;
+      if (act0Container) act0Container.style.transform = prevC0;
+      if (act1Container) act1Container.style.transform = prevC1;
+    }
 
     function recalculateMilestones() {
       const vh = window.innerHeight;
@@ -152,7 +206,7 @@
       topPauseDist0 = 160;
       vDist0 = 560;
       pauseDist0 = 340;
-      zDist01 = 450;
+      tDist01 = 920;
 
       topPauseDist1 = 220;
       vDist1 = Math.max(500, sh1 - vh + 80);
@@ -164,16 +218,18 @@
       M0_VERT_END = M0_TOP_PAUSE_END + vDist0;
       M0_BOTTOM_PAUSE_END = M0_VERT_END + pauseDist0;
 
-      M1_ZOOM_START = M0_BOTTOM_PAUSE_END;
-      M1_ZOOM_END = M1_ZOOM_START + zDist01;
+      M1_TRANS_START = M0_BOTTOM_PAUSE_END;
+      M1_TRANS_END = M1_TRANS_START + tDist01;
 
-      M1_TOP_PAUSE_END = M1_ZOOM_END + topPauseDist1;
+      M1_TOP_PAUSE_END = M1_TRANS_END + topPauseDist1;
       M1_VERT_END = M1_TOP_PAUSE_END + vDist1;
       M1_BOTTOM_PAUSE_END = M1_VERT_END + pauseDist1;
 
       M2_ZOOM_START = M1_BOTTOM_PAUSE_END;
       M2_ZOOM_END = M2_ZOOM_START + zDist12;
       TOTAL_SCROLL = M2_ZOOM_END;
+
+      updateHeaderDeltas();
     }
 
     recalculateMilestones();
@@ -185,24 +241,14 @@
 
     // HUD update helper
     let currentActIndex = 0;
-    const actTitles = ['Overview & Profile', 'Work & Stack', 'Contact'];
 
     function updateHUD(actIdx) {
       if (currentActIndex !== actIdx) {
         currentActIndex = actIdx;
-        if (hudStepCounter) hudStepCounter.textContent = `0${actIdx + 1}`;
-        if (hudStepTitle) hudStepTitle.textContent = actTitles[actIdx] || '';
         hudDots.forEach((dot, i) => {
           dot.classList.toggle('active', i === actIdx);
         });
       }
-    }
-
-    // Direct Jump
-    function scrollToAct(actIdx) {
-      if (actIdx === 0) targetScroll = 0;
-      else if (actIdx === 1) targetScroll = M1_ZOOM_END;
-      else if (actIdx === 2) targetScroll = M2_ZOOM_END;
     }
 
     // Smooth ease-in and ease-out S-curve for vertical content scrolling:
@@ -211,6 +257,13 @@
     function smoothTravel(p) {
       const clamped = Math.max(0, Math.min(1, p));
       return clamped * clamped * (3 - 2 * clamped);
+    }
+
+    // Direct Jump
+    function scrollToAct(actIdx) {
+      if (actIdx === 0) targetScroll = 0;
+      else if (actIdx === 1) targetScroll = M1_TRANS_END;
+      else if (actIdx === 2) targetScroll = M2_ZOOM_END;
     }
 
     // Dynamic scroll sensitivity cushion: gently softens wheel/touch input
@@ -228,9 +281,9 @@
         const cushionProgress = (s - (M0_VERT_END - vDist0 * 0.25)) / (M0_BOTTOM_PAUSE_END - (M0_VERT_END - vDist0 * 0.25));
         baseSens = 0.85 - cushionProgress * 0.35;
       }
-      // 3. Soft cushion when starting or near the top of Act 1 (Projects, right after zoom)
-      else if (dy > 0 && s >= M1_ZOOM_END && s <= (M1_TOP_PAUSE_END + vDist1 * 0.22)) {
-        const ratio = Math.max(0, (s - M1_ZOOM_END) / (M1_TOP_PAUSE_END + vDist1 * 0.22 - M1_ZOOM_END));
+      // 3. Soft cushion when starting or near the top of Act 1 (Projects, right after transition)
+      else if (dy > 0 && s >= M1_TRANS_END && s <= (M1_TOP_PAUSE_END + vDist1 * 0.22)) {
+        const ratio = Math.max(0, (s - M1_TRANS_END) / (M1_TOP_PAUSE_END + vDist1 * 0.22 - M1_TRANS_END));
         baseSens = 0.52 + ratio * 0.33;
       }
       // 4. Soft cushion near the bottom of Act 1 (Stack)
@@ -239,8 +292,8 @@
         baseSens = 0.85 - cushionProgress * 0.35;
       }
       // 5. Cushion when scrolling back upwards towards the top of Act 1
-      else if (dy < 0 && s >= M1_ZOOM_END && s <= (M1_TOP_PAUSE_END + vDist1 * 0.22)) {
-        const ratio = Math.max(0, (s - M1_ZOOM_END) / (M1_TOP_PAUSE_END + vDist1 * 0.22 - M1_ZOOM_END));
+      else if (dy < 0 && s >= M1_TRANS_END && s <= (M1_TOP_PAUSE_END + vDist1 * 0.22)) {
+        const ratio = Math.max(0, (s - M1_TRANS_END) / (M1_TOP_PAUSE_END + vDist1 * 0.22 - M1_TRANS_END));
         baseSens = 0.52 + ratio * 0.33;
       }
       // 6. Cushion when scrolling back upwards towards the top of Act 0
@@ -292,13 +345,48 @@
         act0.style.pointerEvents = 'auto';
         act0.style.zIndex = '10';
 
+        // Ensure Act 0 elements are in natural state before transition begins
+        act0Label.textContent = 'Perspective & Engineering Mindset';
+        act0Header.style.transform = 'none';
+        act0Header.style.opacity = '1';
+
+        if (heroQuickLinks) {
+          heroQuickLinks.style.opacity = '1';
+          heroQuickLinks.style.transform = 'translate3d(0, 0, 0)';
+          heroQuickLinks.style.pointerEvents = 'auto';
+        }
+        if (act0StatementGrid) {
+          act0StatementGrid.style.opacity = '1';
+          act0StatementGrid.style.transform = 'none';
+        }
+        if (heroStatement) {
+          heroStatement.style.opacity = '1';
+          heroStatement.style.transform = 'none';
+        }
+        if (heroSignalRow) {
+          heroSignalRow.style.opacity = '1';
+          heroSignalRow.style.transform = 'none';
+        }
+        if (heroTitle) {
+          heroTitle.style.opacity = '1';
+          heroTitle.style.transform = 'none';
+        }
+
         // Act 1 pre-staged in background
-        act1.style.transform = 'translate3d(0, 0, 0) scale(0.55)';
-        act1.style.filter = 'blur(28px)';
+        act1.style.transform = 'translate3d(0, 0, 0) scale(1)';
+        act1.style.filter = 'none';
         act1.style.opacity = '0';
         act1.style.pointerEvents = 'none';
         act1.style.zIndex = '5';
         if (act1Container) act1Container.style.transform = 'translate3d(0, 0, 0)';
+
+        if (act1Header) act1Header.style.opacity = '0';
+        if (act1Intro) act1Intro.style.opacity = '0';
+        projectCards.forEach(card => {
+          card.style.opacity = '0';
+          card.style.transform = 'translate3d(0, 55px, 0)';
+          card.style.pointerEvents = 'none';
+        });
 
         // Act 2 hidden
         act2.style.opacity = '0';
@@ -306,48 +394,125 @@
 
         updateHUD(0);
       }
-      // 2. Optical Zoom Transition Act 0 -> Act 1 (Continuously scrubbable & pausable)
-      else if (s > M1_ZOOM_START && s < M1_ZOOM_END) {
-        const t = Math.max(0, Math.min(1, (s - M1_ZOOM_START) / zDist01));
+      // 2. Micro-Animation & Dynamic Slide Transition: Act 0 -> Act 1 (Fully Scrollable & Scrubbable)
+      else if (s > M1_TRANS_START && s < M1_TRANS_END) {
+        const t = Math.max(0, Math.min(1, (s - M1_TRANS_START) / tDist01));
 
-        // Act 0 pinned in docked position, zooming forward into optical bokeh
+        // Both acts remain crisp at scale(1)
+        act0.style.transform = 'translate3d(0, 0, 0) scale(1)';
+        act0.style.filter = 'none';
+        act0.style.opacity = '1';
+        act0.style.zIndex = '10';
+        act0.style.pointerEvents = t < 0.5 ? 'auto' : 'none';
+
+        act1.style.transform = 'translate3d(0, 0, 0) scale(1)';
+        act1.style.filter = 'none';
+        act1.style.opacity = '1';
+        act1.style.zIndex = '15';
+        act1.style.pointerEvents = t >= 0.5 ? 'auto' : 'none';
+
+        if (act0Container) act0Container.style.transform = `translate3d(0, -${excessHeight0.toFixed(1)}px, 0)`;
+        if (act1Container) act1Container.style.transform = 'translate3d(0, 0, 0)';
+
         if (sectionProfile) {
           sectionProfile.style.transform = 'translate3d(0, 0, 0)';
           sectionProfile.style.opacity = '1';
         }
-        if (act0Container) act0Container.style.transform = `translate3d(0, -${excessHeight0.toFixed(1)}px, 0)`;
 
-        const scale0 = 1.0 + t * 1.25;
-        const blur0 = Math.pow(t, 1.35) * 32;
-        const opacity0 = Math.max(0, 1 - Math.pow(t, 1.25));
+        // Lazy initialize deltas if 0
+        if (headerDeltaY === 0) {
+          updateHeaderDeltas();
+        }
 
-        act0.style.transform = `translate3d(0, 0, 0) scale(${scale0.toFixed(3)})`;
-        act0.style.filter = `blur(${blur0.toFixed(1)}px)`;
-        act0.style.opacity = opacity0.toFixed(3);
-        act0.style.zIndex = '20';
-        act0.style.pointerEvents = t < 0.25 ? 'auto' : 'none';
+        // Title Slide to Act 1 location (t: 0 -> 0.65)
+        act0Label.textContent = 'Selected Engineering Projects';
 
-        // Act 1 pinned at top, zooming in from background
-        if (act1Container) act1Container.style.transform = 'translate3d(0, 0, 0)';
-        const scale1 = 0.55 + t * 0.45;
-        const blur1 = Math.pow(1 - t, 1.35) * 28;
-        const opacity1 = Math.max(0, Math.pow(t, 1.25));
+        const pSlide = Math.min(1, t / 0.65);
+        const eSlide = smoothTravel(pSlide);
+        const curX = eSlide * headerDeltaX;
+        const curY = eSlide * headerDeltaY;
+        act0Header.style.transform = `translate3d(${curX.toFixed(1)}px, ${curY.toFixed(1)}px, 0)`;
 
-        act1.style.transform = `translate3d(0, 0, 0) scale(${scale1.toFixed(3)})`;
-        act1.style.filter = `blur(${blur1.toFixed(1)}px)`;
-        act1.style.opacity = opacity1.toFixed(3);
-        act1.style.zIndex = '10';
-        act1.style.pointerEvents = t > 0.75 ? 'auto' : 'none';
+        // Quick link chips slide upward out of view
+        if (heroQuickLinks) {
+          const chipsY = -eSlide * 52;
+          const chipsOpacity = Math.max(0, 1 - eSlide * 1.3);
+          heroQuickLinks.style.transform = `translate3d(0, ${chipsY.toFixed(1)}px, 0)`;
+          heroQuickLinks.style.opacity = chipsOpacity.toFixed(3);
+          heroQuickLinks.style.pointerEvents = eSlide > 0.4 ? 'none' : 'auto';
+        }
 
+        // Act 0 body text disappears
+        const bodyOpacity = Math.max(0, 1 - eSlide * 1.25).toFixed(3);
+        const bodyY = (-eSlide * 28).toFixed(1);
+
+        if (act0StatementGrid) {
+          act0StatementGrid.style.opacity = bodyOpacity;
+          act0StatementGrid.style.transform = `translate3d(0, ${bodyY}px, 0)`;
+        }
+        if (heroStatement) {
+          heroStatement.style.opacity = bodyOpacity;
+          heroStatement.style.transform = `translate3d(0, ${bodyY}px, 0)`;
+        }
+        if (heroSignalRow) {
+          heroSignalRow.style.opacity = bodyOpacity;
+          heroSignalRow.style.transform = `translate3d(0, ${bodyY}px, 0)`;
+        }
+        if (heroTitle) {
+          heroTitle.style.opacity = bodyOpacity;
+          heroTitle.style.transform = `translate3d(0, ${bodyY}px, 0)`;
+        }
+
+        // Act 1 Section intro appears
+        if (act1Intro) {
+          const pIntro = Math.min(1, Math.max(0, (t - 0.30) / 0.30));
+          const eIntro = smoothTravel(pIntro);
+          act1Intro.style.opacity = eIntro.toFixed(3);
+          act1Intro.style.transform = `translate3d(0, ${((1 - eIntro) * 24).toFixed(1)}px, 0)`;
+        }
+
+        // Hand off header visibility to act1Header at the very end of slide
+        if (act1Header) {
+          act1Header.style.opacity = t >= 0.95 ? '1' : '0';
+          act1Header.style.transform = 'none';
+        }
+        act0Header.style.opacity = t >= 0.95 ? '0' : '1';
+
+        // Staggered sequential reveal of project demo boxes (t: 0.45 -> 1.00)
+        projectCards.forEach((card, i) => {
+          const cardStart = 0.45 + i * 0.09;
+          const cardDur = 0.24;
+          const pCard = Math.min(1, Math.max(0, (t - cardStart) / cardDur));
+          const eCard = smoothTravel(pCard);
+          card.style.opacity = eCard.toFixed(3);
+          card.style.transform = `translate3d(0, ${((1 - eCard) * 50).toFixed(1)}px, 0)`;
+          card.style.pointerEvents = eCard > 0.85 ? 'auto' : 'none';
+        });
+
+        // Act 2 hidden
         act2.style.opacity = '0';
         act2.style.pointerEvents = 'none';
 
         updateHUD(t >= 0.5 ? 1 : 0);
       }
       // 3. Act 1: Work & Stack (Top Cushion + Smooth S-Curve Travel + Reading Pause)
-      else if (s >= M1_ZOOM_END && s <= M1_BOTTOM_PAUSE_END) {
+      else if (s >= M1_TRANS_END && s <= M1_BOTTOM_PAUSE_END) {
         act0.style.opacity = '0';
         act0.style.pointerEvents = 'none';
+
+        if (act1Header) {
+          act1Header.style.opacity = '1';
+          act1Header.style.transform = 'none';
+        }
+        if (act1Intro) {
+          act1Intro.style.opacity = '1';
+          act1Intro.style.transform = 'none';
+        }
+        projectCards.forEach(card => {
+          card.style.opacity = '1';
+          card.style.transform = '';
+          card.style.pointerEvents = 'auto';
+        });
 
         const maxOffset1 = act1Container ? Math.max(0, act1Container.scrollHeight - window.innerHeight) : 0;
         let translateY = 0;
