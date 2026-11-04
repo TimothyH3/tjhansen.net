@@ -818,152 +818,251 @@
     // Interactive Simulation Toys within Demos
     // =========================================================================
 
-    // 1. ApexQueue Simulation
-    const apexBurstBtn = document.getElementById('apex-burst-btn');
-    const apexRebalanceBtn = document.getElementById('apex-rebalance-btn');
-    const apexThroughput = document.getElementById('apex-throughput');
-    const apexLatency = document.getElementById('apex-latency');
-    const apexTasks = document.getElementById('apex-tasks');
-    const apexLog = document.getElementById('apex-log');
+    // 1. Come Together Compass Simulation
+    const compassGeocodeBtn = document.getElementById('compass-geocode-btn');
+    const compassWipeBtn = document.getElementById('compass-wipe-btn');
+    const compassLatency = document.getElementById('compass-latency-val');
+    const compassRetention = document.getElementById('compass-retention-val');
+    const compassEmergency = document.getElementById('compass-emergency-val');
+    const compassLog = document.getElementById('compass-log');
 
-    let taskCount = 84120;
-    if (apexBurstBtn) {
-      apexBurstBtn.addEventListener('click', function () {
-        taskCount += 2000;
-        if (apexTasks) apexTasks.textContent = taskCount.toLocaleString();
-        if (apexThroughput) apexThroughput.textContent = '24,800 msg/s';
-        if (apexLatency) apexLatency.textContent = '16.4 ms';
+    const sampleAddresses = [
+      '100 W Washington St, Phoenix, AZ 85003',
+      '400 E Van Buren St, Phoenix, AZ 85004',
+      '1100 S Priest Dr, Tempe, AZ 85281',
+      '300 E University Dr, Tempe, AZ 85281'
+    ];
+    let addressIdx = 0;
 
-        if (apexLog) {
+    if (compassGeocodeBtn) {
+      compassGeocodeBtn.addEventListener('click', function () {
+        const addr = sampleAddresses[addressIdx % sampleAddresses.length];
+        addressIdx++;
+        const lat = (33.4255 + (Math.random() * 0.04 - 0.02)).toFixed(4);
+        const lon = (-111.9400 + (Math.random() * 0.04 - 0.02)).toFixed(4);
+        const randLat = Math.floor(95 + Math.random() * 40);
+
+        if (compassLatency) compassLatency.textContent = `${randLat} ms`;
+        if (compassRetention) compassRetention.textContent = '0 Bytes (Volatile Pinia)';
+
+        if (compassLog) {
           const now = new Date().toISOString().substring(11, 23);
-          const line = document.createElement('div');
-          line.className = 'term-line text-green';
-          line.textContent = `[${now}] [BURST] Dispatched 2,000 tasks across partitions 0, 1, 2. WAL batch commit OK.`;
-          apexLog.appendChild(line);
-          apexLog.scrollTop = apexLog.scrollHeight;
+          const line1 = document.createElement('div');
+          line1.className = 'term-line text-green';
+          line1.textContent = `[${now}] [CENSUS-API] Resolved: "${addr}" -> (${lat}° N, ${lon}° W) in ${randLat}ms. $0 API cost.`;
+          const line2 = document.createElement('div');
+          line2.className = 'term-line';
+          line2.textContent = `[${now}] [LEAFLET] Filtered 6 nearest shelter & food aid hubs within 5.0 km radius.`;
+          compassLog.appendChild(line1);
+          compassLog.appendChild(line2);
+          compassLog.scrollTop = compassLog.scrollHeight;
+        }
+      });
+    }
+
+    if (compassWipeBtn) {
+      compassWipeBtn.addEventListener('click', function () {
+        if (compassRetention) compassRetention.textContent = 'PURGED (0 Bytes)';
+        if (compassEmergency) compassEmergency.textContent = '988 Escalated • Safe Mode';
+
+        if (compassLog) {
+          const now = new Date().toISOString().substring(11, 23);
+          const line1 = document.createElement('div');
+          line1.className = 'term-line text-accent';
+          line1.textContent = `[${now}] [EMERGENCY-988] Rapid crisis escalation triggered. Routing client to 988 Lifeline bridge.`;
+          const line2 = document.createElement('div');
+          line2.className = 'term-line text-green';
+          line2.textContent = `[${now}] [PINIA-PURGE] Complete volatile memory purge executed. Session storage: 0 bytes. Zero data footprint.`;
+          compassLog.appendChild(line1);
+          compassLog.appendChild(line2);
+          compassLog.scrollTop = compassLog.scrollHeight;
         }
 
         setTimeout(() => {
-          if (apexThroughput) apexThroughput.textContent = '12,400 msg/s';
-          if (apexLatency) apexLatency.textContent = '14.8 ms';
-        }, 2200);
+          if (compassEmergency) compassEmergency.textContent = '988 Lifeline Armed';
+          if (compassRetention) compassRetention.textContent = '0 Bytes (RAM-Only)';
+        }, 3000);
       });
     }
 
-    if (apexRebalanceBtn) {
-      apexRebalanceBtn.addEventListener('click', function () {
-        if (apexLog) {
+    // 2. Erised AI (Manifest V3) Simulation
+    const erisedExtractBtn = document.getElementById('erised-extract-btn');
+    const erisedInjectBtn = document.getElementById('erised-inject-btn');
+    const erisedLatency = document.getElementById('erised-latency-val');
+    const erisedFlow = document.getElementById('erised-flow-val');
+    const erisedLog = document.getElementById('erised-log');
+
+    const sampleScenes = [
+      'Chapter IV: The lantern cast long shadows across the cobblestones, catching mist in amber light.',
+      'Chapter VII: Rain beat against the stained-glass window, reflecting azure geometry along the stone hearth.',
+      'Chapter XII: Beyond the fortress ramparts, a silent fleet glided across the star-strewn harbor.'
+    ];
+    let sceneIdx = 0;
+
+    if (erisedExtractBtn) {
+      erisedExtractBtn.addEventListener('click', function () {
+        const scene = sampleScenes[sceneIdx % sampleScenes.length];
+        sceneIdx++;
+
+        if (erisedLatency) erisedLatency.textContent = '3.8 ms';
+        if (erisedFlow) erisedFlow.textContent = 'Prompt Dispatched';
+
+        if (erisedLog) {
           const now = new Date().toISOString().substring(11, 23);
           const line1 = document.createElement('div');
           line1.className = 'term-line text-dim';
-          line1.textContent = `[${now}] [REBALANCE] Node-03 heartbeat timeout. Triggering consumer group arbitration.`;
+          line1.textContent = `[${now}] [DOM-SCAN] Extracted paragraph text: "${scene.substring(0, 58)}..."`;
           const line2 = document.createElement('div');
           line2.className = 'term-line text-green';
-          line2.textContent = `[${now}] [REBALANCE] Partitions re-assigned to Node-01, Node-02 in 178ms. 0 messages lost.`;
-          apexLog.appendChild(line1);
-          apexLog.appendChild(line2);
-          apexLog.scrollTop = apexLog.scrollHeight;
+          line2.textContent = `[${now}] [MV3-DISPATCH] Headless background worker formulated zero-cost contextual prompt payload.`;
+          erisedLog.appendChild(line1);
+          erisedLog.appendChild(line2);
+          erisedLog.scrollTop = erisedLog.scrollHeight;
         }
       });
     }
 
-    // 2. CloudCanvas Simulation
-    const canvasNodeBtn = document.getElementById('canvas-node-btn');
-    const canvasSyncBtn = document.getElementById('canvas-sync-btn');
-    const canvasBoard = document.getElementById('canvas-board');
-    const canvasClock = document.getElementById('canvas-clock');
-    const peerCursor1 = document.getElementById('peer-cursor-1');
-    const peerCursor2 = document.getElementById('peer-cursor-2');
+    if (erisedInjectBtn) {
+      erisedInjectBtn.addEventListener('click', function () {
+        if (erisedLatency) erisedLatency.textContent = '2.4 ms';
+        if (erisedFlow) erisedFlow.textContent = 'Zero Reflow (Injected)';
 
-    let clockVersion = 52.4;
-    let customNodeCount = 0;
-
-    if (canvasNodeBtn && canvasBoard) {
-      canvasNodeBtn.addEventListener('click', function () {
-        customNodeCount++;
-        clockVersion += 1.0;
-        if (canvasClock) canvasClock.textContent = `v${clockVersion.toFixed(1)}`;
-
-        const node = document.createElement('div');
-        node.className = 'canvas-node';
-        node.textContent = `Worker Service #${customNodeCount}`;
-        node.style.top = `${60 + (customNodeCount * 30) % 110}px`;
-        node.style.left = `${200 + (customNodeCount * 45) % 220}px`;
-        node.style.borderColor = 'var(--accent)';
-        canvasBoard.appendChild(node);
-      });
-    }
-
-    if (canvasSyncBtn) {
-      canvasSyncBtn.addEventListener('click', function () {
-        clockVersion += 0.8;
-        if (canvasClock) canvasClock.textContent = `v${clockVersion.toFixed(1)}`;
-
-        // Animate simulated peer cursors
-        if (peerCursor1) {
-          peerCursor1.style.transform = `translate(${Math.random() * 80 - 40}px, ${Math.random() * 60 - 30}px)`;
-        }
-        if (peerCursor2) {
-          peerCursor2.style.transform = `translate(${Math.random() * 80 - 40}px, ${Math.random() * 60 - 30}px)`;
+        if (erisedLog) {
+          const now = new Date().toISOString().substring(11, 23);
+          const line = document.createElement('div');
+          line.className = 'term-line text-green';
+          line.textContent = `[${now}] [DOM-STREAM] Injected 1024x640 canvas illustration directly into active reader viewport without altering reader scroll offset.`;
+          erisedLog.appendChild(line);
+          erisedLog.scrollTop = erisedLog.scrollHeight;
         }
       });
     }
 
-    // 3. PulseSync Simulation
-    const syncPartitionBtn = document.getElementById('sync-partition-btn');
-    const syncHealBtn = document.getElementById('sync-heal-btn');
-    const syncNetworkStatus = document.getElementById('sync-network-status');
-    const syncDrift = document.getElementById('sync-drift');
-    const cnodeC = document.getElementById('cnode-c');
-    const cnodeD = document.getElementById('cnode-d');
+    // 3. Starlink Congestion Tracker Simulation
+    const starlinkQueryBtn = document.getElementById('starlink-query-btn');
+    const starlinkToggleBtn = document.getElementById('starlink-toggle-btn');
+    const starlinkLatency = document.getElementById('starlink-latency-val');
+    const starlinkStatus = document.getElementById('starlink-status-val');
+    const starlinkLog = document.getElementById('starlink-log');
 
-    if (syncPartitionBtn) {
-      syncPartitionBtn.addEventListener('click', function () {
-        if (syncNetworkStatus) {
-          syncNetworkStatus.textContent = 'PARTITIONED (Split-Brain)';
-          syncNetworkStatus.className = 'demo-stat-val text-accent';
+    let surchargeActive = false;
+
+    if (starlinkQueryBtn) {
+      starlinkQueryBtn.addEventListener('click', function () {
+        const lat = (33.5 + Math.random() * 0.4).toFixed(4);
+        const lon = (-112.0 + Math.random() * 0.4).toFixed(4);
+        const lookupTime = (1.4 + Math.random() * 0.8).toFixed(1);
+
+        if (starlinkLatency) starlinkLatency.textContent = `${lookupTime} ms`;
+
+        if (starlinkLog) {
+          const now = new Date().toISOString().substring(11, 23);
+          const line1 = document.createElement('div');
+          line1.className = 'term-line';
+          line1.textContent = `[${now}] [POINT-QUERY] Client ray-casting point (${lat}° N, ${lon}° W) across 2,418 GeoJSON polygons...`;
+          const line2 = document.createElement('div');
+          line2.className = 'term-line text-green';
+          line2.textContent = `[${now}] [CELL-MATCH] Cell #AZ-PHX-084 matched in ${lookupTime}ms. Capacity: 84% (Standard Tier, No Surcharge).`;
+          starlinkLog.appendChild(line1);
+          starlinkLog.appendChild(line2);
+          starlinkLog.scrollTop = starlinkLog.scrollHeight;
         }
-        if (syncDrift) syncDrift.textContent = '14.2% (Diverged)';
-        if (cnodeC) cnodeC.classList.add('partitioned');
-        if (cnodeD) cnodeD.classList.add('partitioned');
       });
     }
 
-    if (syncHealBtn) {
-      syncHealBtn.addEventListener('click', function () {
-        if (syncNetworkStatus) {
-          syncNetworkStatus.textContent = 'CONNECTED (Full Mesh)';
-          syncNetworkStatus.className = 'demo-stat-val text-green';
-        }
-        if (syncDrift) syncDrift.textContent = '0.00% (Reconciled)';
-        if (cnodeC) cnodeC.classList.remove('partitioned');
-        if (cnodeD) cnodeD.classList.remove('partitioned');
-      });
-    }
-
-    // 4. SunDevil EdgeML (ASU Capstone) INT8 vs FP32 Comparison
-    const edgemlToggleBtn = document.getElementById('edgeml-toggle-btn');
-    const edgemlFps = document.getElementById('edgeml-fps');
-    const edgemlLat = document.getElementById('edgeml-lat');
-    const edgemlRam = document.getElementById('edgeml-ram');
-    const edgemlMode = document.getElementById('edgeml-mode');
-
-    let isInt8 = true;
-    if (edgemlToggleBtn) {
-      edgemlToggleBtn.addEventListener('click', function () {
-        isInt8 = !isInt8;
-        if (isInt8) {
-          edgemlFps.textContent = '120.4 FPS';
-          edgemlLat.textContent = '4.2 ms';
-          edgemlRam.textContent = '18.4 MB';
-          edgemlMode.textContent = 'INT8 TensorRT (74% Saved)';
-          edgemlToggleBtn.textContent = '⚙️ Switch to Unquantized FP32 Mode';
+    if (starlinkToggleBtn) {
+      starlinkToggleBtn.addEventListener('click', function () {
+        surchargeActive = !surchargeActive;
+        if (surchargeActive) {
+          if (starlinkStatus) {
+            starlinkStatus.textContent = 'HIGH-DEMAND SURCHARGE ZONE ($100)';
+            starlinkStatus.className = 'demo-stat-val text-accent';
+          }
+          if (starlinkLog) {
+            const now = new Date().toISOString().substring(11, 23);
+            const line = document.createElement('div');
+            line.className = 'term-line text-accent';
+            line.textContent = `[${now}] [SURCHARGE-ALERT] Mobile node entered high-demand cell boundary. Warning user of relocation fee surcharge.`;
+            starlinkLog.appendChild(line);
+            starlinkLog.scrollTop = starlinkLog.scrollHeight;
+          }
         } else {
-          edgemlFps.textContent = '36.8 FPS';
-          edgemlLat.textContent = '13.9 ms';
-          edgemlRam.textContent = '72.1 MB';
-          edgemlMode.textContent = 'FP32 Full Precision';
-          edgemlToggleBtn.textContent = '⚙️ Switch to Quantized INT8 Mode (ASU Capstone)';
+          if (starlinkStatus) {
+            starlinkStatus.textContent = 'STANDARD TIER ($0)';
+            starlinkStatus.className = 'demo-stat-val text-green';
+          }
+          if (starlinkLog) {
+            const now = new Date().toISOString().substring(11, 23);
+            const line = document.createElement('div');
+            line.className = 'term-line text-green';
+            line.textContent = `[${now}] [SURCHARGE-CLEARED] Cell boundary reset to standard residential service tier.`;
+            starlinkLog.appendChild(line);
+            starlinkLog.scrollTop = starlinkLog.scrollHeight;
+          }
+        }
+      });
+    }
+
+    // 4. Healthcare Operations Simulation
+    const healthSurgeBtn = document.getElementById('health-surge-btn');
+    const healthTestBtn = document.getElementById('health-test-btn');
+    const healthTps = document.getElementById('health-tps-val');
+    const healthCoverage = document.getElementById('health-coverage-val');
+    const healthQueue = document.getElementById('health-queue-val');
+    const healthLog = document.getElementById('health-log');
+
+    let surgeActive = false;
+
+    if (healthSurgeBtn) {
+      healthSurgeBtn.addEventListener('click', function () {
+        surgeActive = !surgeActive;
+        if (surgeActive) {
+          if (healthTps) healthTps.textContent = '14,800 events/sec';
+          if (healthQueue) healthQueue.textContent = '39 / 40 ICU Beds (SURGE)';
+
+          if (healthLog) {
+            const now = new Date().toISOString().substring(11, 23);
+            const line1 = document.createElement('div');
+            line1.className = 'term-line text-accent';
+            line1.textContent = `[${now}] [SURGE-EVENT] Dispatched 50 triage patient arrivals to ConcurrentPriorityQueue.`;
+            const line2 = document.createElement('div');
+            line2.className = 'term-line text-green';
+            line2.textContent = `[${now}] [SCHEDULER] Acquired re-prioritized worker locks without deadlock. Avg triage wait: 3.2min.`;
+            healthLog.appendChild(line1);
+            healthLog.appendChild(line2);
+            healthLog.scrollTop = healthLog.scrollHeight;
+          }
+        } else {
+          if (healthTps) healthTps.textContent = '5,200 events/sec';
+          if (healthQueue) healthQueue.textContent = '34 / 40 ICU Beds';
+
+          if (healthLog) {
+            const now = new Date().toISOString().substring(11, 23);
+            const line = document.createElement('div');
+            line.className = 'term-line text-green';
+            line.textContent = `[${now}] [STEADY-STATE] ICU surge absorbed. Patient queue restored to nominal baseline.`;
+            healthLog.appendChild(line);
+            healthLog.scrollTop = healthLog.scrollHeight;
+          }
+        }
+      });
+    }
+
+    if (healthTestBtn) {
+      healthTestBtn.addEventListener('click', function () {
+        if (healthCoverage) healthCoverage.textContent = '96.8% Branch';
+
+        if (healthLog) {
+          const now = new Date().toISOString().substring(11, 23);
+          const line1 = document.createElement('div');
+          line1.className = 'term-line text-green';
+          line1.textContent = `[${now}] [JUNIT-5] Executed 142 parameterized unit tests in 184ms: 142 PASSED, 0 FAILED.`;
+          const line2 = document.createElement('div');
+          line2.className = 'term-line text-green';
+          line2.textContent = `[${now}] [SPOTBUGS & JACOCO] 0 high/medium bugs reported. CI verification quality gate PASSED.`;
+          healthLog.appendChild(line1);
+          healthLog.appendChild(line2);
+          healthLog.scrollTop = healthLog.scrollHeight;
         }
       });
     }
@@ -974,73 +1073,77 @@
   // =========================================================================
   function initProjectDrawer() {
     const projectDatabase = {
-      'apex-queue': {
-        title: 'ApexQueue — Distributed Task Broker',
-        fileTag: 'APEX_QUEUE_ARCH.spec',
+      'compass': {
+        title: 'Come Together Compass — Community Aid & Triage',
+        fileTag: 'COMPASS_GEOSPATIAL_SPEC.md',
         image: 'assets/images/project-1.svg',
-        desc: 'High-throughput asynchronous task engine written in Go with partitioned message logs, dead-letter recovery queues, and heartbeat arbitration.',
-        benchmark: '12,400 messages/sec throughput • p99 latency < 14.8ms on a 3-node benchmark cluster',
+        repoUrl: 'https://github.com/TimothyH3/come-together-compass',
+        desc: 'Full-stack community aid locator and anonymous triage platform integrating federal geocoding, client-side OpenStreetMap tiles, and zero-retention session privacy.',
+        benchmark: 'Sub-120ms U.S. Census Geocoding resolution • 0-byte persistent data retention for at-risk user privacy',
         architecture: [
-          'Partitioned Log Structure: Lock-free ring buffer design eliminating thread contention.',
-          'Zero-Allocation Buffer Pools: Uses Go sync.Pool to minimize GC pause overhead by 68%.',
-          'Node Failure Arbitration: Automated consumer group rebalancing within 180ms.'
+          'U.S. Census Bureau Geocoding Pipeline: Intercepts addresses and resolves latitude/longitude without commercial API rate-limits or subscription fees.',
+          'Leaflet / OpenStreetMap Integration: Renders localized mutual aid hubs with custom SVG markers and dynamic bounding-box filtering.',
+          'Zero-Retention Session Architecture: Stores sensitive triage inputs exclusively in volatile Pinia state, wiping state vectors upon session close.'
         ],
         decisions: [
-          'Used gRPC + Protobuf over REST for broker clustering, reducing serialization overhead by 42%.',
-          'Built memory-mapped append-only WAL to survive ungraceful process crashes.'
+          'Implemented direct client-side sanitization and rapid 988 Crisis Lifeline escalation triggers.',
+          'Used Vitest and TypeScript strict typing to ensure 100% type safety across geospatial coordinates and aid provider payloads.'
         ],
-        stack: ['Go (Golang)', 'gRPC', 'Redis', 'Docker', 'Prometheus']
+        stack: ['Vue 3', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'Leaflet', 'Pinia', 'Vitest']
       },
-      'cloud-canvas': {
-        title: 'CloudCanvas — Collaborative System Modeling',
-        fileTag: 'CLOUD_CANVAS_SYSTEM.spec',
+      'erised-ai': {
+        title: 'Erised AI — Dynamic Literary eBook Illustrator',
+        fileTag: 'ERISED_MV3_EXTENSION.spec',
         image: 'assets/images/project-2.svg',
-        desc: 'Real-time collaborative diagramming platform enabling distributed teams to visualize cloud topologies with CRDT state synchronization.',
-        benchmark: 'Sub-30ms multi-cursor canvas latency across 50+ concurrent peers',
+        repoUrl: 'https://github.com/TimothyH3/erised-ai',
+        desc: 'Chrome extension generating real-time, context-aware literary scene artwork using background service workers and in-memory DOM injection pipelines.',
+        benchmark: '< 5ms DOM rendering latency • Zero external commercial API key dependency',
         architecture: [
-          'CRDT State Vector: Automates concurrent modification merging without centralized locks.',
-          'Binary WebSocket Multiplexer: Reduces transport payload size by 60% compared to JSON.',
-          'Decoupled Canvas Renderer: OffscreenCanvas workers render complex graphs at 60 FPS.'
+          'Manifest V3 Service Worker: Manages headless browser automation channels without maintaining persistent background page overhead.',
+          'Contextual Passage Chunking: Analyzes narrative paragraphs in the DOM and extracts semantic visual anchors for prompt formulation.',
+          'In-Memory Canvas Pipeline: Streams generated illustration payloads directly to in-memory blob URLs, eliminating disk writes and reading stutter.'
         ],
         decisions: [
-          'Implemented Yjs CRDT binding over custom OT to remove the single-point-of-failure server arbiter.',
-          'Optimistic local updates provide zero perceived input latency during flaky network drops.'
+          'Decoupled prompt synthesis from the reading DOM to ensure standard EPUB/web page layouts never reflow or lose reader scroll position.',
+          'Configured fallback procedural placeholders during transient network disconnections.'
         ],
-        stack: ['TypeScript', 'React', 'Node.js', 'WebSockets', 'PostgreSQL']
+        stack: ['JavaScript', 'TypeScript', 'Chrome Extensions (MV3)', 'Headless Automation', 'DOM APIs', 'Canvas']
       },
-      'collab-sync': {
-        title: 'PulseSync Protocol — Resilient Replicator',
-        fileTag: 'PULSESYNC_PROTOCOL.spec',
+      'starlink-tracker': {
+        title: 'Starlink Congestion & Relocation Tracker',
+        fileTag: 'STARLINK_GEOSPATIAL_OVERLAY.spec',
         image: 'assets/images/project-3.svg',
-        desc: 'Fault-tolerant distributed replication engine for ephemeral microservice clusters under volatile network partitions.',
-        benchmark: 'Zero state drift and automated healing within 2 roundtrips after 30-sec split-brain event',
+        repoUrl: 'https://github.com/TimothyH3/starlink-tracker',
+        desc: 'Interactive geospatial tool identifying satellite cell demand, capacity bottlenecks, and relocation surcharge zones.',
+        benchmark: '1.8ms client-side ray-casting coordinate intersection across 2,400+ GeoJSON cell polygons',
         architecture: [
-          'Vector Clock Matrix: Detects causal ordering violations across dynamic container nodes.',
-          'Gossip Membership Protocol: Heartbeat broadcasts propagate node lists with O(log N) overhead.',
-          'Anti-Entropy Sync: Merkle tree diffing pinpoints divergent keys without full database dumps.'
+          'Polygon Boundary Parser: Ingests Starlink service cell boundaries from GeoJSON datasets and projects them onto Leaflet layers.',
+          'Point-in-Polygon Ray-Casting: Runs lightweight point-in-polygon checks client-side, eliminating server roundtrips for address validation.',
+          'Surcharge Zone Detection: Automatically flags mobile users when migrating across high-demand cell borders to avert unexpected billing fees.'
         ],
         decisions: [
-          'Applied differential binary snapshots to stop network bandwidth spikes during container rollouts.',
-          'Configurable tunable consistency per topic based on latency vs safety requirements.'
+          'Pre-indexed cell bounding boxes in a spatial R-tree to achieve sub-millisecond point queries on mobile devices.',
+          'Built automated Python pipeline to fetch and refresh cell state delta updates.'
         ],
-        stack: ['Rust / C++', 'Distributed Systems', 'TCP Sockets', 'Linux Syscalls']
+        stack: ['Vue 3', 'TypeScript', 'Python', 'GeoJSON', 'Leaflet', 'Pinia']
       },
-      'asu-capstone': {
-        title: 'SunDevil EdgeML — ASU Senior Capstone',
-        fileTag: 'ASU_CAPSTONE_TELEMETRY.spec',
+      'healthcare-sim': {
+        title: 'Healthcare Operations Simulation — Enterprise Logistics',
+        fileTag: 'HEALTHCARE_LOGISTICS_JAVA.spec',
         image: 'assets/images/project-4.svg',
-        desc: 'Arizona State University Senior Capstone: Edge-optimized sensor telemetry and computer vision inference pipeline for constrained hardware.',
-        benchmark: '120 FPS continuous inference at 4.2ms avg latency with 18.4MB RAM footprint',
+        repoUrl: 'https://github.com/TimothyH3',
+        desc: 'Enterprise discrete-event hospital logistics engine and resource optimization simulator engineered in Java with comprehensive test coverage.',
+        benchmark: 'Simulates 50,000 patient-nurse interactions in < 350ms • 96.4% branch coverage via JUnit 5',
         architecture: [
-          'Quantized Model Inference: INT8 post-training quantization reduced weight memory by 74%.',
-          'MQTT Cloud Uplink: Batches compressed sensor telemetry to AWS IoT over intermittent wireless.',
-          'Local SQLite Fallback: Write-Ahead-Log buffers data during network blackouts.'
+          'Thread-Safe Event Queue: ConcurrentPriorityQueue schedules asynchronous triage assessments, bed transfers, and doctor consultations.',
+          'Resource Contention Arbiter: Optimizes ICU bed utilization, preventing deadlock during simultaneous emergency room arrivals.',
+          'CI/CD Quality Gate: Enforces zero SpotBugs warnings, Checkstyle formatting, and 95%+ JaCoCo branch coverage on every commit.'
         ],
         decisions: [
-          'Engineered edge pre-filtering in C++ before handing frames to the neural net, saving 35% battery.',
-          'Won faculty recognition for high-coverage automated unit test suites.'
+          'Adopted immutable patient event records to guarantee deterministic simulation reproducibility.',
+          'Built JavaFX telemetry dashboards to visualize real-time bed utilization bottlenecks.'
         ],
-        stack: ['Python', 'PyTorch', 'C++ 20', 'MQTT', 'AWS IoT', 'Embedded Linux']
+        stack: ['Java 17', 'JavaFX', 'JUnit 5', 'JaCoCo', 'SpotBugs', 'Checkstyle', 'Concurrency']
       }
     };
 
@@ -1073,7 +1176,7 @@
           ${data.stack.map(tag => `<span class="drawer-tag">${tag}</span>`).join('')}
         </div>
         <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
-          <a href="https://github.com/tjhansen" target="_blank" rel="noopener noreferrer" class="minimal-btn primary-btn font-mono">View Repository ↗</a>
+          <a href="${data.repoUrl || 'https://github.com/TimothyH3'}" target="_blank" rel="noopener noreferrer" class="minimal-btn primary-btn font-mono">View Repository ↗</a>
           <button class="minimal-btn copy-btn font-mono" id="inner-drawer-close">Close Spec</button>
         </div>
       `;
