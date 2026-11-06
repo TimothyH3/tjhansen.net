@@ -34,6 +34,23 @@
     })();
   </script>
 
+  <!-- GitHub Pages SPA Redirect Receiver -->
+  <script>
+    (function (l) {
+      if (l.search[1] === '/') {
+        var decoded = l.search.slice(1).split('&').map(function (s) {
+          return s.replace(/~and~/g, '&');
+        }).join('?');
+        var target = l.pathname.slice(0, -1) + decoded + l.hash;
+        if (target.indexOf('/starlink-surcharge-map') !== -1 || target.indexOf('/StarlinkSurchargeMap') !== -1) {
+          window.location.replace('/starlink-surcharge-map/');
+        } else {
+          window.history.replaceState(null, null, target);
+        }
+      }
+    })(window.location);
+  </script>
+
   <!-- Minimal Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -312,11 +329,14 @@
                       rapid lookup by GPS or address.</span></li>
                 </ul>
                 <div class="bento-actions">
-                  <button class="demo-trigger-btn primary-demo-btn" data-demo="starlink-tracker">
-                    <span>Live Demo</span>
+                  <a href="/starlink-surcharge-map" class="demo-trigger-btn primary-demo-btn" style="text-decoration:none;">
+                    <span>Live Map ↗</span>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <polygon points="5 3 19 12 5 21 5 3"></polygon>
                     </svg>
+                  </a>
+                  <button class="demo-trigger-btn" data-demo="starlink-tracker">
+                    <span>Sim Demo</span>
                   </button>
                   <button class="inspect-btn" data-project="starlink-tracker">
                     <span>Specs</span>
@@ -650,6 +670,9 @@
               Query</button>
             <button class="minimal-btn font-mono" id="starlink-toggle-btn">⚠️ Toggle High-Demand Surcharge Polygon
               Overlay</button>
+            <a href="/starlink-surcharge-map" class="minimal-btn primary-btn font-mono" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+              🚀 Open Fullscreen Surcharge Map Subpage ↗
+            </a>
           </div>
 
           <div class="demo-terminal font-mono" id="starlink-log">
