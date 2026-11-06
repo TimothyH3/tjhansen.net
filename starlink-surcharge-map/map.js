@@ -409,22 +409,40 @@
 
       if (resp.ok) {
         const result = await resp.json();
-        const updated = {
-          lat: result.lat,
-          lng: result.lng,
-          surcharge_amount: result.surcharge_amount,
-          status: result.status,
-          sampled_at: result.timestamp || new Date().toISOString(),
-          location_name: result.location_name || `Coordinate: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`
-        };
-
         if (result.source === 'postgis_cache') {
+          const updated = {
+            lat: result.lat,
+            lng: result.lng,
+            surcharge_amount: result.surcharge_amount,
+            status: result.status,
+            sampled_at: result.timestamp || new Date().toISOString(),
+            location_name: result.location_name || `Coordinate: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`
+          };
           surchargePoints.unshift(updated);
           updateStats();
           renderMarkers();
           displayPointDetails(updated, result.distance_km || 0);
         } else {
-          displayPointDetails(updated, null);
+          // If no closer PostGIS sample was returned, preserve existing inspected node data
+          if (currentlyInspected && !currentlyInspected.isUncached) {
+            const liveBtn = document.getElementById('btn-live-worker');
+            if (liveBtn) {
+              liveBtn.innerHTML = '<span>✓ NODE VERIFIED IN CACHE</span>';
+              setTimeout(() => {
+                liveBtn.innerHTML = '<span>⚡ QUERY SPATIAL CELL CACHE</span>';
+              }, 2200);
+            }
+          } else {
+            displayPointDetails({
+              lat: result.lat,
+              lng: result.lng,
+              surcharge_amount: result.surcharge_amount,
+              status: result.status,
+              sampled_at: result.timestamp || new Date().toISOString(),
+              location_name: result.location_name || `Coordinate (${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W)`,
+              isUncached: true
+            }, null);
+          }
         }
       } else {
         let errBody = '';
