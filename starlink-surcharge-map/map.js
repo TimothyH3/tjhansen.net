@@ -7,11 +7,16 @@
   'use strict';
 
   // Config: Override with window.STARLINK_CONFIG or localStorage if present
-  const savedWorkerUrl = localStorage.getItem('starlink_worker_url');
+  let savedWorkerUrl = localStorage.getItem('starlink_worker_url');
+  if (savedWorkerUrl && savedWorkerUrl.includes('tjhansen.workers.dev')) {
+    savedWorkerUrl = 'https://starlink-surcharge-worker.starlink-surcharge-map.workers.dev/api/check-fee';
+    localStorage.setItem('starlink_worker_url', savedWorkerUrl);
+  }
+
   const CONFIG = Object.assign({
-    SUPABASE_URL: 'https://ezklclyctsuwfmfdrnex.supabase.co',
+    SUPABASE_URL: 'https://lbwwynyvpvecgclvyqrv.supabase.co',
     SUPABASE_ANON_KEY: 'eyJhbGciOi...',
-    WORKER_API_URL: savedWorkerUrl || (window.STARLINK_CONFIG && window.STARLINK_CONFIG.WORKER_API_URL) || 'https://starlink-surcharge-worker.tjhansen.workers.dev/api/check-fee'
+    WORKER_API_URL: savedWorkerUrl || (window.STARLINK_CONFIG && window.STARLINK_CONFIG.WORKER_API_URL) || 'https://starlink-surcharge-worker.starlink-surcharge-map.workers.dev/api/check-fee'
   }, window.STARLINK_CONFIG || {});
 
   // High-fidelity baseline seed points across US bottleneck corridors
@@ -314,9 +319,9 @@
     let tierClass = isSold ? 'tier-waitlist' : isHigh ? 'tier-high' : '';
     let tierTitle = isSold ? 'SOLD OUT / WAITLIST' :
       pt.surcharge_amount >= 1000 ? 'SEVERE CONGESTION SURCHARGE' :
-      pt.surcharge_amount >= 500 ? 'HIGH DEMAND SURCHARGE' :
-      pt.surcharge_amount >= 100 ? 'MODERATE SURCHARGE ZONE' :
-      'STANDARD CAPACITY ($0)';
+        pt.surcharge_amount >= 500 ? 'HIGH DEMAND SURCHARGE' :
+          pt.surcharge_amount >= 100 ? 'MODERATE SURCHARGE ZONE' :
+            'STANDARD CAPACITY ($0)';
 
     const cacheLabel = distKm !== null && distKm !== undefined
       ? (distKm === 0 ? 'Exact Verified Pin' : `Cached (${distKm.toFixed(1)} km away)`)
@@ -417,7 +422,7 @@
         displayPointDetails(updated, 0);
       } else {
         let errBody = '';
-        try { errBody = await resp.text(); } catch (e) {}
+        try { errBody = await resp.text(); } catch (e) { }
         displayLiveQueryError(lat, lng, `HTTP ${resp.status} (${resp.statusText}): ${errBody || 'Proxy returned an error'}`, targetUrl);
       }
     } catch (e) {
