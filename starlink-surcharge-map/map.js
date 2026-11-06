@@ -354,14 +354,11 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="${starlinkVerifyUrl}" target="_blank" rel="noopener noreferrer" class="starlink-verify-link font-mono">
-            <span>🚀 VERIFY ON STARLINK.COM ↗</span>
-          </a>
-          <button id="btn-live-worker" class="worker-secondary-btn font-mono">
-            <span>📡 QUERY POSTGIS SPATIAL CACHE</span>
+          <button id="btn-live-worker" class="worker-action-btn font-mono">
+            <span>⚡ QUERY SPATIAL CELL CACHE</span>
           </button>
           <p class="card-note font-sans">
-            Starlink manages surcharges by hexagonal cell. Click above to view official live checkout pricing for your address on Starlink.com.
+            PostGIS spatial engine evaluates proximity to known verified Starlink capacity cells.
           </p>
         </div>
       </div>
