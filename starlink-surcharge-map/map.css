@@ -473,6 +473,54 @@ html, body {
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.starlink-verify-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 14px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: all 180ms ease;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+.starlink-verify-link:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
+  color: #ffffff;
+}
+
+.worker-secondary-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-muted);
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 180ms ease;
+}
+.worker-secondary-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--accent);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
 .worker-action-btn {
   width: 100%;
   padding: 10px 14px;

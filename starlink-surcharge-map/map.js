@@ -319,13 +319,15 @@
     let tierClass = isSold ? 'tier-waitlist' : isHigh ? 'tier-high' : '';
     let tierTitle = isSold ? 'SOLD OUT / WAITLIST' :
       pt.surcharge_amount >= 1000 ? 'SEVERE CONGESTION SURCHARGE' :
-        pt.surcharge_amount >= 500 ? 'HIGH DEMAND SURCHARGE' :
-          pt.surcharge_amount >= 100 ? 'MODERATE SURCHARGE ZONE' :
-            'STANDARD CAPACITY ($0)';
+      pt.surcharge_amount >= 500 ? 'HIGH DEMAND SURCHARGE' :
+      pt.surcharge_amount >= 100 ? 'MODERATE SURCHARGE ZONE' :
+      'STANDARD CAPACITY ($0)';
 
     const cacheLabel = distKm !== null && distKm !== undefined
-      ? (distKm === 0 ? 'Exact Verified Pin' : `Cached (${distKm.toFixed(1)} km away)`)
-      : 'Uncached Proximity';
+      ? (distKm === 0 ? 'Exact Sampled Node' : `Sampled Node (${distKm.toFixed(1)} km away)`)
+      : 'Open Capacity / Unsampled Zone';
+
+    const starlinkVerifyUrl = `https://www.starlink.com/residential?serviceAddress=${pt.lat.toFixed(4)},${pt.lng.toFixed(4)}`;
 
     container.innerHTML = `
       <div class="pin-card">
@@ -343,20 +345,23 @@
             <span class="prop-value font-sans">${pt.location_name || 'US Point'}</span>
           </div>
           <div class="prop-row">
-            <span class="prop-name">CACHE STATUS:</span>
+            <span class="prop-name">DATA SOURCE:</span>
             <span class="prop-value">${cacheLabel}</span>
           </div>
           <div class="prop-row">
-            <span class="prop-name">CHECKED:</span>
+            <span class="prop-name">LAST SAMPLED:</span>
             <span class="prop-value">${formatDate(pt.sampled_at)}</span>
           </div>
         </div>
         <div class="card-footer">
-          <button id="btn-live-worker" class="worker-action-btn font-mono">
-            <span>⚡ CHECK EXACT LIVE SURCHARGE</span>
+          <a href="${starlinkVerifyUrl}" target="_blank" rel="noopener noreferrer" class="starlink-verify-link font-mono">
+            <span>🚀 VERIFY ON STARLINK.COM ↗</span>
+          </a>
+          <button id="btn-live-worker" class="worker-secondary-btn font-mono">
+            <span>📡 QUERY POSTGIS SPATIAL CACHE</span>
           </button>
           <p class="card-note font-sans">
-            Queries live Starlink checkout qualification proxy and saves to PostGIS.
+            Starlink manages surcharges by hexagonal cell. Click above to view official live checkout pricing for your address on Starlink.com.
           </p>
         </div>
       </div>
@@ -388,12 +393,12 @@
     activeRadarPin = L.marker([lat, lng], { icon: icon }).addTo(map);
   }
 
-  // Invoke Cloudflare Worker Live Lookup (Strict Live Mode — No Offline Faking)
+  // Invoke Cloudflare Worker Spatial Lookup
   async function triggerLiveWorker(lat, lng) {
     const liveBtn = document.getElementById('btn-live-worker');
     if (liveBtn) {
       liveBtn.disabled = true;
-      liveBtn.innerHTML = '<span class="btn-spinner"></span> <span>PROBING LIVE ENDPOINT...</span>';
+      liveBtn.innerHTML = '<span class="btn-spinner"></span> <span>QUERYING POSTGIS...</span>';
     }
 
     const targetUrl = `${CONFIG.WORKER_API_URL}?lat=${lat.toFixed(4)}&lng=${lng.toFixed(4)}`;
@@ -413,21 +418,35 @@
           surcharge_amount: result.surcharge_amount,
           status: result.status,
           sampled_at: result.timestamp || new Date().toISOString(),
-          location_name: `Verified Live: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`
+          location_name: result.location_name || `Coordinate: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`
         };
 
-        surchargePoints.unshift(updated);
-        updateStats();
-        renderMarkers();
-        displayPointDetails(updated, 0);
+        if (result.source === 'postgis_cache') {
+          surchargePoints.unshift(updated);
+          updateStats();
+          renderMarkers();
+          displayPointDetails(updated, result.distance_km || 0);
+        } else {
+          displayPointDetails(updated, null);
+        }
       } else {
         let errBody = '';
-        try { errBody = await resp.text(); } catch (e) { }
+        try { errBody = await resp.text(); } catch (e) {}
         displayLiveQueryError(lat, lng, `HTTP ${resp.status} (${resp.statusText}): ${errBody || 'Proxy returned an error'}`, targetUrl);
       }
     } catch (e) {
-      console.error('Live Worker query error:', e);
+      console.error('Worker query error:', e);
       let errorReason = '';
+      if (e.name === 'AbortError') {
+        errorReason = 'Request timed out after 6 seconds. The Worker API endpoint did not respond.';
+      } else {
+        errorReason = `Network connection failed (${e.message || 'DNS Resolution Failed'}).`;
+      }
+      displayLiveQueryError(lat, lng, errorReason, targetUrl);
+    } finally {
+      if (liveBtn) liveBtn.disabled = false;
+    }
+  }
       if (e.name === 'AbortError') {
         errorReason = 'Request timed out after 6 seconds. The Worker API endpoint did not respond.';
       } else {
