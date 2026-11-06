@@ -447,16 +447,6 @@
       if (liveBtn) liveBtn.disabled = false;
     }
   }
-      if (e.name === 'AbortError') {
-        errorReason = 'Request timed out after 6 seconds. The Worker API endpoint did not respond.';
-      } else {
-        errorReason = `Network connection failed (${e.message || 'DNS Resolution Failed'}). The Worker endpoint has not been deployed to this URL yet, or is unreachable from this network.`;
-      }
-      displayLiveQueryError(lat, lng, errorReason, targetUrl);
-    } finally {
-      if (liveBtn) liveBtn.disabled = false;
-    }
-  }
 
   // Display explicit diagnostic error panel when live lookup fails
   function displayLiveQueryError(lat, lng, errorReason, targetUrl) {
