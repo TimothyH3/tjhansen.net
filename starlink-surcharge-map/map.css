@@ -599,6 +599,103 @@ html, body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* Live Query Error Diagnostics */
+.card-header-bar.tier-error {
+  background: rgba(239, 68, 68, 0.2);
+  border-bottom-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+.card-header-bar.tier-error .card-tier-fee {
+  color: #ef4444;
+}
+
+.error-detail-box {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin: 6px 0;
+  font-size: 0.74rem;
+}
+.error-detail-title {
+  color: #f87171;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.error-detail-msg {
+  color: #fecaca;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.error-endpoint-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: var(--text-muted);
+}
+.endpoint-code {
+  word-break: break-all;
+  color: var(--accent);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+.worker-config-panel {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.config-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  display: block;
+}
+.config-input-group {
+  display: flex;
+  gap: 6px;
+}
+.config-url-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-primary);
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  outline: none;
+}
+.config-url-input:focus {
+  border-color: var(--accent);
+}
+.config-save-btn {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: var(--accent);
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+.config-save-btn:hover {
+  background: rgba(56, 189, 248, 0.25);
+}
+.config-help {
+  font-size: 0.67rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.config-help code {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
 @media (max-width: 900px) {
   .hud-search-bar { max-width: 200px; }
   .corridor-bar { display: none; }
@@ -610,3 +707,4 @@ html, body {
     width: 320px;
   }
 }
+

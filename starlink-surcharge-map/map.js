@@ -6,11 +6,12 @@
 (function () {
   'use strict';
 
-  // Config: Override with window.STARLINK_CONFIG if present
+  // Config: Override with window.STARLINK_CONFIG or localStorage if present
+  const savedWorkerUrl = localStorage.getItem('starlink_worker_url');
   const CONFIG = Object.assign({
     SUPABASE_URL: 'https://xyz.supabase.co',
     SUPABASE_ANON_KEY: 'eyJhbGciOi...',
-    WORKER_API_URL: 'https://starlink-surcharge-worker.tjhansen.workers.dev/api/check-fee'
+    WORKER_API_URL: savedWorkerUrl || (window.STARLINK_CONFIG && window.STARLINK_CONFIG.WORKER_API_URL) || 'https://starlink-surcharge-worker.tjhansen.workers.dev/api/check-fee'
   }, window.STARLINK_CONFIG || {});
 
   // High-fidelity baseline seed points across US bottleneck corridors
@@ -382,95 +383,127 @@
     activeRadarPin = L.marker([lat, lng], { icon: icon }).addTo(map);
   }
 
-  // Calibrated Corridor Heuristic Fallback (when Worker is not yet deployed)
-  function estimateCorridorSurcharge(lat, lng) {
-    if (lat >= 43.0 && lat <= 49.0 && lng >= -124.5 && lng <= -110.0) {
-      if (lat >= 44.0 && lat <= 48.5 && lng >= -122.0 && lng <= -113.5) {
-        return { surcharge: 250, status: 'high_demand' };
-      }
-      return { surcharge: 100, status: 'high_demand' };
-    }
-    if (lat >= 34.0 && lat <= 43.5 && lng >= -112.5 && lng <= -104.5) {
-      if (lat >= 39.0 && lat <= 40.5 && lng >= -107.5 && lng <= -106.0) {
-        return { surcharge: 1000, status: 'high_demand' };
-      }
-      if (lat >= 34.5 && lat <= 36.0 && lng >= -112.0 && lng <= -109.5) {
-        return { surcharge: 500, status: 'high_demand' };
-      }
-      return { surcharge: 250, status: 'high_demand' };
-    }
-    if (lat >= 35.0 && lat <= 39.5 && lng >= -84.5 && lng <= -79.0) {
-      if (lat >= 35.4 && lat <= 36.5 && lng >= -83.8 && lng <= -81.5) {
-        return { surcharge: 500, status: 'high_demand' };
-      }
-      return { surcharge: 250, status: 'high_demand' };
-    }
-    if (lat >= 37.0 && lat <= 41.5 && lng >= -124.0 && lng <= -118.5) {
-      return { surcharge: 500, status: 'high_demand' };
-    }
-    if (lat >= 29.5 && lat <= 31.5 && lng >= -99.5 && lng <= -97.5) {
-      return { surcharge: 500, status: 'high_demand' };
-    }
-    if (lat >= 44.5 && lat <= 47.0 && lng >= -90.5 && lng <= -85.0) {
-      return { surcharge: 250, status: 'high_demand' };
-    }
-    return { surcharge: 0, status: 'standard' };
-  }
-
-  // Invoke Cloudflare Worker Live Lookup with graceful offline model fallback
+  // Invoke Cloudflare Worker Live Lookup (Strict Live Mode — No Offline Faking)
   async function triggerLiveWorker(lat, lng) {
     const liveBtn = document.getElementById('btn-live-worker');
     if (liveBtn) {
       liveBtn.disabled = true;
-      liveBtn.innerHTML = '<span class="btn-spinner"></span> <span>PROBING STARLINK...</span>';
+      liveBtn.innerHTML = '<span class="btn-spinner"></span> <span>PROBING LIVE ENDPOINT...</span>';
     }
 
-    let result = null;
-    let sourceNotice = 'Live Serverless Proxy';
+    const targetUrl = `${CONFIG.WORKER_API_URL}?lat=${lat.toFixed(4)}&lng=${lng.toFixed(4)}`;
 
     try {
-      const url = `${CONFIG.WORKER_API_URL}?lat=${lat.toFixed(4)}&lng=${lng.toFixed(4)}`;
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-      const resp = await fetch(url, { signal: controller.signal });
+      const resp = await fetch(targetUrl, { signal: controller.signal });
       clearTimeout(timeoutId);
 
       if (resp.ok) {
-        result = await resp.json();
+        const result = await resp.json();
+        const updated = {
+          lat: result.lat,
+          lng: result.lng,
+          surcharge_amount: result.surcharge_amount,
+          status: result.status,
+          sampled_at: result.timestamp || new Date().toISOString(),
+          location_name: `Verified Live: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`
+        };
+
+        surchargePoints.unshift(updated);
+        updateStats();
+        renderMarkers();
+        displayPointDetails(updated, 0);
+      } else {
+        let errBody = '';
+        try { errBody = await resp.text(); } catch (e) {}
+        displayLiveQueryError(lat, lng, `HTTP ${resp.status} (${resp.statusText}): ${errBody || 'Proxy returned an error'}`, targetUrl);
       }
     } catch (e) {
-      console.warn('Worker endpoint unreachable at ' + CONFIG.WORKER_API_URL + '. Using calibrated regional model.', e);
+      console.error('Live Worker query error:', e);
+      let errorReason = '';
+      if (e.name === 'AbortError') {
+        errorReason = 'Request timed out after 6 seconds. The Worker API endpoint did not respond.';
+      } else {
+        errorReason = `Network connection failed (${e.message || 'DNS Resolution Failed'}). The Worker endpoint has not been deployed to this URL yet, or is unreachable from this network.`;
+      }
+      displayLiveQueryError(lat, lng, errorReason, targetUrl);
+    } finally {
+      if (liveBtn) liveBtn.disabled = false;
+    }
+  }
+
+  // Display explicit diagnostic error panel when live lookup fails
+  function displayLiveQueryError(lat, lng, errorReason, targetUrl) {
+    const container = document.getElementById('inspector-content');
+    if (!container) return;
+
+    container.innerHTML = `
+      <div class="pin-card card-error">
+        <div class="card-header-bar tier-error">
+          <span class="card-tier-label font-mono">⚠️ LIVE QUERY FAILED</span>
+          <span class="card-tier-fee font-mono">OFFLINE</span>
+        </div>
+        <div class="card-body font-mono">
+          <div class="prop-row">
+            <span class="prop-name">TARGET COORDINATES:</span>
+            <span class="prop-value">${lat.toFixed(4)}°N, ${lng.toFixed(4)}°W</span>
+          </div>
+
+          <div class="error-detail-box">
+            <div class="error-detail-title">FAILURE DIAGNOSTIC:</div>
+            <div class="error-detail-msg">${errorReason}</div>
+            <div class="error-endpoint-row">
+              <span>ENDPOINT PROBED:</span>
+              <code class="endpoint-code">${targetUrl}</code>
+            </div>
+          </div>
+
+          <div class="worker-config-panel">
+            <label class="config-label font-sans">Worker API Endpoint URL:</label>
+            <div class="config-input-group">
+              <input type="text" id="input-worker-url" class="font-mono config-url-input" value="${CONFIG.WORKER_API_URL}" placeholder="http://localhost:8787/api/check-fee" />
+              <button id="btn-save-worker-url" class="font-mono config-save-btn">SAVE</button>
+            </div>
+            <div class="config-help font-sans">
+              • <strong>To test locally:</strong> Run <code>cd cloudflare-worker && npm run dev</code>, then set endpoint to <code>http://localhost:8787/api/check-fee</code><br/>
+              • <strong>To deploy live:</strong> Run <code>cd cloudflare-worker && npm run deploy</code>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button id="btn-retry-live-worker" class="worker-action-btn font-mono">
+            <span>🔄 RETRY LIVE CHECK</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    // Save Worker URL
+    const saveBtn = document.getElementById('btn-save-worker-url');
+    const urlInput = document.getElementById('input-worker-url');
+    if (saveBtn && urlInput) {
+      saveBtn.addEventListener('click', function () {
+        const newUrl = urlInput.value.trim();
+        if (newUrl) {
+          CONFIG.WORKER_API_URL = newUrl;
+          localStorage.setItem('starlink_worker_url', newUrl);
+          this.textContent = 'SAVED ✓';
+          setTimeout(() => { this.textContent = 'SAVE'; }, 1800);
+        }
+      });
     }
 
-    // If Cloudflare Worker is not yet deployed, fallback seamlessly to regional model
-    if (!result) {
-      const est = estimateCorridorSurcharge(lat, lng);
-      result = {
-        lat: lat,
-        lng: lng,
-        surcharge_amount: est.surcharge,
-        status: est.status,
-        timestamp: new Date().toISOString()
-      };
-      sourceNotice = 'Calibrated Model (Worker Pending Deploy)';
+    // Retry Button
+    const retryBtn = document.getElementById('btn-retry-live-worker');
+    if (retryBtn) {
+      retryBtn.addEventListener('click', function () {
+        triggerLiveWorker(lat, lng);
+      });
     }
 
-    const updated = {
-      lat: result.lat,
-      lng: result.lng,
-      surcharge_amount: result.surcharge_amount,
-      status: result.status,
-      sampled_at: result.timestamp,
-      location_name: `Verified: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W (${sourceNotice})`
-    };
-
-    surchargePoints.unshift(updated);
-    updateStats();
-    renderMarkers();
-    displayPointDetails(updated, 0);
-
-    if (liveBtn) liveBtn.disabled = false;
+    dropRadarPin(lat, lng);
   }
 
   // Geocoding Search (OSM Nominatim)
@@ -618,3 +651,4 @@
     initMap();
   }
 })();
+
