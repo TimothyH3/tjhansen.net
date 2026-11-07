@@ -1,0 +1,126 @@
+{
+  "current_week_index": 45,
+  "blanket_cursor": 1,
+  "known_hotspots": [
+    {
+      "name": "Asheville Blue Ridge, NC",
+      "lat": 35.5951,
+      "lng": -82.5515,
+      "last_surcharge": 0,
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-07T15:03:05.671164+00:00"
+    },
+    {
+      "name": "Boone Watauga High Country, NC",
+      "lat": 36.2168,
+      "lng": -81.6758,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Gatlinburg Great Smoky Mtns, TN",
+      "lat": 35.7143,
+      "lng": -83.5102,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Truckee Lake Tahoe Basin, CA",
+      "lat": 39.328,
+      "lng": -120.1278,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Aspen Roaring Fork, CO",
+      "lat": 39.1911,
+      "lng": -106.837,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Jackson Hole Teton, WY",
+      "lat": 43.4799,
+      "lng": -110.7624,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Kalispell Flathead Basin, MT",
+      "lat": 48.192,
+      "lng": -114.3553,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Bozeman Gallatin Valley, MT",
+      "lat": 45.677,
+      "lng": -111.0429,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Bend Deschutes Corridor, OR",
+      "lat": 44.0582,
+      "lng": -121.3153,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Coeur d'Alene Hinterland, ID",
+      "lat": 47.6777,
+      "lng": -116.7804,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Flagstaff Coconino, AZ",
+      "lat": 35.1983,
+      "lng": -111.6513,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Sedona Oak Creek, AZ",
+      "lat": 34.8697,
+      "lng": -111.8315,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Show Low White Mtns, AZ",
+      "lat": 34.2542,
+      "lng": -110.0831,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Fredericksburg Hill Country, TX",
+      "lat": 30.2752,
+      "lng": -98.8719,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Minocqua Northwoods, WI",
+      "lat": 45.8944,
+      "lng": -89.6886,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    },
+    {
+      "name": "Traverse City Leelanau, MI",
+      "lat": 44.7631,
+      "lng": -85.6206,
+      "last_surcharge": 0,
+      "consecutive_zeros": 0
+    }
+  ],
+  "hotspot_cursor": 1,
+  "stats": {
+    "total_probes_run": 2,
+    "high_demand_hits_found": 1,
+    "cycles_completed": 0
+  },
+  "last_run_timestamp": "2026-11-07T15:03:12.045467+00:00"
+}
