@@ -1,6 +1,6 @@
 {
   "current_week_index": 45,
-  "blanket_cursor": 8,
+  "blanket_cursor": 15,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -23,7 +23,8 @@
       "lat": 35.7143,
       "lng": -83.5102,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-07T23:37:59.450770+00:00"
     },
     {
       "name": "Truckee Lake Tahoe Basin, CA",
@@ -117,11 +118,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 2,
+  "hotspot_cursor": 3,
   "stats": {
-    "total_probes_run": 10,
+    "total_probes_run": 18,
     "high_demand_hits_found": 1,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-07T19:25:21.539157+00:00"
+  "last_run_timestamp": "2026-11-07T23:38:31.636870+00:00"
 }
