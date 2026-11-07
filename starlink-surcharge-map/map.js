@@ -19,64 +19,8 @@
     WORKER_API_URL: savedWorkerUrl || (window.STARLINK_CONFIG && window.STARLINK_CONFIG.WORKER_API_URL) || 'https://starlink-surcharge-worker.starlink-surcharge-map.workers.dev/api/check-fee'
   }, window.STARLINK_CONFIG || {});
 
-  // High-fidelity baseline seed points across US bottleneck corridors
-  const BASELINE_DATA = [
-    { lat: 47.6062, lng: -122.3321, surcharge_amount: 100, status: 'high_demand', location_name: 'Seattle Rural Outer, WA', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 47.6588, lng: -117.4260, surcharge_amount: 100, status: 'high_demand', location_name: 'Spokane County, WA', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 44.0582, lng: -121.3153, surcharge_amount: 250, status: 'high_demand', location_name: 'Bend Deschutes Basin, OR', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 44.0521, lng: -123.0868, surcharge_amount: 100, status: 'high_demand', location_name: 'Eugene Periphery, OR', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 43.6150, lng: -116.2023, surcharge_amount: 250, status: 'high_demand', location_name: 'Boise Valley, ID', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 47.6777, lng: -116.7804, surcharge_amount: 250, status: 'high_demand', location_name: 'Coeur d Alene Hinterland, ID', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 48.1920, lng: -114.3553, surcharge_amount: 500, status: 'high_demand', location_name: 'Kalispell Flathead, MT', sampled_at: '2026-11-02T04:00:00Z' },
-    { lat: 46.8721, lng: -114.0076, surcharge_amount: 250, status: 'high_demand', location_name: 'Missoula Bitterroot, MT', sampled_at: '2026-11-02T04:00:00Z' },
-    { lat: 45.6770, lng: -111.0429, surcharge_amount: 500, status: 'high_demand', location_name: 'Bozeman Gallatin, MT', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 40.7608, lng: -111.8910, surcharge_amount: 100, status: 'high_demand', location_name: 'Wasatch Corridor, UT', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 37.1041, lng: -113.5684, surcharge_amount: 500, status: 'high_demand', location_name: 'St. George Basin, UT', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 39.7392, lng: -104.9903, surcharge_amount: 100, status: 'high_demand', location_name: 'Denver Front Range Foothills, CO', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 37.2753, lng: -107.8801, surcharge_amount: 500, status: 'high_demand', location_name: 'Durango San Juan, CO', sampled_at: '2026-11-02T04:00:00Z' },
-    { lat: 39.1911, lng: -106.8370, surcharge_amount: 1000, status: 'high_demand', location_name: 'Aspen Roaring Fork, CO', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 43.4799, lng: -110.7624, surcharge_amount: 1000, status: 'high_demand', location_name: 'Jackson Hole Valley, WY', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 41.3114, lng: -105.5005, surcharge_amount: 0, status: 'standard', location_name: 'Laramie Plains, WY', sampled_at: '2026-11-01T04:00:00Z' },
-    { lat: 35.1983, lng: -111.6513, surcharge_amount: 500, status: 'high_demand', location_name: 'Flagstaff Coconino, AZ', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 34.8697, lng: -111.8315, surcharge_amount: 500, status: 'high_demand', location_name: 'Sedona Red Rock, AZ', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 34.2542, lng: -110.0831, surcharge_amount: 500, status: 'high_demand', location_name: 'Show Low White Mtns, AZ', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 35.6870, lng: -105.9378, surcharge_amount: 250, status: 'high_demand', location_name: 'Santa Fe Foothills, NM', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 36.4072, lng: -105.5734, surcharge_amount: 500, status: 'high_demand', location_name: 'Taos Enchanted Circle, NM', sampled_at: '2026-11-02T04:00:00Z' },
-    { lat: 39.5296, lng: -119.8138, surcharge_amount: 250, status: 'high_demand', location_name: 'Reno / Tahoe Basin, NV', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 36.1699, lng: -115.1398, surcharge_amount: 0, status: 'standard', location_name: 'Clark County Fringe, NV', sampled_at: '2026-11-01T04:00:00Z' },
-    { lat: 35.5951, lng: -82.5515, surcharge_amount: 500, status: 'high_demand', location_name: 'Asheville Blue Ridge, NC', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 36.2168, lng: -81.6758, surcharge_amount: 500, status: 'high_demand', location_name: 'Boone High Country, NC', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 35.7143, lng: -83.5102, surcharge_amount: 1000, status: 'high_demand', location_name: 'Gatlinburg Great Smoky Mtns, TN', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 35.0456, lng: -85.3097, surcharge_amount: 250, status: 'high_demand', location_name: 'Chattanooga Outer, TN', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 38.3498, lng: -81.6326, surcharge_amount: 250, status: 'high_demand', location_name: 'Charleston Kanawha, WV', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 39.6295, lng: -79.9559, surcharge_amount: 250, status: 'high_demand', location_name: 'Morgantown Corridor, WV', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 38.0406, lng: -84.5037, surcharge_amount: 100, status: 'high_demand', location_name: 'Lexington Outer Bluegrass, KY', sampled_at: '2026-11-02T04:00:00Z' },
-    { lat: 37.2487, lng: -83.4488, surcharge_amount: 500, status: 'high_demand', location_name: 'Hazard Coalfields, KY', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 37.2710, lng: -79.9414, surcharge_amount: 250, status: 'high_demand', location_name: 'Roanoke Valley, VA', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 38.4496, lng: -78.8689, surcharge_amount: 250, status: 'high_demand', location_name: 'Shenandoah Valley, VA', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 36.6437, lng: -93.2185, surcharge_amount: 500, status: 'high_demand', location_name: 'Branson Ozarks, MO', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 36.0626, lng: -94.1574, surcharge_amount: 250, status: 'high_demand', location_name: 'Fayetteville Boston Mtns, AR', sampled_at: '2026-11-02T04:00:00Z' },
-    { lat: 34.5262, lng: -84.0713, surcharge_amount: 500, status: 'high_demand', location_name: 'Dahlonega North GA, GA', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 33.9519, lng: -83.3779, surcharge_amount: 100, status: 'high_demand', location_name: 'Athens Outer Rural, GA', sampled_at: '2026-11-02T04:00:00Z' },
-    { lat: 34.0143, lng: -85.9767, surcharge_amount: 250, status: 'high_demand', location_name: 'Gadsden Lookout Mtn, AL', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 30.4005, lng: -86.1477, surcharge_amount: 500, status: 'high_demand', location_name: 'Destin Emerald Coast, FL', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 29.6516, lng: -82.3248, surcharge_amount: 100, status: 'high_demand', location_name: 'Gainesville Basin, FL', sampled_at: '2026-11-02T04:00:00Z' },
-    { lat: 28.5383, lng: -81.3792, surcharge_amount: 0, status: 'standard', location_name: 'Orlando Central Metro, FL', sampled_at: '2026-11-01T04:00:00Z' },
-    { lat: 30.2752, lng: -98.8719, surcharge_amount: 500, status: 'high_demand', location_name: 'Fredericksburg Hill Country, TX', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 30.2672, lng: -97.7431, surcharge_amount: 100, status: 'high_demand', location_name: 'Austin Outer Hill Country, TX', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 29.7604, lng: -95.3698, surcharge_amount: 0, status: 'standard', location_name: 'Houston Metro, TX', sampled_at: '2026-11-01T04:00:00Z' },
-    { lat: 31.5493, lng: -97.1467, surcharge_amount: 250, status: 'high_demand', location_name: 'Waco Brazos Basin, TX', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 32.4487, lng: -99.7331, surcharge_amount: 100, status: 'high_demand', location_name: 'Abilene Plains, TX', sampled_at: '2026-11-02T04:00:00Z' },
-    { lat: 44.7631, lng: -85.6206, surcharge_amount: 500, status: 'high_demand', location_name: 'Traverse City Northern MI, MI', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 46.5436, lng: -87.3770, surcharge_amount: 250, status: 'high_demand', location_name: 'Marquette Upper Peninsula, MI', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 45.8944, lng: -89.6886, surcharge_amount: 500, status: 'high_demand', location_name: 'Minocqua Northwoods, WI', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 46.3527, lng: -94.1632, surcharge_amount: 250, status: 'high_demand', location_name: 'Brainerd Lakes, MN', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 39.3280, lng: -120.1278, surcharge_amount: 1000, status: 'high_demand', location_name: 'Truckee High Sierra, CA', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 37.6485, lng: -118.9721, surcharge_amount: 1000, status: 'high_demand', location_name: 'Mammoth Lakes Sierra, CA', sampled_at: '2026-11-05T04:00:00Z' },
-    { lat: 41.3100, lng: -122.3861, surcharge_amount: 500, status: 'high_demand', location_name: 'Mount Shasta Siskiyou, CA', sampled_at: '2026-11-04T04:00:00Z' },
-    { lat: 39.3077, lng: -123.7995, surcharge_amount: 500, status: 'high_demand', location_name: 'Mendocino Redwood Coast, CA', sampled_at: '2026-11-03T04:00:00Z' },
-    { lat: 34.1347, lng: -116.3131, surcharge_amount: 500, status: 'high_demand', location_name: 'Joshua Tree High Desert, CA', sampled_at: '2026-11-04T04:00:00Z' }
-  ];
+  // Zero pre-loaded mock nodes. Map populates only via genuine database ingestion.
+  const BASELINE_DATA = [];
 
   // State Management
   let map = null;
@@ -178,16 +122,20 @@
           if (statusDot) statusDot.className = 'pulse-dot';
           if (statusText) statusText.textContent = 'SUPABASE SYNCED';
         } else {
-          surchargePoints = BASELINE_DATA;
+          surchargePoints = [];
+          if (statusDot) statusDot.className = 'pulse-dot offline';
+          if (statusText) statusText.textContent = '0 NODES INGESTED';
         }
       } else {
-        surchargePoints = BASELINE_DATA;
+        surchargePoints = [];
+        if (statusDot) statusDot.className = 'pulse-dot offline';
+        if (statusText) statusText.textContent = 'AWAITING INGESTION';
       }
     } catch (err) {
-      console.warn('Supabase not reached. Using local telemetry cache.', err);
-      surchargePoints = BASELINE_DATA;
+      console.warn('Supabase not reached. Zero pre-loaded nodes.', err);
+      surchargePoints = [];
       if (statusDot) statusDot.className = 'pulse-dot offline';
-      if (statusText) statusText.textContent = 'OFFLINE CACHE';
+      if (statusText) statusText.textContent = 'AWAITING INGESTION';
     }
 
     updateStats();
@@ -315,25 +263,37 @@
 
     const isHigh = pt.surcharge_amount > 0;
     const isSold = pt.status === 'sold_out';
+    const isUnsampled = !!pt.isUnsampled || pt.status === 'unsampled' || pt.surcharge_amount === null;
+    const isLive = !!pt.isLiveVerified || pt.source === 'verified_live';
 
     let tierClass = isSold ? 'tier-waitlist' : isHigh ? 'tier-high' : '';
     let tierTitle = isSold ? 'SOLD OUT / WAITLIST' :
       pt.surcharge_amount >= 1000 ? 'SEVERE CONGESTION SURCHARGE' :
       pt.surcharge_amount >= 500 ? 'HIGH DEMAND SURCHARGE' :
       pt.surcharge_amount >= 100 ? 'MODERATE SURCHARGE ZONE' :
+      isUnsampled ? 'UNSAMPLED CELL' :
       'STANDARD CAPACITY ($0)';
 
-    const cacheLabel = distKm !== null && distKm !== undefined
-      ? (distKm === 0 ? 'Exact Sampled Node' : `Sampled Node (${distKm.toFixed(1)} km away)`)
-      : 'Open Capacity / Unsampled Zone';
+    let feeDisplay = isUnsampled ? 'PENDING' : `$${pt.surcharge_amount}`;
 
-    const starlinkVerifyUrl = `https://www.starlink.com/residential?serviceAddress=${pt.lat.toFixed(4)},${pt.lng.toFixed(4)}`;
+    const cacheLabel = isLive 
+      ? 'Verified Live from Starlink Checkout'
+      : distKm !== null && distKm !== undefined
+        ? (distKm === 0 ? 'Verified Ingested Node' : `Ingested Sample (${distKm.toFixed(1)} km away)`)
+        : 'No verified sample in database';
+
+    const monthlyRow = pt.monthly_service_fee ? `
+      <div class="prop-row">
+        <span class="prop-name">MONTHLY SERVICE:</span>
+        <span class="prop-value">$${pt.monthly_service_fee}/mo</span>
+      </div>
+    ` : '';
 
     container.innerHTML = `
       <div class="pin-card">
         <div class="card-header-bar ${tierClass}">
           <span class="card-tier-label font-mono">${tierTitle}</span>
-          <span class="card-tier-fee font-mono">$${pt.surcharge_amount}</span>
+          <span class="card-tier-fee font-mono">${feeDisplay}</span>
         </div>
         <div class="card-body font-mono">
           <div class="prop-row">
@@ -342,23 +302,28 @@
           </div>
           <div class="prop-row">
             <span class="prop-name">LOCATION:</span>
-            <span class="prop-value font-sans">${pt.location_name || 'US Point'}</span>
+            <span class="prop-value font-sans">${pt.location_name || 'US Coordinate'}</span>
           </div>
           <div class="prop-row">
-            <span class="prop-name">DATA SOURCE:</span>
+            <span class="prop-name">DATA STATUS:</span>
             <span class="prop-value">${cacheLabel}</span>
           </div>
           <div class="prop-row">
             <span class="prop-name">LAST SAMPLED:</span>
-            <span class="prop-value">${formatDate(pt.sampled_at)}</span>
+            <span class="prop-value">${isUnsampled ? 'Awaiting check' : formatDate(pt.sampled_at)}</span>
           </div>
+          ${monthlyRow}
         </div>
         <div class="card-footer">
           <button id="btn-live-worker" class="worker-action-btn font-mono">
-            <span>⚡ QUERY SPATIAL CELL CACHE</span>
+            <span>⚡ CHECK LIVE STARLINK SURCHARGE</span>
           </button>
           <p class="card-note font-sans">
-            PostGIS spatial engine evaluates proximity to known verified Starlink capacity cells.
+            ${isLive 
+              ? 'Directly verified from Starlink checkout session via Cloudflare Worker proxy.' 
+              : isUnsampled 
+                ? 'Click above to query live Starlink address qualification and checkout pricing.' 
+                : 'Verified sample from Supabase PostGIS.'}
           </p>
         </div>
       </div>
@@ -395,54 +360,55 @@
     const liveBtn = document.getElementById('btn-live-worker');
     if (liveBtn) {
       liveBtn.disabled = true;
-      liveBtn.innerHTML = '<span class="btn-spinner"></span> <span>QUERYING POSTGIS...</span>';
+      liveBtn.innerHTML = '<span class="btn-spinner"></span> <span>PROBING STARLINK LIVE...</span>';
     }
 
     const targetUrl = `${CONFIG.WORKER_API_URL}?lat=${lat.toFixed(4)}&lng=${lng.toFixed(4)}`;
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
 
       const resp = await fetch(targetUrl, { signal: controller.signal });
       clearTimeout(timeoutId);
 
       if (resp.ok) {
         const result = await resp.json();
-        if (result.source === 'postgis_cache') {
+        if (result.source === 'verified_live' || result.source === 'postgis_cache') {
           const updated = {
             lat: result.lat,
             lng: result.lng,
             surcharge_amount: result.surcharge_amount,
             status: result.status,
             sampled_at: result.timestamp || new Date().toISOString(),
-            location_name: result.location_name || `Coordinate: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`
+            location_name: result.location_name || `Coordinate: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`,
+            isLiveVerified: result.source === 'verified_live',
+            monthly_service_fee: result.monthly_service_fee,
+            isUnsampled: false
           };
-          surchargePoints.unshift(updated);
+
+          // Check if already in points list
+          const existingIdx = surchargePoints.findIndex(p => Math.abs(p.lat - updated.lat) < 0.001 && Math.abs(p.lng - updated.lng) < 0.001);
+          if (existingIdx >= 0) {
+            surchargePoints[existingIdx] = updated;
+          } else {
+            surchargePoints.unshift(updated);
+          }
+
           updateStats();
           renderMarkers();
           displayPointDetails(updated, result.distance_km || 0);
         } else {
-          // If no closer PostGIS sample was returned, preserve existing inspected node data
-          if (currentlyInspected && !currentlyInspected.isUncached) {
-            const liveBtn = document.getElementById('btn-live-worker');
-            if (liveBtn) {
-              liveBtn.innerHTML = '<span>✓ NODE VERIFIED IN CACHE</span>';
-              setTimeout(() => {
-                liveBtn.innerHTML = '<span>⚡ QUERY SPATIAL CELL CACHE</span>';
-              }, 2200);
-            }
-          } else {
-            displayPointDetails({
-              lat: result.lat,
-              lng: result.lng,
-              surcharge_amount: result.surcharge_amount,
-              status: result.status,
-              sampled_at: result.timestamp || new Date().toISOString(),
-              location_name: result.location_name || `Coordinate (${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W)`,
-              isUncached: true
-            }, null);
-          }
+          // Unsampled result returned
+          displayPointDetails({
+            lat: result.lat,
+            lng: result.lng,
+            surcharge_amount: result.surcharge_amount,
+            status: result.status || 'unsampled',
+            sampled_at: result.timestamp || new Date().toISOString(),
+            location_name: result.location_name || `Coordinate (${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W)`,
+            isUnsampled: true
+          }, null);
         }
       } else {
         let errBody = '';
