@@ -1,6 +1,6 @@
 {
   "current_week_index": 45,
-  "blanket_cursor": 1,
+  "blanket_cursor": 8,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -15,7 +15,8 @@
       "lat": 36.2168,
       "lng": -81.6758,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-07T19:24:49.241154+00:00"
     },
     {
       "name": "Gatlinburg Great Smoky Mtns, TN",
@@ -116,11 +117,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 1,
+  "hotspot_cursor": 2,
   "stats": {
-    "total_probes_run": 2,
+    "total_probes_run": 10,
     "high_demand_hits_found": 1,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-07T15:03:12.045467+00:00"
+  "last_run_timestamp": "2026-11-07T19:25:21.539157+00:00"
 }
