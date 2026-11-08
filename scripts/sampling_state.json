@@ -1,6 +1,6 @@
 {
   "current_week_index": 45,
-  "blanket_cursor": 36,
+  "blanket_cursor": 43,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -55,7 +55,8 @@
       "lat": 48.192,
       "lng": -114.3553,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-08T22:52:32.426498+00:00"
     },
     {
       "name": "Bozeman Gallatin Valley, MT",
@@ -121,11 +122,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 6,
+  "hotspot_cursor": 7,
   "stats": {
-    "total_probes_run": 42,
+    "total_probes_run": 50,
     "high_demand_hits_found": 1,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-08T18:50:01.671592+00:00"
+  "last_run_timestamp": "2026-11-08T22:53:07.820950+00:00"
 }
