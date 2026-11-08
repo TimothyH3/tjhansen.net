@@ -1,6 +1,6 @@
 {
   "current_week_index": 45,
-  "blanket_cursor": 29,
+  "blanket_cursor": 36,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -47,7 +47,8 @@
       "lat": 43.4799,
       "lng": -110.7624,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-08T18:49:27.238823+00:00"
     },
     {
       "name": "Kalispell Flathead Basin, MT",
@@ -120,11 +121,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 5,
+  "hotspot_cursor": 6,
   "stats": {
-    "total_probes_run": 34,
+    "total_probes_run": 42,
     "high_demand_hits_found": 1,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-08T13:21:25.032906+00:00"
+  "last_run_timestamp": "2026-11-08T18:50:01.671592+00:00"
 }
