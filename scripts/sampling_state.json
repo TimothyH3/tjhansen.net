@@ -1,6 +1,6 @@
 {
   "current_week_index": 45,
-  "blanket_cursor": 22,
+  "blanket_cursor": 29,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -39,7 +39,8 @@
       "lat": 39.1911,
       "lng": -106.837,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-08T13:20:54.019210+00:00"
     },
     {
       "name": "Jackson Hole Teton, WY",
@@ -119,11 +120,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 4,
+  "hotspot_cursor": 5,
   "stats": {
-    "total_probes_run": 26,
+    "total_probes_run": 34,
     "high_demand_hits_found": 1,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-08T05:58:03.042327+00:00"
+  "last_run_timestamp": "2026-11-08T13:21:25.032906+00:00"
 }
