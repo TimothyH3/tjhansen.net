@@ -1,6 +1,6 @@
 {
-  "current_week_index": 45,
-  "blanket_cursor": 43,
+  "current_week_index": 46,
+  "blanket_cursor": 7,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -63,7 +63,8 @@
       "lat": 45.677,
       "lng": -111.0429,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-09T02:39:28.766750+00:00"
     },
     {
       "name": "Bend Deschutes Corridor, OR",
@@ -122,11 +123,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 7,
+  "hotspot_cursor": 8,
   "stats": {
-    "total_probes_run": 50,
+    "total_probes_run": 58,
     "high_demand_hits_found": 1,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-08T22:53:07.820950+00:00"
+  "last_run_timestamp": "2026-11-09T02:40:05.682569+00:00"
 }
