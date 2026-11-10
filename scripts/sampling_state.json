@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 35,
+  "blanket_cursor": 42,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -103,7 +103,8 @@
       "lat": 34.2542,
       "lng": -110.0831,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-10T20:49:04.149489+00:00"
     },
     {
       "name": "Fredericksburg Hill Country, TX",
@@ -127,11 +128,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 12,
+  "hotspot_cursor": 13,
   "stats": {
-    "total_probes_run": 90,
+    "total_probes_run": 98,
     "high_demand_hits_found": 1,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-10T13:28:02.180560+00:00"
+  "last_run_timestamp": "2026-11-10T20:49:29.475554+00:00"
 }
