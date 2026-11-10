@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 21,
+  "blanket_cursor": 28,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -87,7 +87,8 @@
       "lat": 35.1983,
       "lng": -111.6513,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-10T04:37:51.997014+00:00"
     },
     {
       "name": "Sedona Oak Creek, AZ",
@@ -125,11 +126,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 10,
+  "hotspot_cursor": 11,
   "stats": {
-    "total_probes_run": 74,
+    "total_probes_run": 82,
     "high_demand_hits_found": 1,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-09T22:19:57.047877+00:00"
+  "last_run_timestamp": "2026-11-10T04:38:16.375668+00:00"
 }
