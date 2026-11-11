@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 49,
+  "blanket_cursor": 56,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -119,7 +119,8 @@
       "lat": 45.8944,
       "lng": -89.6886,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-11T07:45:32.617059+00:00"
     },
     {
       "name": "Traverse City Leelanau, MI",
@@ -129,11 +130,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 14,
+  "hotspot_cursor": 15,
   "stats": {
-    "total_probes_run": 106,
+    "total_probes_run": 114,
     "high_demand_hits_found": 1,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-11T01:15:03.703384+00:00"
+  "last_run_timestamp": "2026-11-11T07:46:00.256194+00:00"
 }
