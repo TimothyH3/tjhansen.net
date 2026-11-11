@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Starlink High-Demand Congestion Surcharge Map — Timothy Hansen</title>
+  <title>Starlink Service Cost Map — Timothy Hansen</title>
   
-  <meta name="description" content="Interactive geospatial map tracking Starlink congestion demand surcharges ($100–$1,500) across the United States with real-time PostGIS queries and live qualification checker.">
+  <meta name="description" content="Interactive geospatial map tracking Starlink monthly service costs ($55 Regional Discount, $120 Standard, $130+ Congestion Adjustment) and upfront congestion surcharges across the United States.">
   <meta name="author" content="Timothy Hansen">
   <link rel="canonical" href="https://tjhansen.net/starlink-surcharge-map">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Starlink High-Demand Congestion Surcharge Map">
-  <meta property="og:description" content="Real-time interactive US map tracking Starlink high-demand bottleneck surcharges ($100–$1,500) powered by PostGIS and Cloudflare Workers.">
+  <meta property="og:title" content="Starlink Service Cost & Congestion Fee Map">
+  <meta property="og:description" content="Real-time interactive US map tracking Starlink regional monthly subscription costs ($55–$130+/mo) and demand surcharges powered by PostGIS and Cloudflare Workers.">
   <meta property="og:url" content="https://tjhansen.net/starlink-surcharge-map">
   <meta property="og:type" content="website">
 
@@ -46,7 +46,7 @@
         </a>
         <span class="hud-divider">/</span>
         <div class="hud-title-group">
-          <h1 class="hud-title">Starlink Congestion Surcharges</h1>
+          <h1 class="hud-title">Starlink Service Cost Map</h1>
           <span class="hud-badge font-mono">LIVE TELEMETRY</span>
         </div>
       </div>
@@ -62,7 +62,7 @@
             type="text"
             id="search-input"
             class="search-input font-sans"
-            placeholder="Search US address or city (e.g. Bend OR, Asheville NC)..."
+            placeholder="Search US address or city (e.g. Denver CO, Asheville NC, Dallas TX)..."
             autocomplete="off"
           />
           <button id="btn-clear-search" class="search-clear-btn" aria-label="Clear Search">✕</button>
@@ -94,36 +94,36 @@
       <!-- Floating Legend -->
       <div class="floating-legend font-mono">
         <div class="legend-header">
-          <span>SURCHARGE TIERS</span>
+          <span>MONTHLY SERVICE TIERS</span>
           <span id="visible-nodes-count">-- NODES</span>
         </div>
         <div class="legend-items">
           <label class="legend-row">
-            <input type="checkbox" id="filter-tier0" checked />
+            <input type="checkbox" id="filter-tierDiscount" checked />
+            <span class="swatch swatch-green"></span>
+            <span>$55/mo Regional Discount</span>
+            <span class="tier-badge" id="count-discount">(-)</span>
+          </label>
+          <label class="legend-row">
+            <input type="checkbox" id="filter-tierStandard" checked />
             <span class="swatch swatch-cyan"></span>
-            <span>$0 Standard</span>
-            <span class="tier-badge" id="count-tier0">(-)</span>
+            <span>$120/mo Standard Plan</span>
+            <span class="tier-badge" id="count-standard">(-)</span>
           </label>
           <label class="legend-row">
-            <input type="checkbox" id="filter-tier1" checked />
-            <span class="swatch swatch-yellow"></span>
-            <span>$100–$250 Surcharge</span>
-            <span class="tier-badge" id="count-tier1">(-)</span>
-          </label>
-          <label class="legend-row">
-            <input type="checkbox" id="filter-tier2" checked />
+            <input type="checkbox" id="filter-tierCongested" checked />
             <span class="swatch swatch-orange"></span>
-            <span>$500–$750 Surcharge</span>
-            <span class="tier-badge" id="count-tier2">(-)</span>
+            <span>$130+/mo Congestion Rate</span>
+            <span class="tier-badge" id="count-congested">(-)</span>
           </label>
           <label class="legend-row">
-            <input type="checkbox" id="filter-tier3" checked />
+            <input type="checkbox" id="filter-tierSurcharge" checked />
             <span class="swatch swatch-red"></span>
-            <span>$1,000+ Severe</span>
-            <span class="tier-badge" id="count-tier3">(-)</span>
+            <span>+$100+ Demand Surcharge</span>
+            <span class="tier-badge" id="count-surcharge">(-)</span>
           </label>
           <label class="legend-row">
-            <input type="checkbox" id="filter-soldOut" checked />
+            <input type="checkbox" id="filter-tierSoldOut" checked />
             <span class="swatch swatch-purple"></span>
             <span>Sold Out / Waitlist</span>
             <span class="tier-badge" id="count-sold">(-)</span>
@@ -131,7 +131,7 @@
         </div>
       </div>
 
-      <!-- Quick Navigation To US Bottleneck Corridors -->
+      <!-- Quick Navigation To US Regional Corridors -->
       <div class="corridor-bar font-mono">
         <span class="corridor-label">REGIONS:</span>
         <button id="jump-pnw" class="corridor-btn">Pacific NW</button>
@@ -150,30 +150,30 @@
           <div id="inspector-content">
             <div class="empty-state">
               <div class="empty-state-icon">🛰️</div>
-              <p class="empty-state-text">Click anywhere on the map or search an address to inspect local Starlink congestion surcharges.</p>
+              <p class="empty-state-text">Click anywhere on the map or search an address to inspect local Starlink monthly service rates and congestion fees.</p>
             </div>
           </div>
         </section>
 
         <!-- National Aggregate Statistics -->
         <section class="sidebar-panel">
-          <h2 class="panel-title font-mono">NETWORK CAPACITY METRICS</h2>
+          <h2 class="panel-title font-mono">NETWORK PRICING METRICS</h2>
           <div class="stats-2x2 font-mono">
             <div class="stat-cell">
               <span id="stat-total-nodes" class="stat-metric accent-val">0</span>
               <span class="stat-sub">TOTAL PROBES</span>
             </div>
             <div class="stat-cell">
-              <span id="stat-high-nodes" class="stat-metric red-val">0</span>
-              <span class="stat-sub">SURCHARGE ZONES</span>
+              <span id="stat-discount-nodes" class="stat-metric green-val">0</span>
+              <span class="stat-sub">DISCOUNT NODES</span>
             </div>
             <div class="stat-cell">
-              <span id="stat-avg-fee" class="stat-metric orange-val">$0</span>
-              <span class="stat-sub">AVG SURCHARGE</span>
+              <span id="stat-avg-cost" class="stat-metric orange-val">$0</span>
+              <span class="stat-sub">AVG SERVICE COST</span>
             </div>
             <div class="stat-cell">
-              <span id="stat-max-fee" class="stat-metric crimson-val">$0</span>
-              <span class="stat-sub">MAX SURCHARGE</span>
+              <span id="stat-surcharge-nodes" class="stat-metric crimson-val">0</span>
+              <span class="stat-sub">SURCHARGES FOUND</span>
             </div>
           </div>
         </section>
@@ -182,10 +182,10 @@
         <section class="sidebar-panel">
           <h2 class="panel-title font-mono">INFRASTRUCTURE ARCHITECTURE</h2>
           <ul class="stack-items font-mono">
-            <li><span class="bullet">•</span> PostGIS Spatial GIST Indexing</li>
-            <li><span class="bullet">•</span> Cloudflare Worker Live Proxy</li>
-            <li><span class="bullet">•</span> Weekly GitHub Actions Pipeline</li>
-            <li><span class="bullet">•</span> 25 km Proximity Cache Check</li>
+            <li><span class="bullet">•</span> 4-Step Starlink Qualification Pipeline</li>
+            <li><span class="bullet">•</span> Cloudflare Worker Edge Spatial Proxy</li>
+            <li><span class="bullet">•</span> PostGIS Proximity Caching (25 km radius)</li>
+            <li><span class="bullet">•</span> Weekly Rotating Hexagonal Grid Sampler</li>
           </ul>
         </section>
       </aside>

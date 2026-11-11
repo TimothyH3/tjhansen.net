@@ -332,11 +332,12 @@ html, body {
   border-radius: 50%;
   display: inline-block;
 }
-.swatch-cyan { background-color: #22d3ee; box-shadow: 0 0 6px rgba(34, 211, 238, 0.8); }
-.swatch-yellow { background-color: #facc15; box-shadow: 0 0 6px rgba(250, 204, 21, 0.8); }
-.swatch-orange { background-color: #fb923c; box-shadow: 0 0 6px rgba(251, 146, 60, 0.8); }
+.swatch-green { background-color: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.8); }
+.swatch-cyan { background-color: #38bdf8; box-shadow: 0 0 6px rgba(56, 189, 248, 0.8); }
+.swatch-orange { background-color: #f97316; box-shadow: 0 0 6px rgba(249, 115, 22, 0.8); }
 .swatch-red { background-color: #ef4444; box-shadow: 0 0 6px rgba(239, 68, 68, 0.8); }
 .swatch-purple { background-color: #c084fc; box-shadow: 0 0 6px rgba(192, 132, 252, 0.8); }
+.swatch-yellow { background-color: #facc15; box-shadow: 0 0 6px rgba(250, 204, 21, 0.8); }
 
 .tier-badge {
   margin-left: auto;
@@ -432,6 +433,18 @@ html, body {
   background: rgba(56, 189, 248, 0.1);
   border-bottom: 1px solid rgba(56, 189, 248, 0.2);
 }
+.card-header-bar.tier-discount {
+  background: rgba(16, 185, 129, 0.14);
+  border-bottom-color: rgba(16, 185, 129, 0.3);
+}
+.card-header-bar.tier-standard {
+  background: rgba(56, 189, 248, 0.12);
+  border-bottom-color: rgba(56, 189, 248, 0.25);
+}
+.card-header-bar.tier-congested {
+  background: rgba(249, 115, 22, 0.14);
+  border-bottom-color: rgba(249, 115, 22, 0.3);
+}
 .card-header-bar.tier-high {
   background: rgba(239, 68, 68, 0.14);
   border-bottom-color: rgba(239, 68, 68, 0.3);
@@ -451,7 +464,38 @@ html, body {
   font-weight: 700;
   color: var(--accent);
 }
+.card-header-bar.tier-discount .card-tier-fee { color: #34d399; }
+.card-header-bar.tier-standard .card-tier-fee { color: #38bdf8; }
+.card-header-bar.tier-congested .card-tier-fee { color: #fb923c; }
 .card-header-bar.tier-high .card-tier-fee { color: #ef4444; }
+.card-header-bar.tier-waitlist .card-tier-fee { color: #c084fc; }
+
+.surcharge-banner-callout {
+  margin: 12px 14px 2px 14px;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fca5a5;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.surcharge-none-callout {
+  margin: 10px 14px 0 14px;
+  padding: 6px 12px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #6ee7b7;
+  font-size: 0.72rem;
+}
 
 .card-body {
   padding: 12px 14px;
@@ -591,6 +635,8 @@ html, body {
 
 .accent-val { color: var(--accent); }
 .red-val { color: #ef4444; }
+.green-val { color: #34d399; }
+.cyan-val { color: #38bdf8; }
 .orange-val { color: #fb923c; }
 .crimson-val { color: #f43f5e; }
 

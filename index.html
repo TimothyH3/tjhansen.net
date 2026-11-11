@@ -318,15 +318,15 @@
                   <span class="project-index font-mono">03 // SATELLITE GEOSPATIAL</span>
                   <span class="project-badge font-mono">Vue 3 • Python • GeoJSON • Leaflet</span>
                 </div>
-                <h3 class="bento-title">Starlink Congestion Tracker</h3>
-                <p class="bento-desc">Interactive geospatial tool identifying satellite cell demand, capacity, and
-                  relocation fee zones.</p>
+                <h3 class="bento-title">Starlink Service Cost Map</h3>
+                <p class="bento-desc">Interactive geospatial tool tracking monthly Starlink service costs ($55–$130+/mo),
+                  regional price adjustments, and congestion surcharges.</p>
                 <div class="bento-metric font-mono">⚡ 1.8ms Client Ray-Casting • 2,400+ Polygons</div>
                 <ul class="bento-bullet-list font-mono">
                   <li><span class="bullet">•</span><span>Visualizes real-time polygon boundary overlays for Starlink
-                      service zones to warn mobile users of high-demand surcharges.</span></li>
-                  <li><span class="bullet">•</span><span>Coordinate-intersection algorithms running client-side for
-                      rapid lookup by GPS or address.</span></li>
+                      regional pricing tiers ($55 discount, $120 standard, $130+ congestion).</span></li>
+                  <li><span class="bullet">•</span><span>Direct 4-step Starlink qualification probe identifying upfront
+                      congestion surcharges and monthly price adjustments.</span></li>
                 </ul>
                 <div class="bento-actions">
                   <a href="/starlink-surcharge-map" class="demo-trigger-btn primary-demo-btn" style="text-decoration:none;">
@@ -639,10 +639,9 @@
       <div class="demo-view" id="demo-starlink-tracker">
         <div class="demo-header">
           <div class="demo-tag font-mono">03 // SATELLITE GEOSPATIAL ANALYSIS</div>
-          <h2 class="demo-title">Starlink Congestion &amp; Relocation Tracker</h2>
-          <p class="demo-intro">Interactive geospatial tool identifying satellite cell demand, capacity, and high-demand
-            relocation fee zones. Coordinate-intersection algorithms running client-side warn mobile users of congestion
-            surcharges.</p>
+          <h2 class="demo-title">Starlink Service Cost &amp; Congestion Tracker</h2>
+          <p class="demo-intro">Interactive geospatial tool tracking monthly Starlink service subscription costs
+            ($55 regional discount, $120 standard base rate, $130+ congestion adjustment) and upfront demand surcharges.</p>
         </div>
 
         <div class="demo-stats-grid font-mono">
@@ -659,8 +658,8 @@
             <span class="demo-stat-val" id="starlink-cells-val">2,418 Polygons</span>
           </div>
           <div class="demo-stat-box">
-            <span class="demo-stat-lbl">SURCHARGE STATUS</span>
-            <span class="demo-stat-val text-green" id="starlink-status-val">STANDARD TIER ($0)</span>
+            <span class="demo-stat-lbl">MONTHLY SERVICE</span>
+            <span class="demo-stat-val text-green" id="starlink-status-val">STANDARD ($120/MO)</span>
           </div>
         </div>
 
@@ -671,7 +670,7 @@
             <button class="minimal-btn font-mono" id="starlink-toggle-btn">⚠️ Toggle High-Demand Surcharge Polygon
               Overlay</button>
             <a href="/starlink-surcharge-map" class="minimal-btn primary-btn font-mono" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-              🚀 Open Fullscreen Surcharge Map Subpage ↗
+              🚀 Open Fullscreen Service Cost Map Subpage ↗
             </a>
           </div>
 

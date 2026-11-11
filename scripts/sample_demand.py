@@ -390,16 +390,26 @@ def probe_starlink_availability(lat: float, lng: float) -> Optional[Dict[str, An
 
             deposit = int(pricing_content.get("depositAmount", 0))
             monthly_service = int(pricing_content.get("serviceAmount", 120))
-            status = "sold_out" if deposit > 0 else ("high_demand" if surcharge > 0 else "standard")
+            if deposit > 0:
+                status = "sold_out"
+            elif surcharge > 0:
+                status = "high_demand"
+            elif monthly_service > 120:
+                status = "congested"
+            elif monthly_service < 120:
+                status = "discounted"
+            else:
+                status = "standard"
 
-            logger.info(f"Verified Live: ({lat}, {lng}) -> Surcharge: ${surcharge}, Status: {status}, Service: ${monthly_service}/mo")
+            logger.info(f"Verified Live: ({lat}, {lng}) -> Service: ${monthly_service}/mo, Surcharge: ${surcharge}, Status: {status}")
 
             return {
                 "surcharge_amount": surcharge,
+                "monthly_service_fee": monthly_service,
+                "service_price_adjustment": monthly_service - 120,
                 "status": status,
                 "verified_live": True,
                 "location_name": first_match.get("formatted_address") or f"{city}, {state_short}",
-                "monthly_service_fee": monthly_service,
                 "deposit_amount": deposit
             }
 
@@ -458,11 +468,26 @@ def upsert_batch_to_supabase(records: List[Dict[str, Any]]) -> int:
                     "location_name": rec.get("location_name"),
                     "sampled_at": datetime.now(timezone.utc).isoformat()
                 }
+                if "monthly_service_fee" in rec:
+                    row_data["monthly_service_fee"] = rec["monthly_service_fee"]
+
                 fb_status, fb_text = http_post_json(
                     table_url,
                     payload=row_data,
                     headers={**headers, "Prefer": "resolution=merge-duplicates"}
                 )
+                if fb_status in (200, 201, 204):
+                    successful += 1
+                elif "monthly_service_fee" in fb_text:
+                    # Column not yet in schema; retry without it
+                    row_data.pop("monthly_service_fee", None)
+                    retry_status, _ = http_post_json(
+                        table_url,
+                        payload=row_data,
+                        headers={**headers, "Prefer": "resolution=merge-duplicates"}
+                    )
+                    if retry_status in (200, 201, 204):
+                        successful += 1
                 if fb_status in (200, 201, 204):
                     successful += 1
                 else:
@@ -561,25 +586,30 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
 
         if probe_res:
             surcharge = probe_res["surcharge_amount"]
+            monthly_service = probe_res.get("monthly_service_fee", 120)
             target_hotspot["last_surcharge"] = surcharge
+            target_hotspot["last_monthly_fee"] = monthly_service
             target_hotspot["last_checked"] = datetime.now(timezone.utc).isoformat()
 
-            if surcharge > 0:
+            is_congested_hotspot = (surcharge > 0) or (monthly_service > 120)
+
+            if is_congested_hotspot:
                 target_hotspot["consecutive_zeros"] = 0
-                logger.info(f"  -> Hotspot Active: ${surcharge} congestion surcharge maintained.")
+                logger.info(f"  -> Hotspot Active: ${monthly_service}/mo (${surcharge} surcharge) congestion maintained.")
             else:
                 target_hotspot["consecutive_zeros"] = target_hotspot.get("consecutive_zeros", 0) + 1
-                logger.info(f"  -> Hotspot returned $0 (zeros: {target_hotspot['consecutive_zeros']}/2).")
+                logger.info(f"  -> Hotspot returned standard rate ($120/mo, $0 surcharge) (strikes: {target_hotspot['consecutive_zeros']}/2).")
 
-                # Auto-demote after 2 consecutive $0 checks
+                # Auto-demote after 2 consecutive non-congested checks
                 if target_hotspot["consecutive_zeros"] >= 2:
-                    logger.info(f"  -> Demoting {h_name} from priority hotspots (returned $0 twice).")
+                    logger.info(f"  -> Demoting {h_name} from priority hotspots (standard rate twice).")
                     hotspots.remove(target_hotspot)
 
             records_to_upsert.append({
                 "lat": h_lat,
                 "lng": h_lng,
                 "surcharge_amount": surcharge,
+                "monthly_service_fee": monthly_service,
                 "status": probe_res["status"],
                 "sample_type": "hotspot_priority",
                 "location_name": probe_res.get("location_name") or h_name
@@ -607,6 +637,7 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
                 continue
 
             surcharge = probe_res["surcharge_amount"]
+            monthly_service = probe_res.get("monthly_service_fee", 120)
             status = probe_res["status"]
             loc_name = probe_res.get("location_name") or f"US Cell ({b_lat:.3f}°N, {b_lng:.3f}°W)"
 
@@ -614,14 +645,15 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
                 "lat": b_lat,
                 "lng": b_lng,
                 "surcharge_amount": surcharge,
+                "monthly_service_fee": monthly_service,
                 "status": status,
                 "sample_type": "blanket_grid",
                 "location_name": loc_name
             })
 
-            # 3. Discovery: If Surcharge > 0 in a blanket hex, promote & scatter!
-            if surcharge > 0:
-                logger.info(f"  -> NEW CONGESTION HOTSPOT DISCOVERED! ${surcharge} at {loc_name}")
+            # 3. Discovery: If Surcharge > 0 OR monthly service > $120, promote & scatter!
+            if surcharge > 0 or monthly_service > 120:
+                logger.info(f"  -> CONGESTION ZONE DISCOVERED! ${monthly_service}/mo (+${surcharge} surcharge) at {loc_name}")
                 state["stats"]["high_demand_hits_found"] = state["stats"].get("high_demand_hits_found", 0) + 1
 
                 # Promote to Known Hotspots
@@ -631,6 +663,7 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
                         "lat": b_lat,
                         "lng": b_lng,
                         "last_surcharge": surcharge,
+                        "last_monthly_fee": monthly_service,
                         "consecutive_zeros": 0,
                         "last_checked": datetime.now(timezone.utc).isoformat()
                     })
@@ -645,6 +678,7 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
                             "lat": sc["lat"],
                             "lng": sc["lng"],
                             "surcharge_amount": s_res["surcharge_amount"],
+                            "monthly_service_fee": s_res.get("monthly_service_fee", 120),
                             "status": s_res["status"],
                             "sample_type": "radial_scatter",
                             "location_name": s_res.get("location_name") or f"{loc_name} {sc['name']}"

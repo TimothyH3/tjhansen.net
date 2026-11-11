@@ -1,6 +1,6 @@
 /**
- * Starlink High-Demand Congestion Surcharge Map Engine
- * tjhansen.net / Starlink Surcharge Map
+ * Starlink Regional Service Cost & Surcharge Map Engine
+ * tjhansen.net / Starlink Service Cost Map
  */
 
 (function () {
@@ -19,9 +19,6 @@
     WORKER_API_URL: savedWorkerUrl || (window.STARLINK_CONFIG && window.STARLINK_CONFIG.WORKER_API_URL) || 'https://starlink-surcharge-worker.starlink-surcharge-map.workers.dev/api/check-fee'
   }, window.STARLINK_CONFIG || {});
 
-  // Zero pre-loaded mock nodes. Map populates only via genuine database ingestion.
-  const BASELINE_DATA = [];
-
   // State Management
   let map = null;
   let markersLayer = null;
@@ -30,11 +27,11 @@
   let currentlyInspected = null;
 
   const tierFilters = {
-    tier0: true,
-    tier1: true,
-    tier2: true,
-    tier3: true,
-    soldOut: true
+    tierDiscount: true,
+    tierStandard: true,
+    tierCongested: true,
+    tierSurcharge: true,
+    tierSoldOut: true
   };
 
   // Haversine Distance (km)
@@ -48,12 +45,23 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
-  function getTierColor(surcharge, status) {
-    if (status === 'sold_out') return '#c084fc';
-    if (surcharge >= 1000) return '#ef4444';
-    if (surcharge >= 500) return '#fb923c';
-    if (surcharge >= 100) return '#facc15';
-    return '#22d3ee';
+  function getPointFee(pt) {
+    if (pt.monthly_service_fee !== undefined && pt.monthly_service_fee !== null) {
+      return pt.monthly_service_fee;
+    }
+    if (pt.status === 'discounted') return 55;
+    if (pt.status === 'congested') return 130;
+    return 120;
+  }
+
+  function getTierColor(pt) {
+    if (pt.status === 'sold_out') return '#c084fc';
+    const surcharge = pt.surcharge_amount || 0;
+    if (surcharge > 0) return '#ef4444';
+    const fee = getPointFee(pt);
+    if (fee > 120) return '#f97316';
+    if (fee < 120) return '#10b981';
+    return '#38bdf8';
   }
 
   function formatDate(dStr) {
@@ -145,26 +153,28 @@
   // Calculate Aggregates
   function updateStats() {
     let total = surchargePoints.length;
-    let highCount = 0;
-    let sumSurcharge = 0;
-    let maxS = 0;
-
-    let c0 = 0, c1 = 0, c2 = 0, c3 = 0, cSold = 0;
+    let discountCount = 0;
+    let standardCount = 0;
+    let congestedCount = 0;
+    let surchargeCount = 0;
+    let soldCount = 0;
+    let sumMonthly = 0;
 
     for (const pt of surchargePoints) {
       const s = pt.surcharge_amount || 0;
-      if (s > maxS) maxS = s;
-      if (s > 0) {
-        highCount++;
-        sumSurcharge += s;
-      }
+      const fee = getPointFee(pt);
+      const isSold = pt.status === 'sold_out';
 
-      if (pt.status === 'sold_out') cSold++;
-      else if (s >= 1000) c3++;
-      else if (s >= 500) c2++;
-      else if (s >= 100) c1++;
-      else c0++;
+      sumMonthly += fee;
+
+      if (isSold) soldCount++;
+      if (s > 0) surchargeCount++;
+      if (fee < 120 && !isSold) discountCount++;
+      else if (fee === 120 && !isSold) standardCount++;
+      else if (fee > 120 && !isSold) congestedCount++;
     }
+
+    const avgMonthly = total > 0 ? Math.round(sumMonthly / total) : 120;
 
     const setText = (id, val) => {
       const el = document.getElementById(id);
@@ -172,15 +182,15 @@
     };
 
     setText('stat-total-nodes', total);
-    setText('stat-high-nodes', highCount);
-    setText('stat-avg-fee', highCount > 0 ? `$${Math.round(sumSurcharge / highCount)}` : '$0');
-    setText('stat-max-fee', `$${maxS}`);
+    setText('stat-discount-nodes', discountCount);
+    setText('stat-avg-cost', total > 0 ? `$${avgMonthly}/mo` : '$0');
+    setText('stat-surcharge-nodes', surchargeCount);
 
-    setText('count-tier0', `(${c0})`);
-    setText('count-tier1', `(${c1})`);
-    setText('count-tier2', `(${c2})`);
-    setText('count-tier3', `(${c3})`);
-    setText('count-sold', `(${cSold})`);
+    setText('count-discount', `(${discountCount})`);
+    setText('count-standard', `(${standardCount})`);
+    setText('count-congested', `(${congestedCount})`);
+    setText('count-surcharge', `(${surchargeCount})`);
+    setText('count-sold', `(${soldCount})`);
   }
 
   // Draw Circle Markers
@@ -190,17 +200,18 @@
 
     for (const pt of surchargePoints) {
       const s = pt.surcharge_amount || 0;
+      const fee = getPointFee(pt);
       const isSold = pt.status === 'sold_out';
 
-      if (isSold && !tierFilters.soldOut) continue;
-      if (!isSold && s === 0 && !tierFilters.tier0) continue;
-      if (!isSold && s >= 100 && s < 500 && !tierFilters.tier1) continue;
-      if (!isSold && s >= 500 && s < 1000 && !tierFilters.tier2) continue;
-      if (!isSold && s >= 1000 && !tierFilters.tier3) continue;
+      if (isSold && !tierFilters.tierSoldOut) continue;
+      if (s > 0 && !tierFilters.tierSurcharge) continue;
+      if (!isSold && s === 0 && fee < 120 && !tierFilters.tierDiscount) continue;
+      if (!isSold && s === 0 && fee === 120 && !tierFilters.tierStandard) continue;
+      if (!isSold && s === 0 && fee > 120 && !tierFilters.tierCongested) continue;
 
       visible++;
-      const color = getTierColor(s, pt.status);
-      const radius = s >= 1000 ? 9 : s >= 500 ? 8 : s >= 100 ? 7 : 5;
+      const color = getTierColor(pt);
+      const radius = s > 0 ? 8.5 : fee > 120 ? 7.5 : fee < 120 ? 7.0 : 6.0;
 
       const circle = L.circleMarker([pt.lat, pt.lng], {
         radius,
@@ -208,7 +219,24 @@
         color: '#ffffff',
         weight: 1.2,
         opacity: 0.9,
-        fillOpacity: 0.75
+        fillOpacity: 0.8
+      });
+
+      // Hover tooltip
+      const tipText = isSold
+        ? `Waitlist / Sold Out`
+        : s > 0
+          ? `$${fee}/mo (+$${s} Surcharge)`
+          : fee < 120
+            ? `$${fee}/mo (Regional Discount)`
+            : fee > 120
+              ? `$${fee}/mo (Congestion Adjusted)`
+              : `$120/mo Standard`;
+
+      circle.bindTooltip(tipText, {
+        className: 'font-mono',
+        direction: 'top',
+        offset: [0, -6]
       });
 
       circle.on('click', function (e) {
@@ -244,11 +272,12 @@
       displayPointDetails({
         lat,
         lng,
-        surcharge_amount: 0,
-        status: 'standard',
+        monthly_service_fee: null,
+        surcharge_amount: null,
+        status: 'unsampled',
         location_name: `Uncached Coordinate (${lat.toFixed(3)}°, ${lng.toFixed(3)}°)`,
         sampled_at: new Date().toISOString(),
-        isUncached: true
+        isUnsampled: true
       }, minKm < 1000 ? minKm : null);
     }
 
@@ -261,20 +290,28 @@
     const container = document.getElementById('inspector-content');
     if (!container) return;
 
-    const isHigh = pt.surcharge_amount > 0;
     const isSold = pt.status === 'sold_out';
-    const isUnsampled = !!pt.isUnsampled || pt.status === 'unsampled' || pt.surcharge_amount === null;
+    const isUnsampled = !!pt.isUnsampled || pt.status === 'unsampled' || (pt.monthly_service_fee === null && pt.surcharge_amount === null);
     const isLive = !!pt.isLiveVerified || pt.source === 'verified_live';
 
-    let tierClass = isSold ? 'tier-waitlist' : isHigh ? 'tier-high' : '';
-    let tierTitle = isSold ? 'SOLD OUT / WAITLIST' :
-      pt.surcharge_amount >= 1000 ? 'SEVERE CONGESTION SURCHARGE' :
-      pt.surcharge_amount >= 500 ? 'HIGH DEMAND SURCHARGE' :
-      pt.surcharge_amount >= 100 ? 'MODERATE SURCHARGE ZONE' :
-      isUnsampled ? 'UNSAMPLED CELL' :
-      'STANDARD CAPACITY ($0)';
+    const monthlyFee = pt.monthly_service_fee !== undefined && pt.monthly_service_fee !== null ? pt.monthly_service_fee : (pt.status === 'discounted' ? 55 : pt.status === 'congested' ? 130 : 120);
+    const surcharge = pt.surcharge_amount || 0;
+    const adjustment = monthlyFee - 120;
 
-    let feeDisplay = isUnsampled ? 'PENDING' : `$${pt.surcharge_amount}`;
+    let tierClass = isSold ? 'tier-waitlist' :
+      surcharge > 0 ? 'tier-high' :
+      monthlyFee > 120 ? 'tier-congested' :
+      monthlyFee < 120 ? 'tier-discount' :
+      'tier-standard';
+
+    let tierTitle = isSold ? 'SOLD OUT / WAITLIST' :
+      surcharge > 0 ? 'CONGESTION SURCHARGE ZONE' :
+      monthlyFee > 120 ? 'CONGESTION ADJUSTED RATE' :
+      monthlyFee < 120 ? 'REGIONAL CAPACITY DISCOUNT' :
+      isUnsampled ? 'UNSAMPLED CELL' :
+      'STANDARD RESIDENTIAL PLAN';
+
+    let feeDisplay = isUnsampled ? 'PENDING' : `$${monthlyFee}/mo`;
 
     const cacheLabel = isLive 
       ? 'Verified Live from Starlink Checkout'
@@ -282,12 +319,29 @@
         ? (distKm === 0 ? 'Verified Ingested Node' : `Ingested Sample (${distKm.toFixed(1)} km away)`)
         : 'No verified sample in database';
 
-    const monthlyRow = pt.monthly_service_fee ? `
-      <div class="prop-row">
-        <span class="prop-name">MONTHLY SERVICE:</span>
-        <span class="prop-value">$${pt.monthly_service_fee}/mo</span>
-      </div>
-    ` : '';
+    // Surcharge callout banner
+    let surchargeBanner = '';
+    if (surcharge > 0) {
+      surchargeBanner = `
+        <div class="surcharge-banner-callout font-mono">
+          <span>⚠️</span>
+          <span>+$${surcharge} ONE-TIME CONGESTION SURCHARGE</span>
+        </div>
+      `;
+    } else if (!isUnsampled && !isSold) {
+      surchargeBanner = `
+        <div class="surcharge-none-callout font-mono">
+          <span>✓</span>
+          <span>No upfront surcharge ($0 demand fee)</span>
+        </div>
+      `;
+    }
+
+    const priceAdjustmentNote = adjustment > 0
+      ? `(+$${adjustment}/mo congestion adjustment)`
+      : adjustment < 0
+        ? `(-$${Math.abs(adjustment)}/mo excess capacity discount)`
+        : `(Standard $120 base rate)`;
 
     container.innerHTML = `
       <div class="pin-card">
@@ -295,7 +349,20 @@
           <span class="card-tier-label font-mono">${tierTitle}</span>
           <span class="card-tier-fee font-mono">${feeDisplay}</span>
         </div>
+        ${surchargeBanner}
         <div class="card-body font-mono">
+          <div class="prop-row">
+            <span class="prop-name">MONTHLY SERVICE:</span>
+            <span class="prop-value">${isUnsampled ? 'Awaiting check' : `$${monthlyFee}/mo`}</span>
+          </div>
+          <div class="prop-row">
+            <span class="prop-name">RATE BREAKDOWN:</span>
+            <span class="prop-value font-sans" style="font-size:0.72rem;">${isUnsampled ? 'Unknown' : priceAdjustmentNote}</span>
+          </div>
+          <div class="prop-row">
+            <span class="prop-name">ONE-TIME SURCHARGE:</span>
+            <span class="prop-value" style="color: ${surcharge > 0 ? '#ef4444' : '#34d399'}">${isUnsampled ? 'Pending' : (surcharge > 0 ? `+$${surcharge}` : '$0')}</span>
+          </div>
           <div class="prop-row">
             <span class="prop-name">COORDINATES:</span>
             <span class="prop-value">${pt.lat.toFixed(4)}°N, ${pt.lng.toFixed(4)}°W</span>
@@ -312,11 +379,10 @@
             <span class="prop-name">LAST SAMPLED:</span>
             <span class="prop-value">${isUnsampled ? 'Awaiting check' : formatDate(pt.sampled_at)}</span>
           </div>
-          ${monthlyRow}
         </div>
         <div class="card-footer">
           <button id="btn-live-worker" class="worker-action-btn font-mono">
-            <span>⚡ CHECK LIVE STARLINK SURCHARGE</span>
+            <span>⚡ CHECK LIVE STARLINK SERVICE COST</span>
           </button>
           <p class="card-note font-sans">
             ${isLive 
@@ -360,7 +426,7 @@
     const liveBtn = document.getElementById('btn-live-worker');
     if (liveBtn) {
       liveBtn.disabled = true;
-      liveBtn.innerHTML = '<span class="btn-spinner"></span> <span>PROBING STARLINK LIVE...</span>';
+      liveBtn.innerHTML = '<span class="btn-spinner"></span> <span>PROBING STARLINK CHECKOUT...</span>';
     }
 
     const targetUrl = `${CONFIG.WORKER_API_URL}?lat=${lat.toFixed(4)}&lng=${lng.toFixed(4)}`;
@@ -378,12 +444,13 @@
           const updated = {
             lat: result.lat,
             lng: result.lng,
+            monthly_service_fee: result.monthly_service_fee,
+            service_price_adjustment: result.service_price_adjustment,
             surcharge_amount: result.surcharge_amount,
             status: result.status,
             sampled_at: result.timestamp || new Date().toISOString(),
             location_name: result.location_name || `Coordinate: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`,
             isLiveVerified: result.source === 'verified_live',
-            monthly_service_fee: result.monthly_service_fee,
             isUnsampled: false
           };
 
@@ -403,6 +470,7 @@
           displayPointDetails({
             lat: result.lat,
             lng: result.lng,
+            monthly_service_fee: result.monthly_service_fee,
             surcharge_amount: result.surcharge_amount,
             status: result.status || 'unsampled',
             sampled_at: result.timestamp || new Date().toISOString(),
@@ -419,7 +487,7 @@
       console.error('Worker query error:', e);
       let errorReason = '';
       if (e.name === 'AbortError') {
-        errorReason = 'Request timed out after 6 seconds. The Worker API endpoint did not respond.';
+        errorReason = 'Request timed out after 12 seconds. The Worker API endpoint did not respond.';
       } else {
         errorReason = `Network connection failed (${e.message || 'DNS Resolution Failed'}).`;
       }
@@ -462,7 +530,7 @@
               <button id="btn-save-worker-url" class="font-mono config-save-btn">SAVE</button>
             </div>
             <div class="config-help font-sans">
-              • <strong>To test locally:</strong> Run <code>cd cloudflare-worker && npm run dev</code>, then set endpoint to <code>http://localhost:8787/api/check-fee</code><br/>
+              • <strong>To test locally:</strong> Run <code>cd cloudflare-worker && npm run dev</code><br/>
               • <strong>To deploy live:</strong> Run <code>cd cloudflare-worker && npm run deploy</code>
             </div>
           </div>
@@ -591,12 +659,19 @@
     }
 
     // Tier Checkboxes
-    const tiers = ['tier0', 'tier1', 'tier2', 'tier3', 'soldOut'];
-    tiers.forEach(t => {
-      const chk = document.getElementById(`filter-${t}`);
+    const filterMap = [
+      { id: 'filter-tierDiscount', key: 'tierDiscount' },
+      { id: 'filter-tierStandard', key: 'tierStandard' },
+      { id: 'filter-tierCongested', key: 'tierCongested' },
+      { id: 'filter-tierSurcharge', key: 'tierSurcharge' },
+      { id: 'filter-tierSoldOut', key: 'tierSoldOut' }
+    ];
+
+    filterMap.forEach(({ id, key }) => {
+      const chk = document.getElementById(id);
       if (chk) {
         chk.addEventListener('change', function () {
-          tierFilters[t] = this.checked;
+          tierFilters[key] = this.checked;
           const parent = this.closest('.legend-row');
           if (parent) {
             parent.className = this.checked ? 'legend-row' : 'legend-row disabled';
@@ -646,4 +721,3 @@
     initMap();
   }
 })();
-
