@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 42,
+  "blanket_cursor": 49,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -111,7 +111,8 @@
       "lat": 30.2752,
       "lng": -98.8719,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_checked": "2026-11-11T01:14:36.949355+00:00"
     },
     {
       "name": "Minocqua Northwoods, WI",
@@ -128,11 +129,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 13,
+  "hotspot_cursor": 14,
   "stats": {
-    "total_probes_run": 98,
+    "total_probes_run": 106,
     "high_demand_hits_found": 1,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-10T20:49:29.475554+00:00"
+  "last_run_timestamp": "2026-11-11T01:15:03.703384+00:00"
 }
