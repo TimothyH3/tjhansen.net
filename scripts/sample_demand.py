@@ -389,24 +389,40 @@ def probe_starlink_availability(lat: float, lng: float) -> Optional[Dict[str, An
                 surcharge = int(surcharge_prods[0].get("price", 0))
 
             deposit = int(pricing_content.get("depositAmount", 0))
-            monthly_service = int(pricing_content.get("serviceAmount", 120))
+            base_service = float(pricing_content.get("serviceAmount", 120))
+
+            # Genuine extraction of Service Price Adjustment from Starlink promotionEvaluation
+            service_adjustment = 0.0
+            promo = pricing_content.get("promotionEvaluation") or {}
+            promo_apps = promo.get("promotionApplications", [])
+            for app in promo_apps:
+                desc = (app.get("publicDescription") or app.get("description") or "").lower()
+                if "service" in desc or "adjustment" in desc:
+                    service_adjustment = float(app.get("unitDelta") if app.get("unitDelta") is not None else (app.get("lineDelta") or 0.0))
+                    break
+
+            # Total monthly service cost: Base + Adjustment
+            total_monthly = round(base_service + service_adjustment, 2)
+
             if deposit > 0:
                 status = "sold_out"
             elif surcharge > 0:
                 status = "high_demand"
-            elif monthly_service > 120:
+            elif service_adjustment > 0 or total_monthly > 120:
                 status = "congested"
-            elif monthly_service < 120:
+            elif service_adjustment < 0 or total_monthly < 120:
                 status = "discounted"
             else:
                 status = "standard"
 
-            logger.info(f"Verified Live: ({lat}, {lng}) -> Service: ${monthly_service}/mo, Surcharge: ${surcharge}, Status: {status}")
+            logger.info(f"Verified Live: ({lat}, {lng}) -> Base: ${base_service}/mo, Adj: {'+' if service_adjustment >= 0 else ''}${service_adjustment}/mo, Total: ${total_monthly}/mo, Surcharge: ${surcharge}, Status: {status}")
 
             return {
+                "base_service_fee": base_service,
+                "service_price_adjustment": service_adjustment,
+                "total_monthly_fee": total_monthly,
+                "monthly_service_fee": total_monthly,
                 "surcharge_amount": surcharge,
-                "monthly_service_fee": monthly_service,
-                "service_price_adjustment": monthly_service - 120,
                 "status": status,
                 "verified_live": True,
                 "location_name": first_match.get("formatted_address") or f"{city}, {state_short}",

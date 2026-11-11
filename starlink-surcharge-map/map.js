@@ -34,6 +34,13 @@
     tierSoldOut: true
   };
 
+  // Format currency with cents only if needed
+  function formatMoney(val) {
+    if (val === null || val === undefined || isNaN(val)) return '$0';
+    const num = Number(val);
+    return num % 1 === 0 ? `$${num.toFixed(0)}` : `$${num.toFixed(2)}`;
+  }
+
   // Haversine Distance (km)
   function haversineKm(lat1, lon1, lat2, lon2) {
     const R = 6371;
@@ -45,22 +52,66 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
-  function getPointFee(pt) {
-    if (pt.monthly_service_fee !== undefined && pt.monthly_service_fee !== null) {
-      return pt.monthly_service_fee;
+  // Authentic pricing resolver: Base Plan + Service Price Adjustment = Total Monthly Fee
+  function getPointPricing(pt) {
+    const surcharge = pt.surcharge_amount || 0;
+    const isUnsampled = !!pt.isUnsampled || pt.status === 'unsampled' || 
+      (pt.monthly_service_fee === null && pt.total_monthly_fee === null && pt.base_service_fee === null);
+
+    if (isUnsampled) {
+      return {
+        base: null,
+        adjustment: 0,
+        total: null,
+        surcharge: null,
+        isUnsampled: true
+      };
     }
-    if (pt.status === 'discounted') return 55;
-    if (pt.status === 'congested') return 130;
-    return 120;
+
+    let base = pt.base_service_fee;
+    let adj = pt.service_price_adjustment;
+    let total = pt.total_monthly_fee ?? pt.monthly_service_fee;
+
+    if (adj !== undefined && adj !== null) {
+      adj = Number(adj);
+      if (base === undefined || base === null) {
+        if (total !== undefined && total !== null) {
+          base = Math.round((Number(total) - adj) * 100) / 100;
+        } else {
+          base = 120;
+        }
+      }
+      total = Math.round((Number(base) + adj) * 100) / 100;
+    } else {
+      // Derive if not provided explicitly
+      if (total !== undefined && total !== null) {
+        total = Number(total);
+        if (base === undefined || base === null) {
+          base = total >= 130 ? 130 : total < 120 ? 55 : 120;
+        }
+        adj = Math.round((total - Number(base)) * 100) / 100;
+      } else {
+        total = pt.status === 'discounted' ? 38.5 : pt.status === 'congested' ? 143 : 120;
+        base = total >= 130 ? 130 : total < 120 ? 55 : 120;
+        adj = Math.round((total - base) * 100) / 100;
+      }
+    }
+
+    return {
+      base: Number(base),
+      adjustment: adj,
+      total: Number(total),
+      surcharge,
+      isUnsampled: false
+    };
   }
 
   function getTierColor(pt) {
     if (pt.status === 'sold_out') return '#c084fc';
-    const surcharge = pt.surcharge_amount || 0;
-    if (surcharge > 0) return '#ef4444';
-    const fee = getPointFee(pt);
-    if (fee > 120) return '#f97316';
-    if (fee < 120) return '#10b981';
+    const pricing = getPointPricing(pt);
+    if (pricing.surcharge > 0) return '#ef4444';
+    if (pricing.adjustment > 0 || (pricing.total !== null && pricing.total > 120)) return '#f97316';
+    if (pricing.adjustment < 0 || (pricing.total !== null && pricing.total < 120)) return '#10b981';
     return '#38bdf8';
   }
 
@@ -162,16 +213,18 @@
 
     for (const pt of surchargePoints) {
       const s = pt.surcharge_amount || 0;
-      const fee = getPointFee(pt);
+      const pricing = getPointPricing(pt);
       const isSold = pt.status === 'sold_out';
 
-      sumMonthly += fee;
+      if (!pricing.isUnsampled && pricing.total !== null) {
+        sumMonthly += pricing.total;
+      }
 
       if (isSold) soldCount++;
       if (s > 0) surchargeCount++;
-      if (fee < 120 && !isSold) discountCount++;
-      else if (fee === 120 && !isSold) standardCount++;
-      else if (fee > 120 && !isSold) congestedCount++;
+      if (!isSold && (pricing.adjustment < 0 || pricing.total < 120)) discountCount++;
+      else if (!isSold && pricing.adjustment === 0 && pricing.total === 120) standardCount++;
+      else if (!isSold && (pricing.adjustment > 0 || pricing.total > 120)) congestedCount++;
     }
 
     const avgMonthly = total > 0 ? Math.round(sumMonthly / total) : 120;
@@ -199,19 +252,20 @@
     let visible = 0;
 
     for (const pt of surchargePoints) {
-      const s = pt.surcharge_amount || 0;
-      const fee = getPointFee(pt);
+      const pricing = getPointPricing(pt);
+      const s = pricing.surcharge || 0;
+      const fee = pricing.total;
       const isSold = pt.status === 'sold_out';
 
       if (isSold && !tierFilters.tierSoldOut) continue;
       if (s > 0 && !tierFilters.tierSurcharge) continue;
-      if (!isSold && s === 0 && fee < 120 && !tierFilters.tierDiscount) continue;
-      if (!isSold && s === 0 && fee === 120 && !tierFilters.tierStandard) continue;
-      if (!isSold && s === 0 && fee > 120 && !tierFilters.tierCongested) continue;
+      if (!isSold && s === 0 && (pricing.adjustment < 0 || fee < 120) && !tierFilters.tierDiscount) continue;
+      if (!isSold && s === 0 && pricing.adjustment === 0 && fee === 120 && !tierFilters.tierStandard) continue;
+      if (!isSold && s === 0 && (pricing.adjustment > 0 || fee > 120) && !tierFilters.tierCongested) continue;
 
       visible++;
       const color = getTierColor(pt);
-      const radius = s > 0 ? 8.5 : fee > 120 ? 7.5 : fee < 120 ? 7.0 : 6.0;
+      const radius = s > 0 ? 8.5 : pricing.adjustment > 0 ? 7.5 : pricing.adjustment < 0 ? 7.0 : 6.0;
 
       const circle = L.circleMarker([pt.lat, pt.lng], {
         radius,
@@ -222,16 +276,19 @@
         fillOpacity: 0.8
       });
 
-      // Hover tooltip
-      const tipText = isSold
-        ? `Waitlist / Sold Out`
-        : s > 0
-          ? `$${fee}/mo (+$${s} Surcharge)`
-          : fee < 120
-            ? `$${fee}/mo (Regional Discount)`
-            : fee > 120
-              ? `$${fee}/mo (Congestion Adjusted)`
-              : `$120/mo Standard`;
+      // Hover tooltip showing exact formula: Base + Adjustment = Total
+      let tipText = '';
+      if (isSold) {
+        tipText = 'Waitlist / Capacity Sold Out';
+      } else if (s > 0) {
+        tipText = `${formatMoney(fee)}/mo (+${formatMoney(s)} Upfront Surcharge)`;
+      } else if (pricing.adjustment > 0) {
+        tipText = `${formatMoney(fee)}/mo (${formatMoney(pricing.base)} base + ${formatMoney(pricing.adjustment)} Congestion)`;
+      } else if (pricing.adjustment < 0) {
+        tipText = `${formatMoney(fee)}/mo (${formatMoney(pricing.base)} base - ${formatMoney(Math.abs(pricing.adjustment))} Discount)`;
+      } else {
+        tipText = `${formatMoney(fee)}/mo Standard Base Plan`;
+      }
 
       circle.bindTooltip(tipText, {
         className: 'font-mono',
@@ -272,6 +329,9 @@
       displayPointDetails({
         lat,
         lng,
+        base_service_fee: null,
+        service_price_adjustment: 0,
+        total_monthly_fee: null,
         monthly_service_fee: null,
         surcharge_amount: null,
         status: 'unsampled',
@@ -290,28 +350,30 @@
     const container = document.getElementById('inspector-content');
     if (!container) return;
 
+    const pricing = getPointPricing(pt);
     const isSold = pt.status === 'sold_out';
-    const isUnsampled = !!pt.isUnsampled || pt.status === 'unsampled' || (pt.monthly_service_fee === null && pt.surcharge_amount === null);
+    const isUnsampled = pricing.isUnsampled;
     const isLive = !!pt.isLiveVerified || pt.source === 'verified_live';
 
-    const monthlyFee = pt.monthly_service_fee !== undefined && pt.monthly_service_fee !== null ? pt.monthly_service_fee : (pt.status === 'discounted' ? 55 : pt.status === 'congested' ? 130 : 120);
-    const surcharge = pt.surcharge_amount || 0;
-    const adjustment = monthlyFee - 120;
+    const surcharge = pricing.surcharge || 0;
+    const totalMonthly = pricing.total;
+    const baseMonthly = pricing.base;
+    const adjustment = pricing.adjustment;
 
     let tierClass = isSold ? 'tier-waitlist' :
       surcharge > 0 ? 'tier-high' :
-      monthlyFee > 120 ? 'tier-congested' :
-      monthlyFee < 120 ? 'tier-discount' :
+      adjustment > 0 || (totalMonthly !== null && totalMonthly > 120) ? 'tier-congested' :
+      adjustment < 0 || (totalMonthly !== null && totalMonthly < 120) ? 'tier-discount' :
       'tier-standard';
 
     let tierTitle = isSold ? 'SOLD OUT / WAITLIST' :
       surcharge > 0 ? 'CONGESTION SURCHARGE ZONE' :
-      monthlyFee > 120 ? 'CONGESTION ADJUSTED RATE' :
-      monthlyFee < 120 ? 'REGIONAL CAPACITY DISCOUNT' :
+      adjustment > 0 ? 'CONGESTION ADJUSTMENT ACTIVE' :
+      adjustment < 0 ? 'REGIONAL DISCOUNT ACTIVE' :
       isUnsampled ? 'UNSAMPLED CELL' :
       'STANDARD RESIDENTIAL PLAN';
 
-    let feeDisplay = isUnsampled ? 'PENDING' : `$${monthlyFee}/mo`;
+    let feeDisplay = isUnsampled ? 'PENDING' : `${formatMoney(totalMonthly)}/mo`;
 
     const cacheLabel = isLive 
       ? 'Verified Live from Starlink Checkout'
@@ -325,7 +387,7 @@
       surchargeBanner = `
         <div class="surcharge-banner-callout font-mono">
           <span>⚠️</span>
-          <span>+$${surcharge} ONE-TIME CONGESTION SURCHARGE</span>
+          <span>+${formatMoney(surcharge)} ONE-TIME DEMAND SURCHARGE</span>
         </div>
       `;
     } else if (!isUnsampled && !isSold) {
@@ -337,11 +399,18 @@
       `;
     }
 
-    const priceAdjustmentNote = adjustment > 0
-      ? `(+$${adjustment}/mo congestion adjustment)`
-      : adjustment < 0
-        ? `(-$${Math.abs(adjustment)}/mo excess capacity discount)`
-        : `(Standard $120 base rate)`;
+    // Adjustment label formatting
+    let adjText = '$0.00/mo (No regional adjustment)';
+    let adjColor = '#e2e8f0';
+    if (!isUnsampled) {
+      if (adjustment > 0) {
+        adjText = `+${formatMoney(adjustment)}/mo (Congestion Adjustment)`;
+        adjColor = '#fb923c';
+      } else if (adjustment < 0) {
+        adjText = `-${formatMoney(Math.abs(adjustment))}/mo (Regional Discount)`;
+        adjColor = '#34d399';
+      }
+    }
 
     container.innerHTML = `
       <div class="pin-card">
@@ -352,16 +421,20 @@
         ${surchargeBanner}
         <div class="card-body font-mono">
           <div class="prop-row">
-            <span class="prop-name">MONTHLY SERVICE:</span>
-            <span class="prop-value">${isUnsampled ? 'Awaiting check' : `$${monthlyFee}/mo`}</span>
+            <span class="prop-name">BASE SERVICE PLAN:</span>
+            <span class="prop-value">${isUnsampled ? 'Awaiting check' : `${formatMoney(baseMonthly)}/mo`}</span>
           </div>
           <div class="prop-row">
-            <span class="prop-name">RATE BREAKDOWN:</span>
-            <span class="prop-value font-sans" style="font-size:0.72rem;">${isUnsampled ? 'Unknown' : priceAdjustmentNote}</span>
+            <span class="prop-name">SERVICE PRICE ADJUSTMENT:</span>
+            <span class="prop-value font-sans" style="color: ${adjColor}; font-weight: 500;">${isUnsampled ? 'Awaiting check' : adjText}</span>
+          </div>
+          <div class="prop-row" style="padding: 5px 0; border-top: 1px dashed rgba(255,255,255,0.12); border-bottom: 1px dashed rgba(255,255,255,0.12); font-weight: 600;">
+            <span class="prop-name" style="color: #ffffff;">TOTAL MONTHLY SERVICE:</span>
+            <span class="prop-value" style="color: #38bdf8; font-size: 0.85rem;">${isUnsampled ? 'PENDING' : `${formatMoney(totalMonthly)}/mo`}</span>
           </div>
           <div class="prop-row">
             <span class="prop-name">ONE-TIME SURCHARGE:</span>
-            <span class="prop-value" style="color: ${surcharge > 0 ? '#ef4444' : '#34d399'}">${isUnsampled ? 'Pending' : (surcharge > 0 ? `+$${surcharge}` : '$0')}</span>
+            <span class="prop-value" style="color: ${surcharge > 0 ? '#ef4444' : '#34d399'}">${isUnsampled ? 'Pending' : (surcharge > 0 ? `+${formatMoney(surcharge)}` : '$0')}</span>
           </div>
           <div class="prop-row">
             <span class="prop-name">COORDINATES:</span>
@@ -386,7 +459,7 @@
           </button>
           <p class="card-note font-sans">
             ${isLive 
-              ? 'Directly verified from Starlink checkout session via Cloudflare Worker proxy.' 
+              ? 'Directly qualified from Starlink checkout session via Cloudflare Worker proxy.' 
               : isUnsampled 
                 ? 'Click above to query live Starlink address qualification and checkout pricing.' 
                 : 'Verified sample from Supabase PostGIS.'}
@@ -444,13 +517,16 @@
           const updated = {
             lat: result.lat,
             lng: result.lng,
-            monthly_service_fee: result.monthly_service_fee,
+            base_service_fee: result.base_service_fee,
             service_price_adjustment: result.service_price_adjustment,
+            total_monthly_fee: result.total_monthly_fee,
+            monthly_service_fee: result.total_monthly_fee,
             surcharge_amount: result.surcharge_amount,
             status: result.status,
             sampled_at: result.timestamp || new Date().toISOString(),
             location_name: result.location_name || `Coordinate: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`,
             isLiveVerified: result.source === 'verified_live',
+            adjustment_description: result.adjustment_description,
             isUnsampled: false
           };
 
@@ -470,7 +546,10 @@
           displayPointDetails({
             lat: result.lat,
             lng: result.lng,
-            monthly_service_fee: result.monthly_service_fee,
+            base_service_fee: null,
+            service_price_adjustment: 0,
+            total_monthly_fee: null,
+            monthly_service_fee: null,
             surcharge_amount: result.surcharge_amount,
             status: result.status || 'unsampled',
             sampled_at: result.timestamp || new Date().toISOString(),
