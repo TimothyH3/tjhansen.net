@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 84,
+  "blanket_cursor": 91,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -26,14 +26,6 @@
       "last_surcharge": 0,
       "consecutive_zeros": 1,
       "last_checked": "2026-11-08T13:20:54.019210+00:00"
-    },
-    {
-      "name": "Jackson Hole Teton, WY",
-      "lat": 43.4799,
-      "lng": -110.7624,
-      "last_surcharge": 0,
-      "consecutive_zeros": 1,
-      "last_checked": "2026-11-08T18:49:27.238823+00:00"
     },
     {
       "name": "Kalispell Flathead Basin, MT",
@@ -303,13 +295,67 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-12T12:43:35.203237+00:00"
+    },
+    {
+      "name": "QQ6J+G3 Masiaca, Son., Mexico",
+      "lat": 26.7613,
+      "lng": -109.2198,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T20:47:55.147484+00:00"
+    },
+    {
+      "name": "QQ6P+G2 Potrero de Cancio, Sin., Mexico",
+      "lat": 26.7613,
+      "lng": -108.215,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T20:48:13.640165+00:00"
+    },
+    {
+      "name": "QQ6Q+GX El Chihuite, Chihuahua, Mexico",
+      "lat": 26.7613,
+      "lng": -107.2101,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T20:48:33.259737+00:00"
+    },
+    {
+      "name": "QQ6V+GW San Crist\u00f3bal, Chih., Mexico",
+      "lat": 26.7613,
+      "lng": -106.2052,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T20:48:54.253041+00:00"
+    },
+    {
+      "name": "QQ6X+GR Jos\u00e9 Esteban Coronado, Chihuahua, Mexico",
+      "lat": 26.7613,
+      "lng": -105.2004,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T20:49:10.770660+00:00"
+    },
+    {
+      "name": "QR63+GR Rancho Herrera, Dgo., Mexico",
+      "lat": 26.7613,
+      "lng": -104.1955,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T20:49:28.833857+00:00"
     }
   ],
-  "hotspot_cursor": 3,
+  "hotspot_cursor": 4,
   "stats": {
-    "total_probes_run": 230,
-    "high_demand_hits_found": 22,
+    "total_probes_run": 262,
+    "high_demand_hits_found": 28,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-12T12:43:54.917829+00:00"
+  "last_run_timestamp": "2026-11-12T20:49:47.059104+00:00"
 }
