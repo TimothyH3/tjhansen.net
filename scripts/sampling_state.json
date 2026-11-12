@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 77,
+  "blanket_cursor": 84,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -18,14 +18,6 @@
       "last_surcharge": 0,
       "consecutive_zeros": 1,
       "last_checked": "2026-11-07T23:37:59.450770+00:00"
-    },
-    {
-      "name": "Truckee Lake Tahoe Basin, CA",
-      "lat": 39.328,
-      "lng": -120.1278,
-      "last_surcharge": 0,
-      "consecutive_zeros": 1,
-      "last_checked": "2026-11-08T05:57:37.606290+00:00"
     },
     {
       "name": "Aspen Roaring Fork, CO",
@@ -248,13 +240,76 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-12T03:50:40.220824+00:00"
+    },
+    {
+      "name": "75R5QP6W+GC",
+      "lat": 26.7613,
+      "lng": -116.2539,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T12:40:57.713162+00:00"
+    },
+    {
+      "name": "75R6QQ62+GC",
+      "lat": 26.7613,
+      "lng": -115.249,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T12:41:22.811239+00:00"
+    },
+    {
+      "name": "75R7QQ64+G8",
+      "lat": 26.7613,
+      "lng": -114.2442,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T12:41:47.766133+00:00"
+    },
+    {
+      "name": "QQ66+G7 Laguna San Ignacio, B.C.S., Mexico",
+      "lat": 26.7613,
+      "lng": -113.2393,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T12:42:14.895574+00:00"
+    },
+    {
+      "name": "QQ68+G6 San Joaqu\u00edn, B.C.S., Mexico",
+      "lat": 26.7613,
+      "lng": -112.2344,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T12:42:43.320381+00:00"
+    },
+    {
+      "name": "75RCQQ6C+G5",
+      "lat": 26.7613,
+      "lng": -111.2296,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T12:43:09.293747+00:00"
+    },
+    {
+      "name": "75RFQQ6G+G4",
+      "lat": 26.7613,
+      "lng": -110.2247,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T12:43:35.203237+00:00"
     }
   ],
-  "hotspot_cursor": 2,
+  "hotspot_cursor": 3,
   "stats": {
-    "total_probes_run": 194,
-    "high_demand_hits_found": 15,
+    "total_probes_run": 230,
+    "high_demand_hits_found": 22,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-12T03:50:53.217504+00:00"
+  "last_run_timestamp": "2026-11-12T12:43:54.917829+00:00"
 }
