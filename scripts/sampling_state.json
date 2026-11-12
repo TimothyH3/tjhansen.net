@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 70,
+  "blanket_cursor": 77,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -10,14 +10,6 @@
       "consecutive_zeros": 0,
       "last_checked": "2026-11-11T22:41:42.471704+00:00",
       "last_monthly_fee": 130
-    },
-    {
-      "name": "Boone Watauga High Country, NC",
-      "lat": 36.2168,
-      "lng": -81.6758,
-      "last_surcharge": 0,
-      "consecutive_zeros": 1,
-      "last_checked": "2026-11-07T19:24:49.241154+00:00"
     },
     {
       "name": "Gatlinburg Great Smoky Mtns, TN",
@@ -193,13 +185,76 @@
       "last_monthly_fee": 130,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-11T22:43:34.440870+00:00"
+    },
+    {
+      "name": "77Q9X4M6+M9",
+      "lat": 25.9842,
+      "lng": -72.8891,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T03:48:43.453126+00:00"
+    },
+    {
+      "name": "77QCX4M5+MJ",
+      "lat": 25.9842,
+      "lng": -71.891,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T03:49:01.423582+00:00"
+    },
+    {
+      "name": "77QFX4M4+MV",
+      "lat": 25.9842,
+      "lng": -70.8928,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T03:49:23.475410+00:00"
+    },
+    {
+      "name": "77QGX4M4+M4",
+      "lat": 25.9842,
+      "lng": -69.8947,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T03:49:42.441149+00:00"
+    },
+    {
+      "name": "77QHX4M3+M9",
+      "lat": 25.9842,
+      "lng": -68.8966,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T03:49:59.614243+00:00"
+    },
+    {
+      "name": "77QJX4M2+MJ",
+      "lat": 25.9842,
+      "lng": -67.8985,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T03:50:18.043767+00:00"
+    },
+    {
+      "name": "75R4QP6R+GG",
+      "lat": 26.7613,
+      "lng": -117.2587,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-12T03:50:40.220824+00:00"
     }
   ],
-  "hotspot_cursor": 1,
+  "hotspot_cursor": 2,
   "stats": {
-    "total_probes_run": 158,
-    "high_demand_hits_found": 8,
+    "total_probes_run": 194,
+    "high_demand_hits_found": 15,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-11T22:43:47.765756+00:00"
+  "last_run_timestamp": "2026-11-12T03:50:53.217504+00:00"
 }
