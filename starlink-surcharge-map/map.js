@@ -161,42 +161,60 @@
     bindDomEvents();
   }
 
-  // Load Data from Supabase PostGIS
+  // Load Data from Worker edge cache (or Supabase PostGIS)
   async function loadData() {
     const statusDot = document.getElementById('status-dot');
     const statusText = document.getElementById('status-text');
 
+    // 1. Primary: Load verified points via Cloudflare Worker edge cache
+    const pointsUrl = CONFIG.WORKER_API_URL.replace(/\/api\/check-fee.*$/, '/api/points').replace(/\/check-fee.*$/, '/api/points');
     try {
-      const resp = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/starlink_surcharges?select=*&order=sampled_at.desc`, {
-        headers: {
-          'apikey': CONFIG.SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
-        }
-      });
-
+      const resp = await fetch(pointsUrl);
       if (resp.ok) {
         const data = await resp.json();
         if (Array.isArray(data) && data.length > 0) {
           surchargePoints = data;
           if (statusDot) statusDot.className = 'pulse-dot';
-          if (statusText) statusText.textContent = 'SUPABASE SYNCED';
-        } else {
-          surchargePoints = [];
-          if (statusDot) statusDot.className = 'pulse-dot offline';
-          if (statusText) statusText.textContent = '0 NODES INGESTED';
+          if (statusText) statusText.textContent = `${data.length} NODES SYNCED`;
+          updateStats();
+          renderMarkers();
+          return;
         }
-      } else {
-        surchargePoints = [];
-        if (statusDot) statusDot.className = 'pulse-dot offline';
-        if (statusText) statusText.textContent = 'AWAITING INGESTION';
       }
     } catch (err) {
-      console.warn('Supabase not reached. Zero pre-loaded nodes.', err);
-      surchargePoints = [];
-      if (statusDot) statusDot.className = 'pulse-dot offline';
-      if (statusText) statusText.textContent = 'AWAITING INGESTION';
+      console.warn('Worker /api/points fetch attempt failed:', err);
     }
 
+    // 2. Secondary: Direct Supabase fetch if anon key is available
+    if (CONFIG.SUPABASE_ANON_KEY && !CONFIG.SUPABASE_ANON_KEY.includes('...')) {
+      try {
+        const resp = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/starlink_surcharges?select=*&order=sampled_at.desc`, {
+          headers: {
+            'apikey': CONFIG.SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
+          }
+        });
+
+        if (resp.ok) {
+          const data = await resp.json();
+          if (Array.isArray(data) && data.length > 0) {
+            surchargePoints = data;
+            if (statusDot) statusDot.className = 'pulse-dot';
+            if (statusText) statusText.textContent = `${data.length} NODES SYNCED`;
+            updateStats();
+            renderMarkers();
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Direct Supabase fetch fallback failed:', err);
+      }
+    }
+
+    // 3. Database is reachable but currently empty or awaiting initial seed/qualification
+    surchargePoints = [];
+    if (statusDot) statusDot.className = 'pulse-dot';
+    if (statusText) statusText.textContent = 'READY (0 NODES)';
     updateStats();
     renderMarkers();
   }

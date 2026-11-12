@@ -457,13 +457,21 @@ def upsert_batch_to_supabase(records: List[Dict[str, Any]]) -> int:
     successful = 0
     for rec in records:
         rpc_url = f"{SUPABASE_URL}/rest/v1/rpc/upsert_starlink_surcharge"
+        base_fee = rec.get("base_service_fee", rec.get("monthly_service_fee", 120.0))
+        adj = rec.get("service_price_adjustment", 0.0)
+        tot_fee = rec.get("total_monthly_fee", base_fee + adj)
+
         payload = {
             "p_lat": rec["lat"],
             "p_lng": rec["lng"],
             "p_surcharge_amount": rec["surcharge_amount"],
             "p_status": rec["status"],
             "p_sample_type": rec["sample_type"],
-            "p_location_name": rec.get("location_name")
+            "p_location_name": rec.get("location_name"),
+            "p_base_service_fee": base_fee,
+            "p_service_price_adjustment": adj,
+            "p_total_monthly_fee": tot_fee,
+            "p_adjustment_description": rec.get("adjustment_description", "Service Price Adjustment")
         }
 
         try:
@@ -478,14 +486,17 @@ def upsert_batch_to_supabase(records: List[Dict[str, Any]]) -> int:
                     "coordinates": geom_wkt,
                     "lat": rec["lat"],
                     "lng": rec["lng"],
+                    "base_service_fee": base_fee,
+                    "service_price_adjustment": adj,
+                    "total_monthly_fee": tot_fee,
+                    "monthly_service_fee": tot_fee,
                     "surcharge_amount": rec["surcharge_amount"],
                     "status": rec["status"],
                     "sample_type": rec["sample_type"],
                     "location_name": rec.get("location_name"),
+                    "adjustment_description": rec.get("adjustment_description", "Service Price Adjustment"),
                     "sampled_at": datetime.now(timezone.utc).isoformat()
                 }
-                if "monthly_service_fee" in rec:
-                    row_data["monthly_service_fee"] = rec["monthly_service_fee"]
 
                 fb_status, fb_text = http_post_json(
                     table_url,
@@ -494,18 +505,21 @@ def upsert_batch_to_supabase(records: List[Dict[str, Any]]) -> int:
                 )
                 if fb_status in (200, 201, 204):
                     successful += 1
-                elif "monthly_service_fee" in fb_text:
-                    # Column not yet in schema; retry without it
-                    row_data.pop("monthly_service_fee", None)
-                    retry_status, _ = http_post_json(
+                elif "base_service_fee" in fb_text or "service_price_adjustment" in fb_text:
+                    # Older schema fallback: remove newer columns
+                    row_data.pop("base_service_fee", None)
+                    row_data.pop("service_price_adjustment", None)
+                    row_data.pop("total_monthly_fee", None)
+                    row_data.pop("adjustment_description", None)
+                    retry_status, retry_text = http_post_json(
                         table_url,
                         payload=row_data,
                         headers={**headers, "Prefer": "resolution=merge-duplicates"}
                     )
                     if retry_status in (200, 201, 204):
                         successful += 1
-                if fb_status in (200, 201, 204):
-                    successful += 1
+                    else:
+                        logger.error(f"Fallback upsert failed ({rec['lat']}, {rec['lng']}): {retry_text}")
                 else:
                     logger.error(f"Failed upsert ({rec['lat']}, {rec['lng']}): {fb_text}")
         except Exception as ex:
