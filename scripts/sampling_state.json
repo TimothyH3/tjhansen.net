@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 91,
+  "blanket_cursor": 98,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -34,14 +34,6 @@
       "last_surcharge": 0,
       "consecutive_zeros": 1,
       "last_checked": "2026-11-08T22:52:32.426498+00:00"
-    },
-    {
-      "name": "Bozeman Gallatin Valley, MT",
-      "lat": 45.677,
-      "lng": -111.0429,
-      "last_surcharge": 0,
-      "consecutive_zeros": 1,
-      "last_checked": "2026-11-09T02:39:28.766750+00:00"
     },
     {
       "name": "Bend Deschutes Corridor, OR",
@@ -349,13 +341,58 @@
       "last_monthly_fee": 787.5,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-12T20:49:28.833857+00:00"
+    },
+    {
+      "name": "QR67+GM Nuevo Atalaya, Coah., Mexico",
+      "lat": 26.7613,
+      "lng": -102.1858,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T01:49:40.920187+00:00"
+    },
+    {
+      "name": "QR69+GJ La Gloria, Coah., Mexico",
+      "lat": 26.7613,
+      "lng": -101.1809,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T01:50:00.146654+00:00"
+    },
+    {
+      "name": "QR6F+GH El Arroyo de los Sauces, N.L., Mexico",
+      "lat": 26.7613,
+      "lng": -100.1761,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T01:50:22.755249+00:00"
+    },
+    {
+      "name": "76R4QR6Q+GC",
+      "lat": 26.7613,
+      "lng": -97.1615,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T01:50:51.525671+00:00"
+    },
+    {
+      "name": "76R5QR6V+G9",
+      "lat": 26.7613,
+      "lng": -96.1566,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T01:51:08.844266+00:00"
     }
   ],
-  "hotspot_cursor": 4,
+  "hotspot_cursor": 5,
   "stats": {
-    "total_probes_run": 262,
-    "high_demand_hits_found": 28,
+    "total_probes_run": 290,
+    "high_demand_hits_found": 33,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-12T20:49:47.059104+00:00"
+  "last_run_timestamp": "2026-11-13T01:51:23.939523+00:00"
 }
