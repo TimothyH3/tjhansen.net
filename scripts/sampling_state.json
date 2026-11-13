@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 98,
+  "blanket_cursor": 105,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -42,14 +42,6 @@
       "last_surcharge": 0,
       "consecutive_zeros": 1,
       "last_checked": "2026-11-09T11:27:18.939748+00:00"
-    },
-    {
-      "name": "Coeur d'Alene Hinterland, ID",
-      "lat": 47.6777,
-      "lng": -116.7804,
-      "last_surcharge": 0,
-      "consecutive_zeros": 1,
-      "last_checked": "2026-11-09T22:19:13.869442+00:00"
     },
     {
       "name": "Flagstaff Coconino, AZ",
@@ -386,13 +378,49 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-13T01:51:08.844266+00:00"
+    },
+    {
+      "name": "76R6QR6X+G8",
+      "lat": 26.7613,
+      "lng": -95.1517,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T09:29:19.472343+00:00"
+    },
+    {
+      "name": "77R2QW6G+GC",
+      "lat": 26.7613,
+      "lng": -79.0739,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T09:30:09.994131+00:00"
+    },
+    {
+      "name": "77R3QW6J+G9",
+      "lat": 26.7613,
+      "lng": -78.069,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T09:30:40.492258+00:00"
+    },
+    {
+      "name": "77R4QW6P+G8",
+      "lat": 26.7613,
+      "lng": -77.0642,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T09:31:11.061205+00:00"
     }
   ],
-  "hotspot_cursor": 5,
+  "hotspot_cursor": 6,
   "stats": {
-    "total_probes_run": 290,
-    "high_demand_hits_found": 33,
+    "total_probes_run": 314,
+    "high_demand_hits_found": 37,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-13T01:51:23.939523+00:00"
+  "last_run_timestamp": "2026-11-13T09:31:38.522650+00:00"
 }
