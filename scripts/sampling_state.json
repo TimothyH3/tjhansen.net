@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 105,
+  "blanket_cursor": 112,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -50,14 +50,6 @@
       "last_surcharge": 0,
       "consecutive_zeros": 1,
       "last_checked": "2026-11-10T04:37:51.997014+00:00"
-    },
-    {
-      "name": "Sedona Oak Creek, AZ",
-      "lat": 34.8697,
-      "lng": -111.8315,
-      "last_surcharge": 0,
-      "consecutive_zeros": 1,
-      "last_checked": "2026-11-10T13:27:24.660612+00:00"
     },
     {
       "name": "Show Low White Mtns, AZ",
@@ -414,13 +406,76 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-13T09:31:11.061205+00:00"
+    },
+    {
+      "name": "77R5QW6R+G7",
+      "lat": 26.7613,
+      "lng": -76.0593,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T17:43:18.960263+00:00"
+    },
+    {
+      "name": "77R6QW6W+G6",
+      "lat": 26.7613,
+      "lng": -75.0545,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T17:43:47.161412+00:00"
+    },
+    {
+      "name": "77R7QX62+G5",
+      "lat": 26.7613,
+      "lng": -74.0496,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T17:44:14.550624+00:00"
+    },
+    {
+      "name": "77R8QX64+G4",
+      "lat": 26.7613,
+      "lng": -73.0447,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T17:44:39.523222+00:00"
+    },
+    {
+      "name": "77R9QX66+G2",
+      "lat": 26.7613,
+      "lng": -72.0399,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T17:45:06.674723+00:00"
+    },
+    {
+      "name": "77RCQX68+G2",
+      "lat": 26.7613,
+      "lng": -71.035,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T17:45:33.992898+00:00"
+    },
+    {
+      "name": "77RFQX69+GX",
+      "lat": 26.7613,
+      "lng": -70.0301,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-13T17:45:58.117465+00:00"
     }
   ],
-  "hotspot_cursor": 6,
+  "hotspot_cursor": 7,
   "stats": {
-    "total_probes_run": 314,
-    "high_demand_hits_found": 37,
+    "total_probes_run": 350,
+    "high_demand_hits_found": 44,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-13T09:31:38.522650+00:00"
+  "last_run_timestamp": "2026-11-13T17:46:19.297734+00:00"
 }
