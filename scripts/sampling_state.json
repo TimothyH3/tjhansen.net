@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 126,
+  "blanket_cursor": 133,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -81,9 +81,9 @@
       "lat": 25.9842,
       "lng": -78.8779,
       "last_surcharge": 0,
-      "last_monthly_fee": 130,
+      "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-11T22:42:06.607014+00:00"
+      "last_checked": "2026-11-14T14:08:04.554429+00:00"
     },
     {
       "name": "77Q4X4MC+M3",
@@ -579,13 +579,76 @@
       "last_monthly_fee": 787.5,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-14T06:21:04.214241+00:00"
+    },
+    {
+      "name": "GCQ8+82 Ochilachi, Chih., Mexico",
+      "lat": 27.5383,
+      "lng": -106.5849,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-14T14:08:08.170898+00:00"
+    },
+    {
+      "name": "GCQG+8Q Las Puntas, Chih., Mexico",
+      "lat": 27.5383,
+      "lng": -105.5731,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-14T14:08:28.360573+00:00"
+    },
+    {
+      "name": "GCQQ+8G Benaske, Chihuahua, Mexico",
+      "lat": 27.5383,
+      "lng": -104.5612,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-14T14:08:44.307268+00:00"
+    },
+    {
+      "name": "GFQ2+87 Colorado, Coah., Mexico",
+      "lat": 27.5383,
+      "lng": -103.5493,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-14T14:09:02.377906+00:00"
+    },
+    {
+      "name": "GFQ7+82 Buenavista, Coah., Mexico",
+      "lat": 27.5383,
+      "lng": -102.5374,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-14T14:09:19.957923+00:00"
+    },
+    {
+      "name": "GFQF+8Q Sauceda, Coah., Mexico",
+      "lat": 27.5383,
+      "lng": -101.5256,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-14T14:09:40.154047+00:00"
+    },
+    {
+      "name": "GFQP+8G Santa Rita, Mexico",
+      "lat": 27.5383,
+      "lng": -100.5137,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-14T14:10:00.424117+00:00"
     }
   ],
-  "hotspot_cursor": 9,
+  "hotspot_cursor": 10,
   "stats": {
-    "total_probes_run": 422,
-    "high_demand_hits_found": 58,
+    "total_probes_run": 458,
+    "high_demand_hits_found": 65,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-14T06:21:26.760001+00:00"
+  "last_run_timestamp": "2026-11-14T14:10:14.555673+00:00"
 }
