@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 161,
+  "blanket_cursor": 168,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -126,9 +126,9 @@
       "lat": 25.9842,
       "lng": -73.8872,
       "last_surcharge": 0,
-      "last_monthly_fee": 130,
+      "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-11T22:43:34.440870+00:00"
+      "last_checked": "2026-11-15T17:42:08.086483+00:00"
     },
     {
       "name": "77Q9X4M6+M9",
@@ -840,13 +840,76 @@
       "last_monthly_fee": 787.5,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-15T10:50:51.393107+00:00"
+    },
+    {
+      "name": "8X8G+47 Nicaragua, Son., Mexico",
+      "lat": 28.3153,
+      "lng": -110.0243,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T17:42:15.246743+00:00"
+    },
+    {
+      "name": "8X8V+4X Y\u00e9cora, Sonora, Mexico",
+      "lat": 28.3153,
+      "lng": -109.0051,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T17:42:47.102160+00:00"
+    },
+    {
+      "name": "8287+4H La Abeja, Chih., Mexico",
+      "lat": 28.3153,
+      "lng": -107.986,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T17:43:19.724414+00:00"
+    },
+    {
+      "name": "828M+47 Campo Veintisiete y Medio, Mexico",
+      "lat": 28.3153,
+      "lng": -106.9668,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T17:43:51.393642+00:00"
+    },
+    {
+      "name": "8382+4X La Laborcita, Chih., Mexico",
+      "lat": 28.3153,
+      "lng": -105.9476,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T17:44:24.393249+00:00"
+    },
+    {
+      "name": "838C+4J Noriega, Chih., Mexico",
+      "lat": 28.3153,
+      "lng": -104.9284,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T17:44:55.927368+00:00"
+    },
+    {
+      "name": "838R+48 El Acebuche, Chihuahua, Mexico",
+      "lat": 28.3153,
+      "lng": -103.9092,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T17:45:30.579293+00:00"
     }
   ],
-  "hotspot_cursor": 14,
+  "hotspot_cursor": 15,
   "stats": {
-    "total_probes_run": 578,
-    "high_demand_hits_found": 87,
+    "total_probes_run": 614,
+    "high_demand_hits_found": 94,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-15T10:51:05.752048+00:00"
+  "last_run_timestamp": "2026-11-15T17:45:56.965025+00:00"
 }
