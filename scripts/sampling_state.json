@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 168,
+  "blanket_cursor": 175,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -137,7 +137,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T03:48:43.453126+00:00"
+      "last_checked": "2026-11-15T22:46:42.413812+00:00"
     },
     {
       "name": "77QCX4M5+MJ",
@@ -903,13 +903,40 @@
       "last_monthly_fee": 787.5,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-15T17:45:30.579293+00:00"
+    },
+    {
+      "name": "8485+4X San Ildefonso, Coah., Mexico",
+      "lat": 28.3153,
+      "lng": -102.8901,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T22:46:46.813929+00:00"
+    },
+    {
+      "name": "848H+4J Santa Rosa, Coah., Mexico",
+      "lat": 28.3153,
+      "lng": -101.8709,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T22:47:07.180694+00:00"
+    },
+    {
+      "name": "848X+48 Allende, Coahuila, Mexico",
+      "lat": 28.3153,
+      "lng": -100.8517,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T22:47:26.392133+00:00"
     }
   ],
-  "hotspot_cursor": 15,
+  "hotspot_cursor": 16,
   "stats": {
-    "total_probes_run": 614,
-    "high_demand_hits_found": 94,
+    "total_probes_run": 634,
+    "high_demand_hits_found": 97,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-15T17:45:56.965025+00:00"
+  "last_run_timestamp": "2026-11-15T22:47:57.333324+00:00"
 }
