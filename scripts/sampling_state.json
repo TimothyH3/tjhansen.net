@@ -1,6 +1,6 @@
 {
   "current_week_index": 46,
-  "blanket_cursor": 154,
+  "blanket_cursor": 161,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -117,9 +117,9 @@
       "lat": 25.9842,
       "lng": -74.8854,
       "last_surcharge": 0,
-      "last_monthly_fee": 130,
+      "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-11T22:43:17.257698+00:00"
+      "last_checked": "2026-11-15T10:49:26.174878+00:00"
     },
     {
       "name": "77Q8X4M7+M4",
@@ -786,13 +786,67 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-15T02:41:32.287365+00:00"
+    },
+    {
+      "name": "75W48R8R+4H",
+      "lat": 28.3153,
+      "lng": -117.1586,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T10:49:29.916581+00:00"
+    },
+    {
+      "name": "75W58V86+46",
+      "lat": 28.3153,
+      "lng": -116.1394,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T10:49:44.862673+00:00"
+    },
+    {
+      "name": "8V8X+4J Ejido Jos\u00e9 Mar\u00eda Morelos y Pav\u00f3n, B.C., Mexico",
+      "lat": 28.3153,
+      "lng": -114.101,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T10:50:03.857623+00:00"
+    },
+    {
+      "name": "8W89+47 La Lagunita, B.C., Mexico",
+      "lat": 28.3153,
+      "lng": -113.0818,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T10:50:20.838944+00:00"
+    },
+    {
+      "name": "75W98W8P+4W",
+      "lat": 28.3153,
+      "lng": -112.0627,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T10:50:37.311945+00:00"
+    },
+    {
+      "name": "8X84+4J Rancho Los Arrieros, Son., Mexico",
+      "lat": 28.3153,
+      "lng": -111.0435,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-15T10:50:51.393107+00:00"
     }
   ],
-  "hotspot_cursor": 13,
+  "hotspot_cursor": 14,
   "stats": {
-    "total_probes_run": 546,
-    "high_demand_hits_found": 81,
+    "total_probes_run": 578,
+    "high_demand_hits_found": 87,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-15T02:41:54.516665+00:00"
+  "last_run_timestamp": "2026-11-15T10:51:05.752048+00:00"
 }
