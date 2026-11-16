@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 7,
+  "blanket_cursor": 14,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -155,7 +155,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T03:49:23.475410+00:00"
+      "last_checked": "2026-11-16T11:10:59.952518+00:00"
     },
     {
       "name": "77QGX4M4+M4",
@@ -993,13 +993,76 @@
       "last_monthly_fee": 787.5,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-16T02:45:36.214501+00:00"
+    },
+    {
+      "name": "75QFCR7C+QJ",
+      "lat": 25.4144,
+      "lng": -110.1785,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T11:11:05.594807+00:00"
+    },
+    {
+      "name": "75QGCR77+QX",
+      "lat": 25.4144,
+      "lng": -109.1851,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T11:11:35.878662+00:00"
+    },
+    {
+      "name": "CR75+Q7 Gabriel Leyva Vel\u00e1zquez, Sinaloa, Mexico",
+      "lat": 25.4144,
+      "lng": -108.1918,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T11:12:06.206718+00:00"
+    },
+    {
+      "name": "CR72+QJ Los Pinos, Dgo., Mexico",
+      "lat": 25.4144,
+      "lng": -107.1984,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T11:12:38.053440+00:00"
+    },
+    {
+      "name": "CQ7W+Q2 Puertecitos, Durango, Mexico",
+      "lat": 25.4144,
+      "lng": -106.205,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T11:13:11.739205+00:00"
+    },
+    {
+      "name": "CQ7Q+Q8 Emiliano Mart\u00ednez, Dgo., Mexico",
+      "lat": 25.4144,
+      "lng": -105.2117,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T11:13:44.634375+00:00"
+    },
+    {
+      "name": "CQ7J+QM La Pur\u00edsima, Mexico",
+      "lat": 25.4144,
+      "lng": -104.2183,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T11:14:16.390288+00:00"
     }
   ],
-  "hotspot_cursor": 17,
+  "hotspot_cursor": 18,
   "stats": {
-    "total_probes_run": 670,
-    "high_demand_hits_found": 104,
+    "total_probes_run": 706,
+    "high_demand_hits_found": 111,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-16T02:45:51.068446+00:00"
+  "last_run_timestamp": "2026-11-16T11:14:43.563790+00:00"
 }
