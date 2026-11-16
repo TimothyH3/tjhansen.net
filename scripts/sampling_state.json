@@ -1,6 +1,6 @@
 {
-  "current_week_index": 46,
-  "blanket_cursor": 175,
+  "current_week_index": 47,
+  "blanket_cursor": 7,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -146,7 +146,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T03:49:01.423582+00:00"
+      "last_checked": "2026-11-16T02:43:40.312675+00:00"
     },
     {
       "name": "77QFX4M4+MV",
@@ -930,13 +930,76 @@
       "last_monthly_fee": 787.5,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-15T22:47:26.392133+00:00"
+    },
+    {
+      "name": "75Q4CV79+Q6",
+      "lat": 25.4144,
+      "lng": -117.132,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T02:43:43.319984+00:00"
+    },
+    {
+      "name": "75Q5CV76+QG",
+      "lat": 25.4144,
+      "lng": -116.1387,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T02:44:00.808574+00:00"
+    },
+    {
+      "name": "75Q6CV73+QV",
+      "lat": 25.4144,
+      "lng": -115.1453,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T02:44:22.945899+00:00"
+    },
+    {
+      "name": "75Q7CR7X+Q6",
+      "lat": 25.4144,
+      "lng": -114.1519,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T02:44:39.317664+00:00"
+    },
+    {
+      "name": "75Q8CR7R+QH",
+      "lat": 25.4144,
+      "lng": -113.1586,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T02:44:59.230924+00:00"
+    },
+    {
+      "name": "CR7M+QW Magdalena, B.C.S., Mexico",
+      "lat": 25.4144,
+      "lng": -112.1652,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T02:45:16.610952+00:00"
+    },
+    {
+      "name": "CR7H+Q6 El Alto, Ju\u017ena Donja Kalifornija, Mexico",
+      "lat": 25.4144,
+      "lng": -111.1719,
+      "last_surcharge": 0,
+      "last_monthly_fee": 787.5,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-16T02:45:36.214501+00:00"
     }
   ],
-  "hotspot_cursor": 16,
+  "hotspot_cursor": 17,
   "stats": {
-    "total_probes_run": 634,
-    "high_demand_hits_found": 97,
+    "total_probes_run": 670,
+    "high_demand_hits_found": 104,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-15T22:47:57.333324+00:00"
+  "last_run_timestamp": "2026-11-16T02:45:51.068446+00:00"
 }
