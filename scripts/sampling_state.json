@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 35,
+  "blanket_cursor": 42,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -191,7 +191,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T03:50:40.220824+00:00"
+      "last_checked": "2026-11-17T22:20:08.126063+00:00"
     },
     {
       "name": "75R5QP6W+GC",
@@ -1227,13 +1227,76 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-17T13:23:28.875813+00:00"
+    },
+    {
+      "name": "77QFCH74+QC",
+      "lat": 25.4144,
+      "lng": -70.4439,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T22:20:11.674445+00:00"
+    },
+    {
+      "name": "77QGCG7X+QQ",
+      "lat": 25.4144,
+      "lng": -69.4506,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T22:20:27.246665+00:00"
+    },
+    {
+      "name": "77QHCG7V+Q4",
+      "lat": 25.4144,
+      "lng": -68.4572,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T22:20:45.147092+00:00"
+    },
+    {
+      "name": "77QJCG7P+QF",
+      "lat": 25.4144,
+      "lng": -67.4638,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T22:21:03.215662+00:00"
+    },
+    {
+      "name": "75R45CR7+HG",
+      "lat": 26.1914,
+      "lng": -117.5862,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T22:21:20.543048+00:00"
+    },
+    {
+      "name": "75R55CR7+HF",
+      "lat": 26.1914,
+      "lng": -116.5863,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T22:21:37.447104+00:00"
+    },
+    {
+      "name": "75R65CR7+HC",
+      "lat": 26.1914,
+      "lng": -115.5864,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T22:21:56.391658+00:00"
     }
   ],
-  "hotspot_cursor": 21,
+  "hotspot_cursor": 22,
   "stats": {
-    "total_probes_run": 806,
-    "high_demand_hits_found": 130,
+    "total_probes_run": 842,
+    "high_demand_hits_found": 137,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-17T13:23:52.930980+00:00"
+  "last_run_timestamp": "2026-11-17T22:22:07.509124+00:00"
 }
