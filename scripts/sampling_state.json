@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 21,
+  "blanket_cursor": 28,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -173,7 +173,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T03:49:59.614243+00:00"
+      "last_checked": "2026-11-17T03:49:49.839841+00:00"
     },
     {
       "name": "77QJX4M2+MJ",
@@ -1119,13 +1119,67 @@
       "last_monthly_fee": 905.17,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-16T21:03:30.976165+00:00"
+    },
+    {
+      "name": "76Q5CP7H+QC",
+      "lat": 25.4144,
+      "lng": -96.2714,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T03:49:53.720103+00:00"
+    },
+    {
+      "name": "76Q6CP7C+QR",
+      "lat": 25.4144,
+      "lng": -95.278,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T03:50:10.341522+00:00"
+    },
+    {
+      "name": "76QVCJ7P+Q7",
+      "lat": 25.4144,
+      "lng": -82.3643,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T03:50:26.267354+00:00"
+    },
+    {
+      "name": "76QWCJ7H+QJ",
+      "lat": 25.4144,
+      "lng": -81.3709,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T03:50:43.846398+00:00"
+    },
+    {
+      "name": "77Q2CJ78+Q8",
+      "lat": 25.4144,
+      "lng": -79.3842,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T03:51:05.378998+00:00"
+    },
+    {
+      "name": "77Q3CJ75+QM",
+      "lat": 25.4144,
+      "lng": -78.3908,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-17T03:51:23.490552+00:00"
     }
   ],
-  "hotspot_cursor": 19,
+  "hotspot_cursor": 20,
   "stats": {
-    "total_probes_run": 742,
-    "high_demand_hits_found": 118,
+    "total_probes_run": 774,
+    "high_demand_hits_found": 124,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-16T21:03:51.084582+00:00"
+  "last_run_timestamp": "2026-11-17T03:51:35.144329+00:00"
 }
