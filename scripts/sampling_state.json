@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 42,
+  "blanket_cursor": 49,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -200,7 +200,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T12:40:57.713162+00:00"
+      "last_checked": "2026-11-18T04:17:36.136358+00:00"
     },
     {
       "name": "75R6QQ62+GC",
@@ -1290,13 +1290,76 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-17T22:21:56.391658+00:00"
+    },
+    {
+      "name": "75R75CR7+H9",
+      "lat": 26.1914,
+      "lng": -114.5865,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T04:17:40.235870+00:00"
+    },
+    {
+      "name": "75R85CR7+H9",
+      "lat": 26.1914,
+      "lng": -113.5866,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T04:17:58.276292+00:00"
+    },
+    {
+      "name": "5CR7+H8 San Juanico, BCS, Mexico",
+      "lat": 26.1914,
+      "lng": -112.5867,
+      "last_surcharge": 0,
+      "last_monthly_fee": 905.17,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T04:18:18.156651+00:00"
+    },
+    {
+      "name": "5CR7+H6 San Juan, B.C.S., Mexico",
+      "lat": 26.1914,
+      "lng": -111.5869,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T04:18:35.469962+00:00"
+    },
+    {
+      "name": "75RF5CR7+H6",
+      "lat": 26.1914,
+      "lng": -110.587,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T04:18:53.251559+00:00"
+    },
+    {
+      "name": "75RG5CR7+H5",
+      "lat": 26.1914,
+      "lng": -109.5871,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T04:19:11.332686+00:00"
+    },
+    {
+      "name": "5CR7+H4 Lo de Vega, Sin., Mexico",
+      "lat": 26.1914,
+      "lng": -108.5872,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T04:19:29.453358+00:00"
     }
   ],
-  "hotspot_cursor": 22,
+  "hotspot_cursor": 23,
   "stats": {
-    "total_probes_run": 842,
-    "high_demand_hits_found": 137,
+    "total_probes_run": 878,
+    "high_demand_hits_found": 144,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-17T22:22:07.509124+00:00"
+  "last_run_timestamp": "2026-11-18T04:19:44.718718+00:00"
 }
