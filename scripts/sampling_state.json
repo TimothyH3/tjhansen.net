@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 56,
+  "blanket_cursor": 63,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -218,7 +218,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T12:41:47.766133+00:00"
+      "last_checked": "2026-11-18T21:54:30.639769+00:00"
     },
     {
       "name": "QQ66+G7 Laguna San Ignacio, B.C.S., Mexico",
@@ -1416,13 +1416,58 @@
       "last_monthly_fee": 633.62,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-18T13:58:16.562235+00:00"
+    },
+    {
+      "name": "5CR6+HR El Arco, N.L., Mexico",
+      "lat": 26.1914,
+      "lng": -100.588,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T21:54:36.194123+00:00"
+    },
+    {
+      "name": "5CR6+HQ Arroyo de Piedra, Nuevo Le\u00f3n, Mexico",
+      "lat": 26.1914,
+      "lng": -99.5881,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T21:55:04.956879+00:00"
+    },
+    {
+      "name": "5CR6+HP Los Nogales, Tamaulipas, Mexico",
+      "lat": 26.1914,
+      "lng": -98.5882,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T21:55:32.601896+00:00"
+    },
+    {
+      "name": "76R55CR6+HJ",
+      "lat": 26.1914,
+      "lng": -96.5884,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T21:56:03.078915+00:00"
+    },
+    {
+      "name": "76R65CR6+HJ",
+      "lat": 26.1914,
+      "lng": -95.5885,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T21:56:25.155175+00:00"
     }
   ],
-  "hotspot_cursor": 24,
+  "hotspot_cursor": 25,
   "stats": {
-    "total_probes_run": 914,
-    "high_demand_hits_found": 151,
+    "total_probes_run": 942,
+    "high_demand_hits_found": 156,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-18T13:58:35.330003+00:00"
+  "last_run_timestamp": "2026-11-18T21:56:49.996715+00:00"
 }
