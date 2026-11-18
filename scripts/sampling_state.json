@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 49,
+  "blanket_cursor": 56,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -209,7 +209,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T12:41:22.811239+00:00"
+      "last_checked": "2026-11-18T13:55:44.306958+00:00"
     },
     {
       "name": "75R7QQ64+G8",
@@ -1353,13 +1353,76 @@
       "last_monthly_fee": 633.62,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-18T04:19:29.453358+00:00"
+    },
+    {
+      "name": "5CR7+H3 Algarrobas, Mexico",
+      "lat": 26.1914,
+      "lng": -107.5873,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T13:55:48.178478+00:00"
+    },
+    {
+      "name": "5CR7+H2 Terreros, Chih., Mexico",
+      "lat": 26.1914,
+      "lng": -106.5874,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T13:56:12.364746+00:00"
+    },
+    {
+      "name": "5CR7+H2 Ricardo Flores Mag\u00f3n, Dgo., Mexico",
+      "lat": 26.1914,
+      "lng": -105.5875,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T13:56:35.207873+00:00"
+    },
+    {
+      "name": "5CR6+HX La Enramada, Dgo., Mexico",
+      "lat": 26.1914,
+      "lng": -104.5876,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T13:57:00.700047+00:00"
+    },
+    {
+      "name": "5CR6+HW Rancho La Zorra, Dgo., Mexico",
+      "lat": 26.1914,
+      "lng": -103.5877,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T13:57:23.100175+00:00"
+    },
+    {
+      "name": "5CR6+HV Los Gachupines, Coah., Mexico",
+      "lat": 26.1914,
+      "lng": -102.5878,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T13:57:48.134397+00:00"
+    },
+    {
+      "name": "5CR6+HR Las Coloradas, Coah., Mexico",
+      "lat": 26.1914,
+      "lng": -101.5879,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-18T13:58:16.562235+00:00"
     }
   ],
-  "hotspot_cursor": 23,
+  "hotspot_cursor": 24,
   "stats": {
-    "total_probes_run": 878,
-    "high_demand_hits_found": 144,
+    "total_probes_run": 914,
+    "high_demand_hits_found": 151,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-18T04:19:44.718718+00:00"
+  "last_run_timestamp": "2026-11-18T13:58:35.330003+00:00"
 }
