@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 77,
+  "blanket_cursor": 84,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -245,7 +245,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T12:43:09.293747+00:00"
+      "last_checked": "2026-11-19T21:29:34.075886+00:00"
     },
     {
       "name": "75RFQQ6G+G4",
@@ -1569,13 +1569,76 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-19T13:01:50.072340+00:00"
+    },
+    {
+      "name": "75R4XX96+CH",
+      "lat": 26.9685,
+      "lng": -117.0386,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T21:29:38.884724+00:00"
+    },
+    {
+      "name": "75R5XX99+C6",
+      "lat": 26.9685,
+      "lng": -116.0319,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T21:30:00.133288+00:00"
+    },
+    {
+      "name": "75R6XX9F+CW",
+      "lat": 26.9685,
+      "lng": -115.0252,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T21:30:23.723872+00:00"
+    },
+    {
+      "name": "XX9J+CJ San Hip\u00f3lito, Mexico",
+      "lat": 26.9685,
+      "lng": -114.0185,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T21:30:48.368445+00:00"
+    },
+    {
+      "name": "XX9Q+C7 Casas Blancas, B.C.S., Mexico",
+      "lat": 26.9685,
+      "lng": -113.0118,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T21:31:15.847969+00:00"
+    },
+    {
+      "name": "XX9V+CX Muleg\u00e9, BCS, Mexico",
+      "lat": 26.9685,
+      "lng": -112.0051,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T21:31:40.364159+00:00"
+    },
+    {
+      "name": "75RFX292+CJ",
+      "lat": 26.9685,
+      "lng": -110.9984,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T21:32:05.734075+00:00"
     }
   ],
-  "hotspot_cursor": 27,
+  "hotspot_cursor": 28,
   "stats": {
-    "total_probes_run": 1006,
-    "high_demand_hits_found": 168,
+    "total_probes_run": 1042,
+    "high_demand_hits_found": 175,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-19T13:02:04.246997+00:00"
+  "last_run_timestamp": "2026-11-19T21:32:23.473822+00:00"
 }
