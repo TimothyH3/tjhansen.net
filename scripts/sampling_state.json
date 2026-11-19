@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 63,
+  "blanket_cursor": 70,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -225,9 +225,9 @@
       "lat": 26.7613,
       "lng": -113.2393,
       "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
+      "last_monthly_fee": 633.62,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T12:42:14.895574+00:00"
+      "last_checked": "2026-11-19T03:23:50.637511+00:00"
     },
     {
       "name": "QQ68+G6 San Joaqu\u00edn, B.C.S., Mexico",
@@ -1461,13 +1461,58 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-18T21:56:25.155175+00:00"
+    },
+    {
+      "name": "77R25CR5+HX",
+      "lat": 26.1914,
+      "lng": -79.5901,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T03:24:01.726131+00:00"
+    },
+    {
+      "name": "77R35CR5+HW",
+      "lat": 26.1914,
+      "lng": -78.5902,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T03:24:28.664895+00:00"
+    },
+    {
+      "name": "77R55CR5+HR",
+      "lat": 26.1914,
+      "lng": -76.5904,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T03:25:01.336926+00:00"
+    },
+    {
+      "name": "77R65CR5+HR",
+      "lat": 26.1914,
+      "lng": -75.5905,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T03:25:26.543196+00:00"
+    },
+    {
+      "name": "77R75CR5+HQ",
+      "lat": 26.1914,
+      "lng": -74.5906,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-19T03:25:51.502900+00:00"
     }
   ],
-  "hotspot_cursor": 25,
+  "hotspot_cursor": 26,
   "stats": {
-    "total_probes_run": 942,
-    "high_demand_hits_found": 156,
+    "total_probes_run": 970,
+    "high_demand_hits_found": 161,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-18T21:56:49.996715+00:00"
+  "last_run_timestamp": "2026-11-19T03:26:11.129484+00:00"
 }
