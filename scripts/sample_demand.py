@@ -621,28 +621,37 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
             target_hotspot["last_monthly_fee"] = monthly_service
             target_hotspot["last_checked"] = datetime.now(timezone.utc).isoformat()
 
-            is_congested_hotspot = (surcharge > 0) or (monthly_service > 120)
+            is_congested_hotspot = (
+                (surcharge > 0) or 
+                (probe_res.get("service_price_adjustment", 0) > 0) or 
+                (monthly_service > 120) or 
+                (probe_res.get("status") in ("congested", "high_demand"))
+            )
 
             if is_congested_hotspot:
                 target_hotspot["consecutive_zeros"] = 0
                 logger.info(f"  -> Hotspot Active: ${monthly_service}/mo (${surcharge} surcharge) congestion maintained.")
             else:
                 target_hotspot["consecutive_zeros"] = target_hotspot.get("consecutive_zeros", 0) + 1
-                logger.info(f"  -> Hotspot returned standard rate ($120/mo, $0 surcharge) (strikes: {target_hotspot['consecutive_zeros']}/2).")
+                logger.info(f"  -> Hotspot returned non-congested rate (strikes: {target_hotspot['consecutive_zeros']}/2).")
 
                 # Auto-demote after 2 consecutive non-congested checks
                 if target_hotspot["consecutive_zeros"] >= 2:
-                    logger.info(f"  -> Demoting {h_name} from priority hotspots (standard rate twice).")
+                    logger.info(f"  -> Demoting {h_name} from priority hotspots.")
                     hotspots.remove(target_hotspot)
 
             records_to_upsert.append({
                 "lat": h_lat,
                 "lng": h_lng,
+                "base_service_fee": probe_res.get("base_service_fee", 120.0),
+                "service_price_adjustment": probe_res.get("service_price_adjustment", 0.0),
+                "total_monthly_fee": probe_res.get("total_monthly_fee", monthly_service),
+                "monthly_service_fee": probe_res.get("total_monthly_fee", monthly_service),
                 "surcharge_amount": surcharge,
-                "monthly_service_fee": monthly_service,
                 "status": probe_res["status"],
                 "sample_type": "hotspot_priority",
-                "location_name": probe_res.get("location_name") or h_name
+                "location_name": probe_res.get("location_name") or h_name,
+                "adjustment_description": probe_res.get("adjustment_description", "Service Price Adjustment")
             })
             hotspots_checked += 1
 
@@ -674,15 +683,25 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
             records_to_upsert.append({
                 "lat": b_lat,
                 "lng": b_lng,
+                "base_service_fee": probe_res.get("base_service_fee", 120.0),
+                "service_price_adjustment": probe_res.get("service_price_adjustment", 0.0),
+                "total_monthly_fee": probe_res.get("total_monthly_fee", monthly_service),
+                "monthly_service_fee": probe_res.get("total_monthly_fee", monthly_service),
                 "surcharge_amount": surcharge,
-                "monthly_service_fee": monthly_service,
                 "status": status,
                 "sample_type": "blanket_grid",
-                "location_name": loc_name
+                "location_name": loc_name,
+                "adjustment_description": probe_res.get("adjustment_description", "Service Price Adjustment")
             })
 
-            # 3. Discovery: If Surcharge > 0 OR monthly service > $120, promote & scatter!
-            if surcharge > 0 or monthly_service > 120:
+            # 3. Discovery: If Surcharge > 0 OR congestion detected, promote & scatter!
+            is_discovered_congestion = (
+                surcharge > 0 or 
+                probe_res.get("service_price_adjustment", 0) > 0 or 
+                monthly_service > 120 or 
+                status in ("congested", "high_demand")
+            )
+            if is_discovered_congestion:
                 logger.info(f"  -> CONGESTION ZONE DISCOVERED! ${monthly_service}/mo (+${surcharge} surcharge) at {loc_name}")
                 state["stats"]["high_demand_hits_found"] = state["stats"].get("high_demand_hits_found", 0) + 1
 
@@ -707,11 +726,15 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
                         records_to_upsert.append({
                             "lat": sc["lat"],
                             "lng": sc["lng"],
+                            "base_service_fee": s_res.get("base_service_fee", 120.0),
+                            "service_price_adjustment": s_res.get("service_price_adjustment", 0.0),
+                            "total_monthly_fee": s_res.get("total_monthly_fee", s_res.get("monthly_service_fee", 120)),
+                            "monthly_service_fee": s_res.get("total_monthly_fee", s_res.get("monthly_service_fee", 120)),
                             "surcharge_amount": s_res["surcharge_amount"],
-                            "monthly_service_fee": s_res.get("monthly_service_fee", 120),
                             "status": s_res["status"],
                             "sample_type": "radial_scatter",
-                            "location_name": s_res.get("location_name") or f"{loc_name} {sc['name']}"
+                            "location_name": s_res.get("location_name") or f"{loc_name} {sc['name']}",
+                            "adjustment_description": s_res.get("adjustment_description", "Service Price Adjustment")
                         })
 
         # Advance cursor and check for cycle wrap
