@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 91,
+  "blanket_cursor": 98,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -261,9 +261,9 @@
       "lat": 26.7613,
       "lng": -109.2198,
       "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
+      "last_monthly_fee": 633.62,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T20:47:55.147484+00:00"
+      "last_checked": "2026-11-20T11:32:43.608997+00:00"
     },
     {
       "name": "QQ6P+G2 Potrero de Cancio, Sin., Mexico",
@@ -1695,13 +1695,58 @@
       "last_monthly_fee": 633.62,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-20T03:12:48.093263+00:00"
+    },
+    {
+      "name": "X394+C4 La Esperanza, Coah., Mexico",
+      "lat": 26.9685,
+      "lng": -102.9447,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T11:32:48.521367+00:00"
+    },
+    {
+      "name": "X396+CQ Agua del Pozo, Coah., Mexico",
+      "lat": 26.9685,
+      "lng": -101.938,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T11:33:14.528434+00:00"
+    },
+    {
+      "name": "X399+CF Las Cabras, Coah., Mexico",
+      "lat": 26.9685,
+      "lng": -100.9313,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T11:33:41.049454+00:00"
+    },
+    {
+      "name": "X39G+C5 La Mezquitosa, N.L., Mexico",
+      "lat": 26.9685,
+      "lng": -99.9246,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T11:34:09.101265+00:00"
+    },
+    {
+      "name": "76R5X39W+C6",
+      "lat": 26.9685,
+      "lng": -96.9045,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T11:34:47.498110+00:00"
     }
   ],
-  "hotspot_cursor": 29,
+  "hotspot_cursor": 30,
   "stats": {
-    "total_probes_run": 1078,
-    "high_demand_hits_found": 182,
+    "total_probes_run": 1106,
+    "high_demand_hits_found": 187,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-20T03:13:04.201119+00:00"
+  "last_run_timestamp": "2026-11-20T11:35:07.951756+00:00"
 }
