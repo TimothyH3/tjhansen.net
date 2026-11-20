@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 98,
+  "blanket_cursor": 105,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -270,9 +270,9 @@
       "lat": 26.7613,
       "lng": -108.215,
       "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
+      "last_monthly_fee": 633.62,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T20:48:13.640165+00:00"
+      "last_checked": "2026-11-20T20:12:16.096593+00:00"
     },
     {
       "name": "QQ6Q+GX El Chihuite, Chihuahua, Mexico",
@@ -1740,13 +1740,49 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-20T11:34:47.498110+00:00"
+    },
+    {
+      "name": "76R6X492+CV",
+      "lat": 26.9685,
+      "lng": -95.8978,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T20:12:19.970694+00:00"
+    },
+    {
+      "name": "77R2X695+CR",
+      "lat": 26.9685,
+      "lng": -79.7905,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T20:12:48.352505+00:00"
+    },
+    {
+      "name": "77R3X698+CF",
+      "lat": 26.9685,
+      "lng": -78.7838,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T20:13:06.686615+00:00"
+    },
+    {
+      "name": "77R5X69H+CR",
+      "lat": 26.9685,
+      "lng": -76.7704,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T20:13:34.817087+00:00"
     }
   ],
-  "hotspot_cursor": 30,
+  "hotspot_cursor": 31,
   "stats": {
-    "total_probes_run": 1106,
-    "high_demand_hits_found": 187,
+    "total_probes_run": 1130,
+    "high_demand_hits_found": 191,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-20T11:35:07.951756+00:00"
+  "last_run_timestamp": "2026-11-20T20:13:50.640221+00:00"
 }
