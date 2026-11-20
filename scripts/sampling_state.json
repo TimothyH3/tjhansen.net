@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 84,
+  "blanket_cursor": 91,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -254,7 +254,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T12:43:35.203237+00:00"
+      "last_checked": "2026-11-20T03:10:46.230382+00:00"
     },
     {
       "name": "QQ6J+G3 Masiaca, Son., Mexico",
@@ -1632,13 +1632,76 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-19T21:32:05.734075+00:00"
+    },
+    {
+      "name": "X295+C8 Huivulai, Sonora, Mexico",
+      "lat": 26.9685,
+      "lng": -109.9917,
+      "last_surcharge": 0,
+      "last_monthly_fee": 905.17,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T03:10:50.485798+00:00"
+    },
+    {
+      "name": "X298+C2 \u00c1lamos, Sonora, Mexico",
+      "lat": 26.9685,
+      "lng": -108.985,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T03:11:07.256459+00:00"
+    },
+    {
+      "name": "X29C+CM Agua Caliente, Chihuahua, Mexico",
+      "lat": 26.9685,
+      "lng": -107.9783,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T03:11:25.507041+00:00"
+    },
+    {
+      "name": "X29H+C9 La Ca\u00f1ada, Chihuahua, Mexico",
+      "lat": 26.9685,
+      "lng": -106.9716,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T03:11:44.637509+00:00"
+    },
+    {
+      "name": "X29P+C2 La Noria, Chihuahua, Mexico",
+      "lat": 26.9685,
+      "lng": -105.9649,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T03:12:06.525612+00:00"
+    },
+    {
+      "name": "X29R+CP Octaviano L\u00f3pez, Chih., Mexico",
+      "lat": 26.9685,
+      "lng": -104.9582,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T03:12:29.167185+00:00"
+    },
+    {
+      "name": "X29X+CC Ejido Liberaci\u00f3n, Chih., Mexico",
+      "lat": 26.9685,
+      "lng": -103.9515,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-20T03:12:48.093263+00:00"
     }
   ],
-  "hotspot_cursor": 28,
+  "hotspot_cursor": 29,
   "stats": {
-    "total_probes_run": 1042,
-    "high_demand_hits_found": 175,
+    "total_probes_run": 1078,
+    "high_demand_hits_found": 182,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-19T21:32:23.473822+00:00"
+  "last_run_timestamp": "2026-11-20T03:13:04.201119+00:00"
 }
