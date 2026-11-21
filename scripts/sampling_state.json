@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 126,
+  "blanket_cursor": 133,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -306,9 +306,9 @@
       "lat": 26.7613,
       "lng": -104.1955,
       "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
+      "last_monthly_fee": 633.62,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T20:49:28.833857+00:00"
+      "last_checked": "2026-11-21T23:13:14.341439+00:00"
     },
     {
       "name": "QR67+GM Nuevo Atalaya, Coah., Mexico",
@@ -1965,13 +1965,67 @@
       "last_monthly_fee": 633.62,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-21T17:31:30.058633+00:00"
+    },
+    {
+      "name": "PMW9+5R El Mimbre, Chih., Mexico",
+      "lat": 27.7455,
+      "lng": -105.3304,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T23:13:18.518811+00:00"
+    },
+    {
+      "name": "PMWM+59 San Juan de las Maravillas, Chih., Mexico",
+      "lat": 27.7455,
+      "lng": -104.3166,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T23:13:39.868050+00:00"
+    },
+    {
+      "name": "PMWW+5V El Cenzontle, Coah., Mexico",
+      "lat": 27.7455,
+      "lng": -103.3028,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T23:13:57.384206+00:00"
+    },
+    {
+      "name": "PPW6+59 Charcos de Figueroa, Coah., Mexico",
+      "lat": 27.7455,
+      "lng": -102.289,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T23:14:17.292213+00:00"
+    },
+    {
+      "name": "PPWF+5W La Loma, Coah., Mexico",
+      "lat": 27.7455,
+      "lng": -101.2752,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T23:14:35.524170+00:00"
+    },
+    {
+      "name": "PPWQ+5C El Nuevo Pillaje, N.L., Mexico",
+      "lat": 27.7455,
+      "lng": -100.2614,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T23:14:54.257777+00:00"
     }
   ],
-  "hotspot_cursor": 34,
+  "hotspot_cursor": 35,
   "stats": {
-    "total_probes_run": 1238,
-    "high_demand_hits_found": 212,
+    "total_probes_run": 1270,
+    "high_demand_hits_found": 218,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-21T17:31:53.638537+00:00"
+  "last_run_timestamp": "2026-11-21T23:15:12.973357+00:00"
 }
