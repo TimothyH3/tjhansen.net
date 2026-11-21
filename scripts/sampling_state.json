@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 112,
+  "blanket_cursor": 119,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -288,9 +288,9 @@
       "lat": 26.7613,
       "lng": -106.2052,
       "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
+      "last_monthly_fee": 633.62,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T20:48:54.253041+00:00"
+      "last_checked": "2026-11-21T09:46:50.939500+00:00"
     },
     {
       "name": "QQ6X+GR Jos\u00e9 Esteban Coronado, Chihuahua, Mexico",
@@ -1839,13 +1839,76 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-21T01:32:26.925766+00:00"
+    },
+    {
+      "name": "77RHX79M+C8",
+      "lat": 26.9685,
+      "lng": -68.7167,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T09:46:56.693732+00:00"
+    },
+    {
+      "name": "77RJX79R+C2",
+      "lat": 26.9685,
+      "lng": -67.71,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T09:47:25.330941+00:00"
+    },
+    {
+      "name": "75V4PGW3+5J",
+      "lat": 27.7455,
+      "lng": -117.4959,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T09:47:56.290117+00:00"
+    },
+    {
+      "name": "75V5PGW9+55",
+      "lat": 27.7455,
+      "lng": -116.4821,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T09:48:23.474315+00:00"
+    },
+    {
+      "name": "75V6PGWJ+5M",
+      "lat": 27.7455,
+      "lng": -115.4683,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T09:48:53.315845+00:00"
+    },
+    {
+      "name": "PGWW+56 El Vizca\u00edno, B.C.S., Mexico",
+      "lat": 27.7455,
+      "lng": -114.4545,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T09:49:24.690940+00:00"
+    },
+    {
+      "name": "PHW5+5P Francisco J. M\u00fajica, B.C.S., Mexico",
+      "lat": 27.7455,
+      "lng": -113.4407,
+      "last_surcharge": 0,
+      "last_monthly_fee": 633.62,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T09:49:58.462181+00:00"
     }
   ],
-  "hotspot_cursor": 32,
+  "hotspot_cursor": 33,
   "stats": {
-    "total_probes_run": 1166,
-    "high_demand_hits_found": 198,
+    "total_probes_run": 1202,
+    "high_demand_hits_found": 205,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-21T01:32:47.767044+00:00"
+  "last_run_timestamp": "2026-11-21T09:50:26.309393+00:00"
 }
