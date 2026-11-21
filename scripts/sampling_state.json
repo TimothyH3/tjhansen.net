@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 105,
+  "blanket_cursor": 112,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -279,9 +279,9 @@
       "lat": 26.7613,
       "lng": -107.2101,
       "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
+      "last_monthly_fee": 633.62,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T20:48:33.259737+00:00"
+      "last_checked": "2026-11-21T01:29:59.744098+00:00"
     },
     {
       "name": "QQ6V+GW San Crist\u00f3bal, Chih., Mexico",
@@ -1776,13 +1776,76 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-20T20:13:34.817087+00:00"
+    },
+    {
+      "name": "77R6X69P+CG",
+      "lat": 26.9685,
+      "lng": -75.7637,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T01:30:04.582327+00:00"
+    },
+    {
+      "name": "77R7X69V+C6",
+      "lat": 26.9685,
+      "lng": -74.757,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T01:30:29.332983+00:00"
+    },
+    {
+      "name": "77R8X69X+CV",
+      "lat": 26.9685,
+      "lng": -73.7503,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T01:30:53.856134+00:00"
+    },
+    {
+      "name": "77R9X794+CJ",
+      "lat": 26.9685,
+      "lng": -72.7435,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T01:31:17.208813+00:00"
+    },
+    {
+      "name": "77RCX797+C7",
+      "lat": 26.9685,
+      "lng": -71.7368,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T01:31:38.960892+00:00"
+    },
+    {
+      "name": "77RFX799+CX",
+      "lat": 26.9685,
+      "lng": -70.7301,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T01:32:02.015745+00:00"
+    },
+    {
+      "name": "77RGX79G+CJ",
+      "lat": 26.9685,
+      "lng": -69.7234,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-21T01:32:26.925766+00:00"
     }
   ],
-  "hotspot_cursor": 31,
+  "hotspot_cursor": 32,
   "stats": {
-    "total_probes_run": 1130,
-    "high_demand_hits_found": 191,
+    "total_probes_run": 1166,
+    "high_demand_hits_found": 198,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-20T20:13:50.640221+00:00"
+  "last_run_timestamp": "2026-11-21T01:32:47.767044+00:00"
 }
