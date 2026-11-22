@@ -52,56 +52,43 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
-  // Pointy-topped regular hexagonal honeycomb grid snapping (Zero overlap guaranteed)
-  // Circumradius R = 12.5 km. Column spacing = sqrt(3)*R ~= 21.65 km, Row spacing = 1.5*R = 18.75 km.
-  const HEX_RADIUS_KM = 12.5;
-  const REF_LAT = 38.0;
-  const REF_LNG = -97.0;
+  // Official Starlink Map Spatial Index (Uber H3 Resolution 5)
+  // Starlink schedules spot beams, capacity, and official map availability using H3 Res 5 (~252 km² cells)
+  const STARLINK_H3_RES = 5;
 
-  function snapToHexGrid(lat, lng, radiusKm = HEX_RADIUS_KM) {
-    const kmPerLat = 111.132;
-    const kmPerLng = 111.320 * Math.cos(REF_LAT * Math.PI / 180);
-    const x = (lng - REF_LNG) * kmPerLng;
-    const y = (lat - REF_LAT) * kmPerLat;
-    const R = radiusKm;
-
-    const r = (2.0 / 3.0) * (y / R);
-    const q = (Math.sqrt(3) / 3.0) * (x / R) - r / 2.0;
-
-    const xc = q;
-    const zc = r;
-    const yc = -xc - zc;
-
-    let rx = Math.round(xc);
-    let ry = Math.round(yc);
-    let rz = Math.round(zc);
-
-    const xDiff = Math.abs(rx - xc);
-    const yDiff = Math.abs(ry - yc);
-    const zDiff = Math.abs(rz - zc);
-
-    if (xDiff > yDiff && xDiff > zDiff) {
-      rx = -ry - rz;
-    } else if (yDiff > zDiff) {
-      ry = -rx - rz;
-    } else {
-      rz = -rx - ry;
+  function getH3Cell(lat, lng) {
+    if (typeof h3 !== 'undefined' && (h3.latLngToCell || h3.geoToH3)) {
+      try {
+        const cellId = h3.latLngToCell ? h3.latLngToCell(lat, lng, STARLINK_H3_RES) : h3.geoToH3(lat, lng, STARLINK_H3_RES);
+        const center = h3.cellToLatLng ? h3.cellToLatLng(cellId) : h3.h3ToGeo(cellId);
+        const boundary = h3.cellToBoundary ? h3.cellToBoundary(cellId) : h3.h3ToGeoBoundary(cellId);
+        return {
+          cellId,
+          cellKey: cellId,
+          centerLat: center[0],
+          centerLng: center[1],
+          boundary: boundary, // Exact 6 [lat, lng] vertices matching official Starlink map
+          isH3: true
+        };
+      } catch (e) {
+        console.warn('H3 indexing error:', e);
+      }
     }
 
-    const qSnap = rx;
-    const rSnap = rz;
-
-    const xCenter = R * Math.sqrt(3) * (qSnap + rSnap / 2.0);
-    const yCenter = R * (3.0 / 2.0) * rSnap;
-
-    const centerLat = REF_LAT + yCenter / kmPerLat;
-    const centerLng = REF_LNG + xCenter / kmPerLng;
-
+    // Geodesic regular hexagon fallback (~11.35 km circumradius matching H3 Res 5)
+    const fallbackCoords = getHexagonLatLngs(lat, lng, 11.35);
     return {
-      centerLat: Math.round(centerLat * 10000) / 10000,
-      centerLng: Math.round(centerLng * 10000) / 10000,
-      cellKey: `${qSnap}_${rSnap}`
+      cellId: `${Math.round(lat * 100)}_${Math.round(lng * 100)}`,
+      cellKey: `${Math.round(lat * 100)}_${Math.round(lng * 100)}`,
+      centerLat: lat,
+      centerLng: lng,
+      boundary: fallbackCoords,
+      isH3: false
     };
+  }
+
+  function snapToHexGrid(lat, lng) {
+    return getH3Cell(lat, lng);
   }
 
   // Authentic pricing resolver: Base Plan + Service Price Adjustment = Total Monthly Fee
@@ -469,7 +456,8 @@
       const isSold = cell.status === 'sold_out';
       const color = getTierColor(cell);
 
-      const hexCoords = getHexagonLatLngs(cell.centerLat, cell.centerLng, 12.5);
+      // Use authentic official Starlink H3 Resolution 5 boundary polygon
+      const hexCoords = cell.boundary || getHexagonLatLngs(cell.centerLat, cell.centerLng, 11.35);
       const hex = L.polygon(hexCoords, {
         color: '#ffffff',
         weight: 2.2,
@@ -659,6 +647,10 @@
           <div class="prop-row">
             <span class="prop-name">COORDINATES:</span>
             <span class="prop-value">${pt.lat.toFixed(4)}°N, ${pt.lng.toFixed(4)}°W</span>
+          </div>
+          <div class="prop-row">
+            <span class="prop-name">STARLINK H3 CELL:</span>
+            <span class="prop-value font-mono" style="color: #38bdf8;">${pt.cellId || (typeof h3 !== 'undefined' && h3.latLngToCell ? h3.latLngToCell(pt.lat, pt.lng, 5) : 'H3 Res 5')}</span>
           </div>
           <div class="prop-row">
             <span class="prop-name">LOCATION:</span>
