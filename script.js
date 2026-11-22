@@ -117,9 +117,9 @@
     const hudDots = Array.from(document.querySelectorAll('.hud-dot'));
 
     // Dynamic scroll milestone measurements
-    let topPauseDist0 = 160;  // Soft cushion buffer at very top of Hero
+    let topPauseDist0 = 0;  // Soft cushion buffer at very top of Hero
     let vDist0 = 560;         // Vertical travel distance: Section 2 slides up to sit under chips
-    let pauseDist0 = 340;     // Rest buffer at bottom of Act 0 before transition begins (~3-4 clicks)
+    let pauseDist0 = 240;     // Rest buffer at bottom of Act 0 before transition begins (~3-4 clicks)
     let tDist01 = 920;        // Title slide & staggered cards transition distance Act 0 -> Act 1
     let profileOffsetNeeded = 600; // Distance needed to position Section 2 offscreen below fold
     let excessHeight0 = 0;         // Container scroll adjustment for shorter screens

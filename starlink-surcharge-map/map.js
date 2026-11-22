@@ -115,6 +115,77 @@
     return '#38bdf8';
   }
 
+  function getTierKey(pt) {
+    if (pt.status === 'sold_out') return 'sold_out';
+    const pricing = getPointPricing(pt);
+    if (pricing.surcharge > 0) return 'high_demand';
+    if (pricing.adjustment > 0 || (pricing.total !== null && pricing.total > 120)) return 'congested';
+    if (pricing.adjustment < 0 || (pricing.total !== null && pricing.total < 120)) return 'discounted';
+    return 'standard';
+  }
+
+  // Generates geographically invariant regular hexagon coordinates (12.5 km circumradius matching Starlink cells)
+  function getHexagonLatLngs(centerLat, centerLng, radiusKm = 12.5) {
+    const latRad = centerLat * Math.PI / 180;
+    const kmPerLat = 111.132;
+    const kmPerLng = 111.320 * Math.cos(latRad);
+    const coords = [];
+    for (let i = 0; i < 6; i++) {
+      const angleDeg = 30 + i * 60; // Pointy-topped hexagon (30, 90, 150, 210, 270, 330)
+      const angleRad = angleDeg * Math.PI / 180;
+      const dLat = (radiusKm * Math.sin(angleRad)) / kmPerLat;
+      const dLng = (radiusKm * Math.cos(angleRad)) / kmPerLng;
+      coords.push([centerLat + dLat, centerLng + dLng]);
+    }
+    return coords;
+  }
+
+  // Injects SVG radial gradients into Leaflet overlay pane for fading surrounding auras
+  function ensureSvgGradients() {
+    const svg = document.querySelector('.leaflet-pane.leaflet-overlay-pane svg');
+    if (!svg || svg.querySelector('#hex-aura-congested')) return;
+
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    defs.innerHTML = `
+      <radialGradient id="hex-aura-congested" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#f97316" stop-opacity="0.55" />
+        <stop offset="25%" stop-color="#f97316" stop-opacity="0.38" />
+        <stop offset="55%" stop-color="#f97316" stop-opacity="0.18" />
+        <stop offset="80%" stop-color="#f97316" stop-opacity="0.05" />
+        <stop offset="100%" stop-color="#f97316" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="hex-aura-high_demand" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.60" />
+        <stop offset="25%" stop-color="#ef4444" stop-opacity="0.42" />
+        <stop offset="55%" stop-color="#ef4444" stop-opacity="0.20" />
+        <stop offset="80%" stop-color="#ef4444" stop-opacity="0.06" />
+        <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="hex-aura-standard" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.50" />
+        <stop offset="25%" stop-color="#38bdf8" stop-opacity="0.32" />
+        <stop offset="55%" stop-color="#38bdf8" stop-opacity="0.15" />
+        <stop offset="80%" stop-color="#38bdf8" stop-opacity="0.04" />
+        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="hex-aura-discounted" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#10b981" stop-opacity="0.55" />
+        <stop offset="25%" stop-color="#10b981" stop-opacity="0.36" />
+        <stop offset="55%" stop-color="#10b981" stop-opacity="0.16" />
+        <stop offset="80%" stop-color="#10b981" stop-opacity="0.05" />
+        <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient id="hex-aura-sold_out" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#c084fc" stop-opacity="0.50" />
+        <stop offset="25%" stop-color="#c084fc" stop-opacity="0.32" />
+        <stop offset="55%" stop-color="#c084fc" stop-opacity="0.15" />
+        <stop offset="80%" stop-color="#c084fc" stop-opacity="0.04" />
+        <stop offset="100%" stop-color="#c084fc" stop-opacity="0" />
+      </radialGradient>
+    `;
+    svg.insertBefore(defs, svg.firstChild);
+  }
+
   function formatDate(dStr) {
     try {
       const d = new Date(dStr);
@@ -264,34 +335,58 @@
     setText('count-sold', `(${soldCount})`);
   }
 
-  // Draw Circle Markers
+  // Render Starlink Hexagonal Cells & Radial Fading Auras
   function renderMarkers() {
     markersLayer.clearLayers();
     let visible = 0;
 
-    for (const pt of surchargePoints) {
+    // Filter points based on active tier checkboxes
+    const activePoints = surchargePoints.filter(pt => {
       const pricing = getPointPricing(pt);
       const s = pricing.surcharge || 0;
       const fee = pricing.total;
       const isSold = pt.status === 'sold_out';
 
-      if (isSold && !tierFilters.tierSoldOut) continue;
-      if (s > 0 && !tierFilters.tierSurcharge) continue;
-      if (!isSold && s === 0 && (pricing.adjustment < 0 || fee < 120) && !tierFilters.tierDiscount) continue;
-      if (!isSold && s === 0 && pricing.adjustment === 0 && fee === 120 && !tierFilters.tierStandard) continue;
-      if (!isSold && s === 0 && (pricing.adjustment > 0 || fee > 120) && !tierFilters.tierCongested) continue;
+      if (isSold && !tierFilters.tierSoldOut) return false;
+      if (s > 0 && !tierFilters.tierSurcharge) return false;
+      if (!isSold && s === 0 && (pricing.adjustment < 0 || fee < 120) && !tierFilters.tierDiscount) return false;
+      if (!isSold && s === 0 && pricing.adjustment === 0 && fee === 120 && !tierFilters.tierStandard) return false;
+      if (!isSold && s === 0 && (pricing.adjustment > 0 || fee > 120) && !tierFilters.tierCongested) return false;
+      return true;
+    });
 
+    // Pass 1: Render outer fading gradient auras spanning a large surrounding area (65 km ground radius)
+    for (const pt of activePoints) {
+      const tierKey = getTierKey(pt);
+      const aura = L.circle([pt.lat, pt.lng], {
+        radius: 65000, // 65 km real-world geographic ground radius
+        stroke: false,
+        interactive: false,
+        className: `starlink-hex-aura starlink-aura-${tierKey}`
+      });
+      markersLayer.addLayer(aura);
+    }
+
+    // Ensure SVG gradients exist in Leaflet SVG layer
+    ensureSvgGradients();
+
+    // Pass 2: Render crisp central Starlink cell hexagons (12.5 km circumradius matching Starlink cells)
+    for (const pt of activePoints) {
       visible++;
+      const pricing = getPointPricing(pt);
+      const s = pricing.surcharge || 0;
+      const fee = pricing.total;
+      const isSold = pt.status === 'sold_out';
       const color = getTierColor(pt);
-      const radius = s > 0 ? 8.5 : pricing.adjustment > 0 ? 7.5 : pricing.adjustment < 0 ? 7.0 : 6.0;
 
-      const circle = L.circleMarker([pt.lat, pt.lng], {
-        radius,
-        fillColor: color,
+      const hexCoords = getHexagonLatLngs(pt.lat, pt.lng, 12.5);
+      const hex = L.polygon(hexCoords, {
         color: '#ffffff',
-        weight: 1.2,
-        opacity: 0.9,
-        fillOpacity: 0.8
+        weight: 1.8,
+        opacity: 0.95,
+        fillColor: color,
+        fillOpacity: 0.72,
+        className: 'starlink-cell-hex'
       });
 
       // Hover tooltip showing exact formula: Base + Adjustment = Total
@@ -308,18 +403,34 @@
         tipText = `${formatMoney(fee)}/mo Standard Base Plan`;
       }
 
-      circle.bindTooltip(tipText, {
-        className: 'font-mono',
+      hex.bindTooltip(tipText, {
+        className: 'font-mono starlink-hex-tooltip',
         direction: 'top',
-        offset: [0, -6]
+        offset: [0, -10]
       });
 
-      circle.on('click', function (e) {
+      hex.on('mouseover', function () {
+        this.setStyle({
+          weight: 3.0,
+          color: '#38bdf8',
+          fillOpacity: 0.94
+        });
+      });
+
+      hex.on('mouseout', function () {
+        this.setStyle({
+          weight: 1.8,
+          color: '#ffffff',
+          fillOpacity: 0.72
+        });
+      });
+
+      hex.on('click', function (e) {
         L.DomEvent.stopPropagation(e);
         displayPointDetails(pt, 0);
       });
 
-      markersLayer.addLayer(circle);
+      markersLayer.addLayer(hex);
     }
 
     const counter = document.getElementById('visible-nodes-count');

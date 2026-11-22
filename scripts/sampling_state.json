@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 105,
+  "blanket_cursor": 0,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -68,600 +68,6 @@
       "last_checked": "2026-11-11T07:45:32.617059+00:00"
     },
     {
-      "name": "77Q2X4MF+MJ",
-      "lat": 25.9842,
-      "lng": -79.876,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-11T22:41:46.236818+00:00"
-    },
-    {
-      "name": "77Q3X4MC+MR",
-      "lat": 25.9842,
-      "lng": -78.8779,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T14:08:04.554429+00:00"
-    },
-    {
-      "name": "77Q4X4MC+M3",
-      "lat": 25.9842,
-      "lng": -77.8798,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T19:09:54.177087+00:00"
-    },
-    {
-      "name": "77Q5X4M9+M9",
-      "lat": 25.9842,
-      "lng": -76.8816,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T22:58:18.098414+00:00"
-    },
-    {
-      "name": "77Q6X4M8+MJ",
-      "lat": 25.9842,
-      "lng": -75.8835,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T02:38:35.932430+00:00"
-    },
-    {
-      "name": "77Q7X4M7+MR",
-      "lat": 25.9842,
-      "lng": -74.8854,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T10:49:26.174878+00:00"
-    },
-    {
-      "name": "77Q8X4M7+M4",
-      "lat": 25.9842,
-      "lng": -73.8872,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T17:42:08.086483+00:00"
-    },
-    {
-      "name": "77Q9X4M6+M9",
-      "lat": 25.9842,
-      "lng": -72.8891,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T22:46:42.413812+00:00"
-    },
-    {
-      "name": "77QCX4M5+MJ",
-      "lat": 25.9842,
-      "lng": -71.891,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T02:43:40.312675+00:00"
-    },
-    {
-      "name": "77QFX4M4+MV",
-      "lat": 25.9842,
-      "lng": -70.8928,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T11:10:59.952518+00:00"
-    },
-    {
-      "name": "77QGX4M4+M4",
-      "lat": 25.9842,
-      "lng": -69.8947,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T21:00:34.830218+00:00"
-    },
-    {
-      "name": "77QHX4M3+M9",
-      "lat": 25.9842,
-      "lng": -68.8966,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T03:49:49.839841+00:00"
-    },
-    {
-      "name": "77QJX4M2+MJ",
-      "lat": 25.9842,
-      "lng": -67.8985,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T13:20:50.987165+00:00"
-    },
-    {
-      "name": "75R4QP6R+GG",
-      "lat": 26.7613,
-      "lng": -117.2587,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T22:20:08.126063+00:00"
-    },
-    {
-      "name": "75R5QP6W+GC",
-      "lat": 26.7613,
-      "lng": -116.2539,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T04:17:36.136358+00:00"
-    },
-    {
-      "name": "75R6QQ62+GC",
-      "lat": 26.7613,
-      "lng": -115.249,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T13:55:44.306958+00:00"
-    },
-    {
-      "name": "75R7QQ64+G8",
-      "lat": 26.7613,
-      "lng": -114.2442,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T21:54:30.639769+00:00"
-    },
-    {
-      "name": "QQ66+G7 Laguna San Ignacio, B.C.S., Mexico",
-      "lat": 26.7613,
-      "lng": -113.2393,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T03:23:50.637511+00:00"
-    },
-    {
-      "name": "QQ68+G6 San Joaqu\u00edn, B.C.S., Mexico",
-      "lat": 26.7613,
-      "lng": -112.2344,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T13:00:07.252715+00:00"
-    },
-    {
-      "name": "75RCQQ6C+G5",
-      "lat": 26.7613,
-      "lng": -111.2296,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T21:29:34.075886+00:00"
-    },
-    {
-      "name": "75RFQQ6G+G4",
-      "lat": 26.7613,
-      "lng": -110.2247,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T03:10:46.230382+00:00"
-    },
-    {
-      "name": "QQ6J+G3 Masiaca, Son., Mexico",
-      "lat": 26.7613,
-      "lng": -109.2198,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T11:32:43.608997+00:00"
-    },
-    {
-      "name": "QQ6P+G2 Potrero de Cancio, Sin., Mexico",
-      "lat": 26.7613,
-      "lng": -108.215,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T20:12:16.096593+00:00"
-    },
-    {
-      "name": "QQ6Q+GX El Chihuite, Chihuahua, Mexico",
-      "lat": 26.7613,
-      "lng": -107.2101,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T20:48:33.259737+00:00"
-    },
-    {
-      "name": "QQ6V+GW San Crist\u00f3bal, Chih., Mexico",
-      "lat": 26.7613,
-      "lng": -106.2052,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T20:48:54.253041+00:00"
-    },
-    {
-      "name": "QQ6X+GR Jos\u00e9 Esteban Coronado, Chihuahua, Mexico",
-      "lat": 26.7613,
-      "lng": -105.2004,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T20:49:10.770660+00:00"
-    },
-    {
-      "name": "QR63+GR Rancho Herrera, Dgo., Mexico",
-      "lat": 26.7613,
-      "lng": -104.1955,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-12T20:49:28.833857+00:00"
-    },
-    {
-      "name": "QR67+GM Nuevo Atalaya, Coah., Mexico",
-      "lat": 26.7613,
-      "lng": -102.1858,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T01:49:40.920187+00:00"
-    },
-    {
-      "name": "QR69+GJ La Gloria, Coah., Mexico",
-      "lat": 26.7613,
-      "lng": -101.1809,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T01:50:00.146654+00:00"
-    },
-    {
-      "name": "QR6F+GH El Arroyo de los Sauces, N.L., Mexico",
-      "lat": 26.7613,
-      "lng": -100.1761,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T01:50:22.755249+00:00"
-    },
-    {
-      "name": "76R4QR6Q+GC",
-      "lat": 26.7613,
-      "lng": -97.1615,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T01:50:51.525671+00:00"
-    },
-    {
-      "name": "76R5QR6V+G9",
-      "lat": 26.7613,
-      "lng": -96.1566,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T01:51:08.844266+00:00"
-    },
-    {
-      "name": "76R6QR6X+G8",
-      "lat": 26.7613,
-      "lng": -95.1517,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T09:29:19.472343+00:00"
-    },
-    {
-      "name": "77R2QW6G+GC",
-      "lat": 26.7613,
-      "lng": -79.0739,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T09:30:09.994131+00:00"
-    },
-    {
-      "name": "77R3QW6J+G9",
-      "lat": 26.7613,
-      "lng": -78.069,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T09:30:40.492258+00:00"
-    },
-    {
-      "name": "77R4QW6P+G8",
-      "lat": 26.7613,
-      "lng": -77.0642,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T09:31:11.061205+00:00"
-    },
-    {
-      "name": "77R5QW6R+G7",
-      "lat": 26.7613,
-      "lng": -76.0593,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T17:43:18.960263+00:00"
-    },
-    {
-      "name": "77R6QW6W+G6",
-      "lat": 26.7613,
-      "lng": -75.0545,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T17:43:47.161412+00:00"
-    },
-    {
-      "name": "77R7QX62+G5",
-      "lat": 26.7613,
-      "lng": -74.0496,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T17:44:14.550624+00:00"
-    },
-    {
-      "name": "77R8QX64+G4",
-      "lat": 26.7613,
-      "lng": -73.0447,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T17:44:39.523222+00:00"
-    },
-    {
-      "name": "77R9QX66+G2",
-      "lat": 26.7613,
-      "lng": -72.0399,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T17:45:06.674723+00:00"
-    },
-    {
-      "name": "77RCQX68+G2",
-      "lat": 26.7613,
-      "lng": -71.035,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T17:45:33.992898+00:00"
-    },
-    {
-      "name": "77RFQX69+GX",
-      "lat": 26.7613,
-      "lng": -70.0301,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T17:45:58.117465+00:00"
-    },
-    {
-      "name": "77RGQX6F+GV",
-      "lat": 26.7613,
-      "lng": -69.0253,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T23:31:26.258315+00:00"
-    },
-    {
-      "name": "77RHQX6H+GR",
-      "lat": 26.7613,
-      "lng": -68.0204,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T23:31:43.525376+00:00"
-    },
-    {
-      "name": "77RJQX6M+GQ",
-      "lat": 26.7613,
-      "lng": -67.0155,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T23:32:00.046001+00:00"
-    },
-    {
-      "name": "75V4G7QM+8Q",
-      "lat": 27.5383,
-      "lng": -117.7156,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T23:32:18.130472+00:00"
-    },
-    {
-      "name": "75V5G7QW+8G",
-      "lat": 27.5383,
-      "lng": -116.7037,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T23:32:35.882079+00:00"
-    },
-    {
-      "name": "75V6G8Q5+87",
-      "lat": 27.5383,
-      "lng": -115.6918,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T23:32:53.885888+00:00"
-    },
-    {
-      "name": "G8QC+82 Morro Hermoso, B.C.S., Mexico",
-      "lat": 27.5383,
-      "lng": -114.68,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-13T23:33:14.433450+00:00"
-    },
-    {
-      "name": "G8QJ+8Q Los Gavilanes, B.C.S., Mexico",
-      "lat": 27.5383,
-      "lng": -113.6681,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T06:18:17.682614+00:00"
-    },
-    {
-      "name": "G8QV+8G El Azufre, B.C.S., Mexico",
-      "lat": 27.5383,
-      "lng": -112.6562,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T06:18:47.653686+00:00"
-    },
-    {
-      "name": "75VCG9Q4+87",
-      "lat": 27.5383,
-      "lng": -111.6443,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T06:19:16.362318+00:00"
-    },
-    {
-      "name": "G9Q8+8X Siuti, Son., Mexico",
-      "lat": 27.5383,
-      "lng": -110.6325,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T06:19:41.280936+00:00"
-    },
-    {
-      "name": "G9QH+8Q Los Amigos, Son., Mexico",
-      "lat": 27.5383,
-      "lng": -109.6206,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T06:20:11.677122+00:00"
-    },
-    {
-      "name": "G9QR+8G Las Tunas, Mexico",
-      "lat": 27.5383,
-      "lng": -108.6087,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T06:20:39.544365+00:00"
-    },
-    {
-      "name": "GCQ3+87 Remechi, Chihuahua, Mexico",
-      "lat": 27.5383,
-      "lng": -107.5968,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T06:21:04.214241+00:00"
-    },
-    {
-      "name": "GCQ8+82 Ochilachi, Chih., Mexico",
-      "lat": 27.5383,
-      "lng": -106.5849,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T14:08:08.170898+00:00"
-    },
-    {
-      "name": "GCQG+8Q Las Puntas, Chih., Mexico",
-      "lat": 27.5383,
-      "lng": -105.5731,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T14:08:28.360573+00:00"
-    },
-    {
-      "name": "GCQQ+8G Benaske, Chihuahua, Mexico",
-      "lat": 27.5383,
-      "lng": -104.5612,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T14:08:44.307268+00:00"
-    },
-    {
-      "name": "GFQ2+87 Colorado, Coah., Mexico",
-      "lat": 27.5383,
-      "lng": -103.5493,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T14:09:02.377906+00:00"
-    },
-    {
-      "name": "GFQ7+82 Buenavista, Coah., Mexico",
-      "lat": 27.5383,
-      "lng": -102.5374,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T14:09:19.957923+00:00"
-    },
-    {
-      "name": "GFQF+8Q Sauceda, Coah., Mexico",
-      "lat": 27.5383,
-      "lng": -101.5256,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T14:09:40.154047+00:00"
-    },
-    {
-      "name": "GFQP+8G Santa Rita, Mexico",
-      "lat": 27.5383,
-      "lng": -100.5137,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T14:10:00.424117+00:00"
-    },
-    {
-      "name": "76V5GGQM+8G",
-      "lat": 27.5383,
-      "lng": -96.4662,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T19:10:17.568772+00:00"
-    },
-    {
-      "name": "76V6GGQW+87",
-      "lat": 27.5383,
-      "lng": -95.4543,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T19:10:46.251757+00:00"
-    },
-    {
       "name": "GPQF+8H South Beach, FL, USA",
       "lat": 27.5383,
       "lng": -80.2761,
@@ -669,483 +75,6 @@
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-14T22:58:22.055913+00:00"
-    },
-    {
-      "name": "77V2GPQP+87",
-      "lat": 27.5383,
-      "lng": -79.2643,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T22:58:38.630745+00:00"
-    },
-    {
-      "name": "77V3GPQX+82",
-      "lat": 27.5383,
-      "lng": -78.2524,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T22:58:53.523761+00:00"
-    },
-    {
-      "name": "77V4GQQ5+8R",
-      "lat": 27.5383,
-      "lng": -77.2405,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T22:59:09.129634+00:00"
-    },
-    {
-      "name": "77V5GQQC+8H",
-      "lat": 27.5383,
-      "lng": -76.2286,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T22:59:26.675547+00:00"
-    },
-    {
-      "name": "77V6GQQM+87",
-      "lat": 27.5383,
-      "lng": -75.2168,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T22:59:43.373657+00:00"
-    },
-    {
-      "name": "77V7GQQW+82",
-      "lat": 27.5383,
-      "lng": -74.2049,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T23:00:02.276488+00:00"
-    },
-    {
-      "name": "77V8GRQ4+8R",
-      "lat": 27.5383,
-      "lng": -73.193,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T02:38:41.096896+00:00"
-    },
-    {
-      "name": "77V9GRQ9+8H",
-      "lat": 27.5383,
-      "lng": -72.1811,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T02:39:09.961174+00:00"
-    },
-    {
-      "name": "77VCGRQJ+88",
-      "lat": 27.5383,
-      "lng": -71.1692,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T02:39:38.579128+00:00"
-    },
-    {
-      "name": "77VFGRQV+82",
-      "lat": 27.5383,
-      "lng": -70.1574,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T02:40:05.454208+00:00"
-    },
-    {
-      "name": "77VGGVQ3+8R",
-      "lat": 27.5383,
-      "lng": -69.1455,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T02:40:34.097576+00:00"
-    },
-    {
-      "name": "77VHGVQ8+8H",
-      "lat": 27.5383,
-      "lng": -68.1336,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T02:41:03.032969+00:00"
-    },
-    {
-      "name": "77VJGVQH+88",
-      "lat": 27.5383,
-      "lng": -67.1217,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T02:41:32.287365+00:00"
-    },
-    {
-      "name": "75W48R8R+4H",
-      "lat": 28.3153,
-      "lng": -117.1586,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T10:49:29.916581+00:00"
-    },
-    {
-      "name": "75W58V86+46",
-      "lat": 28.3153,
-      "lng": -116.1394,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T10:49:44.862673+00:00"
-    },
-    {
-      "name": "8V8X+4J Ejido Jos\u00e9 Mar\u00eda Morelos y Pav\u00f3n, B.C., Mexico",
-      "lat": 28.3153,
-      "lng": -114.101,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T10:50:03.857623+00:00"
-    },
-    {
-      "name": "8W89+47 La Lagunita, B.C., Mexico",
-      "lat": 28.3153,
-      "lng": -113.0818,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T10:50:20.838944+00:00"
-    },
-    {
-      "name": "75W98W8P+4W",
-      "lat": 28.3153,
-      "lng": -112.0627,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T10:50:37.311945+00:00"
-    },
-    {
-      "name": "8X84+4J Rancho Los Arrieros, Son., Mexico",
-      "lat": 28.3153,
-      "lng": -111.0435,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T10:50:51.393107+00:00"
-    },
-    {
-      "name": "8X8G+47 Nicaragua, Son., Mexico",
-      "lat": 28.3153,
-      "lng": -110.0243,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T17:42:15.246743+00:00"
-    },
-    {
-      "name": "8X8V+4X Y\u00e9cora, Sonora, Mexico",
-      "lat": 28.3153,
-      "lng": -109.0051,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T17:42:47.102160+00:00"
-    },
-    {
-      "name": "8287+4H La Abeja, Chih., Mexico",
-      "lat": 28.3153,
-      "lng": -107.986,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T17:43:19.724414+00:00"
-    },
-    {
-      "name": "828M+47 Campo Veintisiete y Medio, Mexico",
-      "lat": 28.3153,
-      "lng": -106.9668,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T17:43:51.393642+00:00"
-    },
-    {
-      "name": "8382+4X La Laborcita, Chih., Mexico",
-      "lat": 28.3153,
-      "lng": -105.9476,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T17:44:24.393249+00:00"
-    },
-    {
-      "name": "838C+4J Noriega, Chih., Mexico",
-      "lat": 28.3153,
-      "lng": -104.9284,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T17:44:55.927368+00:00"
-    },
-    {
-      "name": "838R+48 El Acebuche, Chihuahua, Mexico",
-      "lat": 28.3153,
-      "lng": -103.9092,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T17:45:30.579293+00:00"
-    },
-    {
-      "name": "8485+4X San Ildefonso, Coah., Mexico",
-      "lat": 28.3153,
-      "lng": -102.8901,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T22:46:46.813929+00:00"
-    },
-    {
-      "name": "848H+4J Santa Rosa, Coah., Mexico",
-      "lat": 28.3153,
-      "lng": -101.8709,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T22:47:07.180694+00:00"
-    },
-    {
-      "name": "848X+48 Allende, Coahuila, Mexico",
-      "lat": 28.3153,
-      "lng": -100.8517,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-15T22:47:26.392133+00:00"
-    },
-    {
-      "name": "75Q4CV79+Q6",
-      "lat": 25.4144,
-      "lng": -117.132,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T02:43:43.319984+00:00"
-    },
-    {
-      "name": "75Q5CV76+QG",
-      "lat": 25.4144,
-      "lng": -116.1387,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T02:44:00.808574+00:00"
-    },
-    {
-      "name": "75Q6CV73+QV",
-      "lat": 25.4144,
-      "lng": -115.1453,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T02:44:22.945899+00:00"
-    },
-    {
-      "name": "75Q7CR7X+Q6",
-      "lat": 25.4144,
-      "lng": -114.1519,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T02:44:39.317664+00:00"
-    },
-    {
-      "name": "75Q8CR7R+QH",
-      "lat": 25.4144,
-      "lng": -113.1586,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T02:44:59.230924+00:00"
-    },
-    {
-      "name": "CR7M+QW Magdalena, B.C.S., Mexico",
-      "lat": 25.4144,
-      "lng": -112.1652,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T02:45:16.610952+00:00"
-    },
-    {
-      "name": "CR7H+Q6 El Alto, Ju\u017ena Donja Kalifornija, Mexico",
-      "lat": 25.4144,
-      "lng": -111.1719,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T02:45:36.214501+00:00"
-    },
-    {
-      "name": "75QFCR7C+QJ",
-      "lat": 25.4144,
-      "lng": -110.1785,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T11:11:05.594807+00:00"
-    },
-    {
-      "name": "75QGCR77+QX",
-      "lat": 25.4144,
-      "lng": -109.1851,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T11:11:35.878662+00:00"
-    },
-    {
-      "name": "CR75+Q7 Gabriel Leyva Vel\u00e1zquez, Sinaloa, Mexico",
-      "lat": 25.4144,
-      "lng": -108.1918,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T11:12:06.206718+00:00"
-    },
-    {
-      "name": "CR72+QJ Los Pinos, Dgo., Mexico",
-      "lat": 25.4144,
-      "lng": -107.1984,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T11:12:38.053440+00:00"
-    },
-    {
-      "name": "CQ7W+Q2 Puertecitos, Durango, Mexico",
-      "lat": 25.4144,
-      "lng": -106.205,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T11:13:11.739205+00:00"
-    },
-    {
-      "name": "CQ7Q+Q8 Emiliano Mart\u00ednez, Dgo., Mexico",
-      "lat": 25.4144,
-      "lng": -105.2117,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T11:13:44.634375+00:00"
-    },
-    {
-      "name": "CQ7J+QM La Pur\u00edsima, Mexico",
-      "lat": 25.4144,
-      "lng": -104.2183,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T11:14:16.390288+00:00"
-    },
-    {
-      "name": "CQ7G+Q2 La Rosita, Mexico",
-      "lat": 25.4144,
-      "lng": -103.2249,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T21:00:41.411359+00:00"
-    },
-    {
-      "name": "CQ79+Q9 Parras de la Fuente, Coahuila, Mexico",
-      "lat": 25.4144,
-      "lng": -102.2316,
-      "last_surcharge": 0,
-      "last_monthly_fee": 1125.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T21:01:11.163534+00:00"
-    },
-    {
-      "name": "CQ76+QP Los Calderones, Coahuila, Mexico",
-      "lat": 25.4144,
-      "lng": -101.2382,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T21:01:38.620277+00:00"
-    },
-    {
-      "name": "CQ74+Q3 La Ci\u00e9nega de Gonz\u00e1lez, N.L., Mexico",
-      "lat": 25.4144,
-      "lng": -100.2448,
-      "last_surcharge": 0,
-      "last_monthly_fee": 1280.17,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T21:02:08.606578+00:00"
-    },
-    {
-      "name": "CP7X+QC Cigarros, N.L., Mexico",
-      "lat": 25.4144,
-      "lng": -99.2515,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T21:02:37.416185+00:00"
-    },
-    {
-      "name": "CP7R+QQ Mar\u00eda Carolina, Tamaulipas, Mexico",
-      "lat": 25.4144,
-      "lng": -98.2581,
-      "last_surcharge": 0,
-      "last_monthly_fee": 787.5,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T21:03:03.307990+00:00"
-    },
-    {
-      "name": "CP7P+Q3 La Capilla, Tamps., Mexico",
-      "lat": 25.4144,
-      "lng": -97.2648,
-      "last_surcharge": 0,
-      "last_monthly_fee": 905.17,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-16T21:03:30.976165+00:00"
-    },
-    {
-      "name": "76Q5CP7H+QC",
-      "lat": 25.4144,
-      "lng": -96.2714,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T03:49:53.720103+00:00"
-    },
-    {
-      "name": "76Q6CP7C+QR",
-      "lat": 25.4144,
-      "lng": -95.278,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T03:50:10.341522+00:00"
-    },
-    {
-      "name": "76QVCJ7P+Q7",
-      "lat": 25.4144,
-      "lng": -82.3643,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T03:50:26.267354+00:00"
     },
     {
       "name": "76QWCJ7H+QJ",
@@ -1157,631 +86,290 @@
       "last_checked": "2026-11-17T03:50:43.846398+00:00"
     },
     {
-      "name": "77Q2CJ78+Q8",
-      "lat": 25.4144,
-      "lng": -79.3842,
+      "name": "Boone Watauga High Country, NC",
+      "lat": 36.2168,
+      "lng": -81.6758,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T03:51:05.378998+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77Q3CJ75+QM",
-      "lat": 25.4144,
-      "lng": -78.3908,
+      "name": "Chattanooga Cumberland Plateau, TN",
+      "lat": 35.0456,
+      "lng": -85.3097,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T03:51:23.490552+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77Q4CJ73+Q2",
-      "lat": 25.4144,
-      "lng": -77.3975,
+      "name": "Knoxville Ridge Corridor, TN",
+      "lat": 36.0104,
+      "lng": -84.388,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T13:20:57.073396+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77Q6CH7Q+QM",
-      "lat": 25.4144,
-      "lng": -75.4108,
+      "name": "Dahlonega North GA Mtns, GA",
+      "lat": 34.5262,
+      "lng": -84.0713,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T13:21:32.773720+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77Q7CH7M+Q2",
-      "lat": 25.4144,
-      "lng": -74.4174,
+      "name": "Hazard Eastern Coalfields, KY",
+      "lat": 37.2487,
+      "lng": -83.4488,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T13:22:02.768957+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77Q8CH7G+QC",
-      "lat": 25.4144,
-      "lng": -73.424,
+      "name": "Charleston Kanawha Valley, WV",
+      "lat": 38.3498,
+      "lng": -81.6326,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T13:22:30.565021+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77Q9CH79+QP",
-      "lat": 25.4144,
-      "lng": -72.4307,
+      "name": "Roanoke Blue Ridge Valley, VA",
+      "lat": 37.271,
+      "lng": -79.9414,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T13:23:00.663261+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77QCCH77+Q3",
-      "lat": 25.4144,
-      "lng": -71.4373,
+      "name": "Shenandoah Valley, VA",
+      "lat": 38.4496,
+      "lng": -78.8689,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T13:23:28.875813+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77QFCH74+QC",
-      "lat": 25.4144,
-      "lng": -70.4439,
+      "name": "Seattle Puget Sound, WA",
+      "lat": 47.6062,
+      "lng": -122.3321,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T22:20:11.674445+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77QGCG7X+QQ",
-      "lat": 25.4144,
-      "lng": -69.4506,
+      "name": "Spokane Inland Empire, WA",
+      "lat": 47.6588,
+      "lng": -117.426,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T22:20:27.246665+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77QHCG7V+Q4",
-      "lat": 25.4144,
-      "lng": -68.4572,
+      "name": "Eugene Willamette Valley, OR",
+      "lat": 44.0521,
+      "lng": -123.0868,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T22:20:45.147092+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77QJCG7P+QF",
-      "lat": 25.4144,
-      "lng": -67.4638,
+      "name": "Boise Treasure Valley, ID",
+      "lat": 43.615,
+      "lng": -116.2023,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T22:21:03.215662+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "75R45CR7+HG",
-      "lat": 26.1914,
-      "lng": -117.5862,
+      "name": "Coeur d'Alene Hinterland, ID",
+      "lat": 47.6777,
+      "lng": -116.7804,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T22:21:20.543048+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "75R55CR7+HF",
-      "lat": 26.1914,
-      "lng": -116.5863,
+      "name": "Bozeman Gallatin Valley, MT",
+      "lat": 45.677,
+      "lng": -111.0429,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T22:21:37.447104+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "75R65CR7+HC",
-      "lat": 26.1914,
-      "lng": -115.5864,
+      "name": "Missoula Clark Fork, MT",
+      "lat": 46.8721,
+      "lng": -114.0076,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T22:21:56.391658+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "75R75CR7+H9",
-      "lat": 26.1914,
-      "lng": -114.5865,
+      "name": "Jackson Hole Teton, WY",
+      "lat": 43.4799,
+      "lng": -110.7624,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T04:17:40.235870+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "75R85CR7+H9",
-      "lat": 26.1914,
-      "lng": -113.5866,
+      "name": "Wasatch Front Salt Lake, UT",
+      "lat": 40.7608,
+      "lng": -111.891,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T04:17:58.276292+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR7+H8 San Juanico, BCS, Mexico",
-      "lat": 26.1914,
-      "lng": -112.5867,
+      "name": "St. George Red Rock, UT",
+      "lat": 37.1041,
+      "lng": -113.5684,
       "last_surcharge": 0,
-      "last_monthly_fee": 905.17,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T04:18:18.156651+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR7+H6 San Juan, B.C.S., Mexico",
-      "lat": 26.1914,
-      "lng": -111.5869,
+      "name": "Durango San Juan, CO",
+      "lat": 37.2753,
+      "lng": -107.8801,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T04:18:35.469962+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "75RF5CR7+H6",
-      "lat": 26.1914,
-      "lng": -110.587,
+      "name": "Denver Front Range, CO",
+      "lat": 39.7392,
+      "lng": -104.9903,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T04:18:53.251559+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "75RG5CR7+H5",
-      "lat": 26.1914,
-      "lng": -109.5871,
+      "name": "Sedona Oak Creek, AZ",
+      "lat": 34.8697,
+      "lng": -111.8315,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T04:19:11.332686+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR7+H4 Lo de Vega, Sin., Mexico",
-      "lat": 26.1914,
-      "lng": -108.5872,
+      "name": "Santa Fe Foothills, NM",
+      "lat": 35.687,
+      "lng": -105.9378,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T04:19:29.453358+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR7+H3 Algarrobas, Mexico",
-      "lat": 26.1914,
-      "lng": -107.5873,
+      "name": "Taos Enchanted Circle, NM",
+      "lat": 36.4072,
+      "lng": -105.5734,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T13:55:48.178478+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR7+H2 Terreros, Chih., Mexico",
-      "lat": 26.1914,
-      "lng": -106.5874,
+      "name": "Truckee Lake Tahoe Basin, CA",
+      "lat": 39.328,
+      "lng": -120.1278,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T13:56:12.364746+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR7+H2 Ricardo Flores Mag\u00f3n, Dgo., Mexico",
-      "lat": 26.1914,
-      "lng": -105.5875,
+      "name": "Mammoth Lakes Eastern Sierra, CA",
+      "lat": 37.6485,
+      "lng": -118.9721,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T13:56:35.207873+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR6+HX La Enramada, Dgo., Mexico",
-      "lat": 26.1914,
-      "lng": -104.5876,
+      "name": "Mount Shasta Siskiyou, CA",
+      "lat": 41.31,
+      "lng": -122.3861,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T13:57:00.700047+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR6+HW Rancho La Zorra, Dgo., Mexico",
-      "lat": 26.1914,
-      "lng": -103.5877,
+      "name": "Mendocino Coastal Ridge, CA",
+      "lat": 39.3077,
+      "lng": -123.7995,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T13:57:23.100175+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR6+HV Los Gachupines, Coah., Mexico",
-      "lat": 26.1914,
-      "lng": -102.5878,
+      "name": "Joshua Tree High Desert, CA",
+      "lat": 34.1347,
+      "lng": -116.3131,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T13:57:48.134397+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR6+HR Las Coloradas, Coah., Mexico",
-      "lat": 26.1914,
-      "lng": -101.5879,
+      "name": "Reno Tahoe Corridor, NV",
+      "lat": 39.5296,
+      "lng": -119.8138,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T13:58:16.562235+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR6+HR El Arco, N.L., Mexico",
-      "lat": 26.1914,
-      "lng": -100.588,
+      "name": "Austin Travis Exurb, TX",
+      "lat": 30.2672,
+      "lng": -97.7431,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T21:54:36.194123+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR6+HQ Arroyo de Piedra, Nuevo Le\u00f3n, Mexico",
-      "lat": 26.1914,
-      "lng": -99.5881,
+      "name": "Fredericksburg Hill Country, TX",
+      "lat": 30.2752,
+      "lng": -98.8719,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T21:55:04.956879+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "5CR6+HP Los Nogales, Tamaulipas, Mexico",
-      "lat": 26.1914,
-      "lng": -98.5882,
+      "name": "Waco Brazos Corridor, TX",
+      "lat": 31.5493,
+      "lng": -97.1467,
       "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T21:55:32.601896+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "76R55CR6+HJ",
-      "lat": 26.1914,
-      "lng": -96.5884,
+      "name": "Lubbock South Plains, TX",
+      "lat": 33.5779,
+      "lng": -101.8552,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T21:56:03.078915+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "76R65CR6+HJ",
-      "lat": 26.1914,
-      "lng": -95.5885,
+      "name": "Huntsville Tennessee Valley, AL",
+      "lat": 34.6818,
+      "lng": -86.581,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-18T21:56:25.155175+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77R25CR5+HX",
-      "lat": 26.1914,
-      "lng": -79.5901,
+      "name": "Destin Emerald Coast, FL",
+      "lat": 30.4005,
+      "lng": -86.1477,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T03:24:01.726131+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77R35CR5+HW",
-      "lat": 26.1914,
-      "lng": -78.5902,
+      "name": "Tampa Outer Bay, FL",
+      "lat": 27.9506,
+      "lng": -82.4572,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T03:24:28.664895+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77R55CR5+HR",
-      "lat": 26.1914,
-      "lng": -76.5904,
+      "name": "Traverse City Leelanau, MI",
+      "lat": 44.7631,
+      "lng": -85.6206,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T03:25:01.336926+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77R65CR5+HR",
-      "lat": 26.1914,
-      "lng": -75.5905,
+      "name": "Brainerd Lakes, MN",
+      "lat": 46.3527,
+      "lng": -94.1632,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T03:25:26.543196+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77R75CR5+HQ",
-      "lat": 26.1914,
-      "lng": -74.5906,
+      "name": "Branson Ozark Lakes, MO",
+      "lat": 36.6437,
+      "lng": -93.2185,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T03:25:51.502900+00:00"
+      "consecutive_zeros": 0
     },
     {
-      "name": "77R85CR5+HP",
-      "lat": 26.1914,
-      "lng": -73.5907,
+      "name": "Fayetteville Ozarks, AR",
+      "lat": 36.0626,
+      "lng": -94.1574,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T13:00:10.336229+00:00"
-    },
-    {
-      "name": "77R95CR5+HM",
-      "lat": 26.1914,
-      "lng": -72.5908,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T13:00:26.908239+00:00"
-    },
-    {
-      "name": "77RC5CR5+HJ",
-      "lat": 26.1914,
-      "lng": -71.5909,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T13:00:43.021008+00:00"
-    },
-    {
-      "name": "77RF5CR5+HJ",
-      "lat": 26.1914,
-      "lng": -70.591,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T13:00:58.324029+00:00"
-    },
-    {
-      "name": "77RG5CR5+HH",
-      "lat": 26.1914,
-      "lng": -69.5911,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T13:01:14.172485+00:00"
-    },
-    {
-      "name": "77RH5CR5+HG",
-      "lat": 26.1914,
-      "lng": -68.5912,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T13:01:30.993842+00:00"
-    },
-    {
-      "name": "77RJ5CR5+HF",
-      "lat": 26.1914,
-      "lng": -67.5913,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T13:01:50.072340+00:00"
-    },
-    {
-      "name": "75R4XX96+CH",
-      "lat": 26.9685,
-      "lng": -117.0386,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T21:29:38.884724+00:00"
-    },
-    {
-      "name": "75R5XX99+C6",
-      "lat": 26.9685,
-      "lng": -116.0319,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T21:30:00.133288+00:00"
-    },
-    {
-      "name": "75R6XX9F+CW",
-      "lat": 26.9685,
-      "lng": -115.0252,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T21:30:23.723872+00:00"
-    },
-    {
-      "name": "XX9J+CJ San Hip\u00f3lito, Mexico",
-      "lat": 26.9685,
-      "lng": -114.0185,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T21:30:48.368445+00:00"
-    },
-    {
-      "name": "XX9Q+C7 Casas Blancas, B.C.S., Mexico",
-      "lat": 26.9685,
-      "lng": -113.0118,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T21:31:15.847969+00:00"
-    },
-    {
-      "name": "XX9V+CX Muleg\u00e9, BCS, Mexico",
-      "lat": 26.9685,
-      "lng": -112.0051,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T21:31:40.364159+00:00"
-    },
-    {
-      "name": "75RFX292+CJ",
-      "lat": 26.9685,
-      "lng": -110.9984,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-19T21:32:05.734075+00:00"
-    },
-    {
-      "name": "X295+C8 Huivulai, Sonora, Mexico",
-      "lat": 26.9685,
-      "lng": -109.9917,
-      "last_surcharge": 0,
-      "last_monthly_fee": 905.17,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T03:10:50.485798+00:00"
-    },
-    {
-      "name": "X298+C2 \u00c1lamos, Sonora, Mexico",
-      "lat": 26.9685,
-      "lng": -108.985,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T03:11:07.256459+00:00"
-    },
-    {
-      "name": "X29C+CM Agua Caliente, Chihuahua, Mexico",
-      "lat": 26.9685,
-      "lng": -107.9783,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T03:11:25.507041+00:00"
-    },
-    {
-      "name": "X29H+C9 La Ca\u00f1ada, Chihuahua, Mexico",
-      "lat": 26.9685,
-      "lng": -106.9716,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T03:11:44.637509+00:00"
-    },
-    {
-      "name": "X29P+C2 La Noria, Chihuahua, Mexico",
-      "lat": 26.9685,
-      "lng": -105.9649,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T03:12:06.525612+00:00"
-    },
-    {
-      "name": "X29R+CP Octaviano L\u00f3pez, Chih., Mexico",
-      "lat": 26.9685,
-      "lng": -104.9582,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T03:12:29.167185+00:00"
-    },
-    {
-      "name": "X29X+CC Ejido Liberaci\u00f3n, Chih., Mexico",
-      "lat": 26.9685,
-      "lng": -103.9515,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T03:12:48.093263+00:00"
-    },
-    {
-      "name": "X394+C4 La Esperanza, Coah., Mexico",
-      "lat": 26.9685,
-      "lng": -102.9447,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T11:32:48.521367+00:00"
-    },
-    {
-      "name": "X396+CQ Agua del Pozo, Coah., Mexico",
-      "lat": 26.9685,
-      "lng": -101.938,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T11:33:14.528434+00:00"
-    },
-    {
-      "name": "X399+CF Las Cabras, Coah., Mexico",
-      "lat": 26.9685,
-      "lng": -100.9313,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T11:33:41.049454+00:00"
-    },
-    {
-      "name": "X39G+C5 La Mezquitosa, N.L., Mexico",
-      "lat": 26.9685,
-      "lng": -99.9246,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T11:34:09.101265+00:00"
-    },
-    {
-      "name": "76R5X39W+C6",
-      "lat": 26.9685,
-      "lng": -96.9045,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T11:34:47.498110+00:00"
-    },
-    {
-      "name": "76R6X492+CV",
-      "lat": 26.9685,
-      "lng": -95.8978,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T20:12:19.970694+00:00"
-    },
-    {
-      "name": "77R2X695+CR",
-      "lat": 26.9685,
-      "lng": -79.7905,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T20:12:48.352505+00:00"
-    },
-    {
-      "name": "77R3X698+CF",
-      "lat": 26.9685,
-      "lng": -78.7838,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T20:13:06.686615+00:00"
-    },
-    {
-      "name": "77R5X69H+CR",
-      "lat": 26.9685,
-      "lng": -76.7704,
-      "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-20T20:13:34.817087+00:00"
+      "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 31,
+  "hotspot_cursor": 0,
   "stats": {
     "total_probes_run": 1130,
-    "high_demand_hits_found": 191,
+    "high_demand_hits_found": 3,
     "cycles_completed": 0
   },
   "last_run_timestamp": "2026-11-20T20:13:50.640221+00:00"

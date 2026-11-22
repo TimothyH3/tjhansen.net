@@ -137,24 +137,62 @@ USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0"
 ]
 
-# Baseline Seeds for Initial Hotspot Priority Queue
+# High-Priority Known Hotspots across Continental US Bottlenecks
 INITIAL_HOTSPOTS: List[Dict[str, Any]] = [
-    {"name": "Asheville Blue Ridge, NC", "lat": 35.5951, "lng": -82.5515, "last_surcharge": 250, "consecutive_zeros": 0},
+    # Appalachia & Blue Ridge
+    {"name": "Asheville Blue Ridge, NC", "lat": 35.5951, "lng": -82.5515, "last_surcharge": 0, "consecutive_zeros": 0},
     {"name": "Boone Watauga High Country, NC", "lat": 36.2168, "lng": -81.6758, "last_surcharge": 0, "consecutive_zeros": 0},
     {"name": "Gatlinburg Great Smoky Mtns, TN", "lat": 35.7143, "lng": -83.5102, "last_surcharge": 0, "consecutive_zeros": 0},
-    {"name": "Truckee Lake Tahoe Basin, CA", "lat": 39.3280, "lng": -120.1278, "last_surcharge": 0, "consecutive_zeros": 0},
-    {"name": "Aspen Roaring Fork, CO", "lat": 39.1911, "lng": -106.8370, "last_surcharge": 0, "consecutive_zeros": 0},
-    {"name": "Jackson Hole Teton, WY", "lat": 43.4799, "lng": -110.7624, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Chattanooga Cumberland Plateau, TN", "lat": 35.0456, "lng": -85.3097, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Knoxville Ridge Corridor, TN", "lat": 36.0104, "lng": -84.3880, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Dahlonega North GA Mtns, GA", "lat": 34.5262, "lng": -84.0713, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Hazard Eastern Coalfields, KY", "lat": 37.2487, "lng": -83.4488, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Charleston Kanawha Valley, WV", "lat": 38.3498, "lng": -81.6326, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Roanoke Blue Ridge Valley, VA", "lat": 37.2710, "lng": -79.9414, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Shenandoah Valley, VA", "lat": 38.4496, "lng": -78.8689, "last_surcharge": 0, "consecutive_zeros": 0},
+    # Pacific Northwest & Intermountain West
+    {"name": "Seattle Puget Sound, WA", "lat": 47.6062, "lng": -122.3321, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Spokane Inland Empire, WA", "lat": 47.6588, "lng": -117.4260, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Bend Deschutes Corridor, OR", "lat": 44.0582, "lng": -121.3153, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Eugene Willamette Valley, OR", "lat": 44.0521, "lng": -123.0868, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Boise Treasure Valley, ID", "lat": 43.6150, "lng": -116.2023, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Coeur d'Alene Hinterland, ID", "lat": 47.6777, "lng": -116.7804, "last_surcharge": 0, "consecutive_zeros": 0},
     {"name": "Kalispell Flathead Basin, MT", "lat": 48.1920, "lng": -114.3553, "last_surcharge": 0, "consecutive_zeros": 0},
     {"name": "Bozeman Gallatin Valley, MT", "lat": 45.6770, "lng": -111.0429, "last_surcharge": 0, "consecutive_zeros": 0},
-    {"name": "Bend Deschutes Corridor, OR", "lat": 44.0582, "lng": -121.3153, "last_surcharge": 0, "consecutive_zeros": 0},
-    {"name": "Coeur d'Alene Hinterland, ID", "lat": 47.6777, "lng": -116.7804, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Missoula Clark Fork, MT", "lat": 46.8721, "lng": -114.0076, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Jackson Hole Teton, WY", "lat": 43.4799, "lng": -110.7624, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Wasatch Front Salt Lake, UT", "lat": 40.7608, "lng": -111.8910, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "St. George Red Rock, UT", "lat": 37.1041, "lng": -113.5684, "last_surcharge": 0, "consecutive_zeros": 0},
+    # Rocky Mountains & Southwest
+    {"name": "Aspen Roaring Fork, CO", "lat": 39.1911, "lng": -106.8370, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Durango San Juan, CO", "lat": 37.2753, "lng": -107.8801, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Denver Front Range, CO", "lat": 39.7392, "lng": -104.9903, "last_surcharge": 0, "consecutive_zeros": 0},
     {"name": "Flagstaff Coconino, AZ", "lat": 35.1983, "lng": -111.6513, "last_surcharge": 0, "consecutive_zeros": 0},
     {"name": "Sedona Oak Creek, AZ", "lat": 34.8697, "lng": -111.8315, "last_surcharge": 0, "consecutive_zeros": 0},
     {"name": "Show Low White Mtns, AZ", "lat": 34.2542, "lng": -110.0831, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Santa Fe Foothills, NM", "lat": 35.6870, "lng": -105.9378, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Taos Enchanted Circle, NM", "lat": 36.4072, "lng": -105.5734, "last_surcharge": 0, "consecutive_zeros": 0},
+    # California & Nevada
+    {"name": "Truckee Lake Tahoe Basin, CA", "lat": 39.3280, "lng": -120.1278, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Mammoth Lakes Eastern Sierra, CA", "lat": 37.6485, "lng": -118.9721, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Mount Shasta Siskiyou, CA", "lat": 41.3100, "lng": -122.3861, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Mendocino Coastal Ridge, CA", "lat": 39.3077, "lng": -123.7995, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Joshua Tree High Desert, CA", "lat": 34.1347, "lng": -116.3131, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Reno Tahoe Corridor, NV", "lat": 39.5296, "lng": -119.8138, "last_surcharge": 0, "consecutive_zeros": 0},
+    # Texas & South
+    {"name": "Austin Travis Exurb, TX", "lat": 30.2672, "lng": -97.7431, "last_surcharge": 0, "consecutive_zeros": 0},
     {"name": "Fredericksburg Hill Country, TX", "lat": 30.2752, "lng": -98.8719, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Waco Brazos Corridor, TX", "lat": 31.5493, "lng": -97.1467, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Lubbock South Plains, TX", "lat": 33.5779, "lng": -101.8552, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Huntsville Tennessee Valley, AL", "lat": 34.6818, "lng": -86.5810, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Destin Emerald Coast, FL", "lat": 30.4005, "lng": -86.1477, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Tampa Outer Bay, FL", "lat": 27.9506, "lng": -82.4572, "last_surcharge": 0, "consecutive_zeros": 0},
+    # Midwest & Ozarks
     {"name": "Minocqua Northwoods, WI", "lat": 45.8944, "lng": -89.6886, "last_surcharge": 0, "consecutive_zeros": 0},
-    {"name": "Traverse City Leelanau, MI", "lat": 44.7631, "lng": -85.6206, "last_surcharge": 0, "consecutive_zeros": 0}
+    {"name": "Traverse City Leelanau, MI", "lat": 44.7631, "lng": -85.6206, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Brainerd Lakes, MN", "lat": 46.3527, "lng": -94.1632, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Branson Ozark Lakes, MO", "lat": 36.6437, "lng": -93.2185, "last_surcharge": 0, "consecutive_zeros": 0},
+    {"name": "Fayetteville Ozarks, AR", "lat": 36.0626, "lng": -94.1574, "last_surcharge": 0, "consecutive_zeros": 0}
 ]
 
 
@@ -187,53 +225,71 @@ def calculate_destination_point(lat: float, lng: float, distance_km: float, bear
     return round(dest_lat, 4), round(dest_lng, 4)
 
 
+# ---------------------------------------------------------------------------
+# CONTINENTAL UNITED STATES (CONUS) BOUNDARY VERIFICATION
+# ---------------------------------------------------------------------------
+CONUS_POLYGON = [
+    (49.0, -124.8), (49.0, -95.15), (49.38, -95.15), (48.0, -89.5), (47.5, -88.0),
+    (46.5, -84.3), (45.4, -83.4), (43.0, -82.4), (41.7, -82.8), (42.9, -78.9),
+    (44.0, -76.3), (45.0, -74.8), (45.0, -71.5), (47.46, -69.2), (47.0, -67.8),
+    (44.8, -66.9), (43.5, -70.2), (42.0, -70.0), (41.1, -72.0), (40.5, -73.8),
+    (38.8, -74.8), (36.9, -75.8), (35.2, -75.4), (33.9, -77.8), (32.0, -80.8),
+    (30.4, -81.3), (28.4, -80.4), (26.7, -79.9), (25.7, -80.0), (24.8, -80.5),
+    (24.4, -81.9), (25.2, -81.4), (26.5, -82.1), (27.9, -82.9), (29.8, -83.8),
+    (30.0, -85.7), (30.4, -87.5), (30.2, -88.1), (29.0, -89.4), (29.7, -93.9),
+    (29.3, -94.9), (28.3, -96.6), (27.8, -97.5), (25.8, -97.1), (26.3, -99.0),
+    (27.5, -99.6), (29.3, -101.0), (29.0, -103.6), (31.3, -105.1), (31.75, -106.6),
+    (31.33, -108.6), (31.33, -111.1), (32.4, -114.9), (32.5, -116.1), (32.5, -117.2),
+    (34.0, -118.6), (34.5, -120.6), (36.6, -122.0), (37.8, -122.6), (40.4, -124.5),
+    (42.0, -124.5), (46.2, -124.1), (48.5, -124.8)
+]
+
+def is_point_in_conus(lat: float, lng: float) -> bool:
+    """Ray-casting algorithm to strictly verify coordinates fall within CONUS landmass."""
+    n = len(CONUS_POLYGON)
+    inside = False
+    p1_lat, p1_lng = CONUS_POLYGON[0]
+    for i in range(1, n + 1):
+        p2_lat, p2_lng = CONUS_POLYGON[i % n]
+        if min(p1_lat, p2_lat) < lat <= max(p1_lat, p2_lat):
+            if lng <= max(p1_lng, p2_lng):
+                if p1_lat != p2_lat:
+                    xinters = (lat - p1_lat) * (p2_lng - p1_lng) / (p2_lat - p1_lat) + p1_lng
+                if p1_lng == p2_lng or lng <= xinters:
+                    inside = not inside
+        p1_lat, p1_lng = p2_lat, p2_lng
+    return inside
+
+
 def generate_radial_scatter_points(center_lat: float, center_lng: float) -> List[Dict[str, Any]]:
-    """Generates 4 cardinal perimeter points (~25 km N, E, S, W) around a discovered surcharge hit."""
+    """Generates 4 cardinal perimeter points (~25 km N, E, S, W) strictly filtered to CONUS."""
     points = []
     cardinal_bearings = [("North", 0.0), ("East", 90.0), ("South", 180.0), ("West", 270.0)]
     for label, bearing in cardinal_bearings:
         lat, lng = calculate_destination_point(center_lat, center_lng, 25.0, bearing)
-        points.append({
-            "name": f"Perimeter 25km {label}",
-            "lat": lat,
-            "lng": lng,
-            "distance_km": 25.0,
-            "bearing": bearing
-        })
+        if is_point_in_conus(lat, lng):
+            points.append({
+                "name": f"Perimeter 25km {label}",
+                "lat": lat,
+                "lng": lng,
+                "distance_km": 25.0,
+                "bearing": bearing
+            })
     return points
 
 
 # ---------------------------------------------------------------------------
 # HEXAGONAL BLANKET GRID GENERATOR (CONUS LAND MASS)
 # ---------------------------------------------------------------------------
-def is_conus_land(lat: float, lng: float) -> bool:
-    """Filters out oceans and external borders for continental US."""
-    if not (24.5 <= lat <= 49.5 and -124.8 <= lng <= -66.9):
-        return False
-    # Exclude Gulf of Mexico
-    if lat < 29.2 and -95.0 < lng < -82.5:
-        return False
-    # Exclude Atlantic South/East of Florida
-    if lat < 25.2 and lng > -80.0:
-        return False
-    # Exclude Pacific offshore
-    if lat < 33.5 and lng < -118.0:
-        return False
-    # Exclude northern Maine ocean wedge
-    if lat > 47.2 and lng > -67.5:
-        return False
-    return True
-
-
 def generate_us_blanket_hex_grid(spacing_km: float = 115.0, week_offset: int = 0) -> List[Tuple[float, float]]:
     """
-    Generates a true staggered hexagonal honeycomb lattice over CONUS.
-    Applies a rotating weekly offset (shifting ~15 km each week) so that week 1, 2, 3, 4, 5
+    Generates a true staggered hexagonal honeycomb lattice over Continental US.
+    Applies a rotating weekly offset (shifting ~15 km each week) so that consecutive weeks
     interleave different ground locations without re-testing identical cells.
+    Every single point is strictly verified against the CONUS land polygon.
     """
     lat_step = spacing_km / 111.0  # ~1.036 deg lat
 
-    # Shift vector: 5 weekly rotations moving diagonally across the hex tile
     shift_lat = (week_offset % 5) * (lat_step / 5.0)
     shift_lng = (week_offset % 5) * (lat_step / 5.0)
 
@@ -251,7 +307,7 @@ def generate_us_blanket_hex_grid(spacing_km: float = 115.0, week_offset: int = 0
 
         lng = -124.5 + lng_stagger + shift_lng
         while lng <= -67.0:
-            if is_conus_land(lat, lng):
+            if is_point_in_conus(lat, lng):
                 points.append((round(lat, 4), round(lng, 4)))
             lng += lng_step
 
@@ -600,9 +656,11 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
     logger.info(f"Batch Size: {batch_size} points")
     logger.info("==========================================================")
 
-    # 1. Probe 1-2 Known Hotspots First (Priority Queue)
+    # 1. Target Known Hotspots First (Priority Queue)
     hotspots_checked = 0
-    if hotspots:
+    max_hotspots_per_batch = min(len(hotspots), batch_size if hotspots_only else max(2, min(4, batch_size // 2)))
+
+    while hotspots and hotspots_checked < max_hotspots_per_batch:
         hotspot_idx = state.get("hotspot_cursor", 0) % len(hotspots)
         target_hotspot = hotspots[hotspot_idx]
         state["hotspot_cursor"] = (hotspot_idx + 1) % len(hotspots)
@@ -611,7 +669,13 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
         h_lng = target_hotspot["lng"]
         h_name = target_hotspot["name"]
 
-        logger.info(f"[Priority Hotspot] Probing: {h_name} ({h_lat}, {h_lng})")
+        # Ensure hotspot is strictly within CONUS
+        if not is_point_in_conus(h_lat, h_lng):
+            logger.warning(f"Removing non-CONUS hotspot: {h_name} ({h_lat}, {h_lng})")
+            hotspots.remove(target_hotspot)
+            continue
+
+        logger.info(f"[Priority Hotspot {hotspots_checked+1}/{max_hotspots_per_batch}] Probing: {h_name} ({h_lat}, {h_lng})")
         probe_res = probe_starlink_availability(h_lat, h_lng)
 
         if probe_res:
@@ -705,8 +769,8 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
                 logger.info(f"  -> CONGESTION ZONE DISCOVERED! ${monthly_service}/mo (+${surcharge} surcharge) at {loc_name}")
                 state["stats"]["high_demand_hits_found"] = state["stats"].get("high_demand_hits_found", 0) + 1
 
-                # Promote to Known Hotspots
-                if not any(abs(h["lat"] - b_lat) < 0.1 and abs(h["lng"] - b_lng) < 0.1 for h in hotspots):
+                # Promote to Known Hotspots (strictly within CONUS)
+                if is_point_in_conus(b_lat, b_lng) and not any(abs(h["lat"] - b_lat) < 0.1 and abs(h["lng"] - b_lng) < 0.1 for h in hotspots):
                     hotspots.append({
                         "name": loc_name,
                         "lat": b_lat,
