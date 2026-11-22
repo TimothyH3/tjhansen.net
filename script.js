@@ -1,23 +1,35 @@
 /**
+ * =============================================================================
  * Timothy Hansen — Portfolio Engine (tjhansen.net)
- * Features:
- * 1. Safe Theme Auto-Detection + One-Click Dark/Light Mode
- * 2. 3-Stage Optical Engine:
- *    - Act 0 (Overview & Profile): Connected via continuous vertical scroll
- *    - Title Slide & Card Cascade Transition (Act 0 -> Act 1): Fully scrubbable & pausable
- *    - Act 1 (Work & Stack): Connected via continuous vertical scroll
- *    - Optical Zoom Transition (Act 1 -> Act 2): Fully scrubbable & pausable
- *    - Act 2 (Contact): Centered connect stage
- * 3. 3-Stage Navigation HUD with live dot indicators and theme mode switcher
- * 4. Interactive Project Demo Pages: Zoom-in on click, zoom-out on click or scroll
- * 5. Interactive Simulation Toys for each demo (ApexQueue, CloudCanvas, PulseSync, SunDevil EdgeML)
- * 6. Copy Email Toast & Fallback
+ * =============================================================================
+ * Architecture:
+ * 1. THEME MANAGER: Auto system preference detection + manual dark/light toggle
+ * 2. 3-STAGE OPTICAL ENGINE:
+ *    - Act 0 (Overview & Profile): Continuous vertical scroll with hero docking
+ *    - Transition (Act 0 -> Act 1): Smooth fade & cascade into projects
+ *    - Act 1 (Work & Stack): Direct vertical scroll through projects and tech stack
+ *    - Transition (Act 1 -> Act 2): Hardware-accelerated optical zoom
+ *    - Act 2 (Contact): Centered connection card with direct action links
+ * 3. 3-STAGE NAVIGATION HUD: Live dot indicators and theme mode switcher
+ * 4. PROJECT DEMO MODALS: Full-screen interactive demo views with escape triggers
+ * 5. ARCHITECTURAL SPEC DRAWER: Technical deep dives, concurrency specs & metrics
+ * 6. INTERACTIVE SIMULATION TOYS:
+ *    - Come Together Compass (Census Geocoder & 988 Crisis Wipe)
+ *    - Erised AI (DOM Stream & In-Memory Canvas Pipeline)
+ *    - Starlink Tracker (Ray-Casting Intersect Query & Surcharge Overlay)
+ *    - Healthcare Operations Sim (Discrete Event Queue & Concurrency Surge)
+ * 7. UTILITIES: One-click clipboard copy with animated toast notification
+ * 8. TERMINAL ENTRANCE: Graceful in-place typing morph for hero title
+ * =============================================================================
  */
 
 (function () {
   'use strict';
 
-  // Safe localStorage helper to prevent SecurityError on restricted origins (e.g. file://)
+  // ===========================================================================
+  // 1. SAFE STORAGE HELPER
+  // Prevents SecurityError on restricted origins (e.g., file:// or private sandbox)
+  // ===========================================================================
   const safeStorage = {
     get: function (key, fallback) {
       try {
@@ -33,9 +45,9 @@
     }
   };
 
-  // =========================================================================
-  // 1. Theme Management (System Auto-Detect + Live Switcher)
-  // =========================================================================
+  // ===========================================================================
+  // 2. THEME CONTROLLER (System Auto-Detect + Manual Switcher)
+  // ===========================================================================
   function initTheme() {
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const themeModeText = document.getElementById('theme-mode-text');
@@ -86,12 +98,14 @@
     }
   }
 
-  // =========================================================================
-  // 2. 3-Act Hybrid Vertical Scroll & Optical Zoom Engine
-  // =========================================================================
+  // ===========================================================================
+  // 3. 3-ACT HYBRID SCROLL & OPTICAL STAGE ENGINE
+  // Direct 1:1, Zero-Damping, Fail-Safe Architecture
+  // ===========================================================================
   let globalEngine = null;
 
   function initScrollAndZoomEngine() {
+    // Stage DOM Containers
     const act0 = document.getElementById('act-0');
     const act1 = document.getElementById('act-1');
     const act2 = document.getElementById('act-2');
@@ -102,10 +116,10 @@
     const act2Container = act2.querySelector('.act-scroll-container');
     const sectionProfile = document.getElementById('section-profile');
 
-    // Morphing transition elements between Act 0 and Act 1
-    const act0Header = document.getElementById('act0-chapter-header');
-    const act0Label = document.getElementById('act0-chapter-label');
-    const act1Header = document.getElementById('act1-chapter-header');
+    // Hero and Transition Elements (All null-guarded for resilience)
+    const bgOrange = document.getElementById('bg-orange');
+    const bgBlue = document.getElementById('bg-blue');
+    const act1Heading = document.getElementById('act1-heading');
     const heroQuickLinks = document.getElementById('hero-quick-links');
     const heroStatement = document.querySelector('#section-hero .hero-statement');
     const heroSignalRow = document.querySelector('#section-hero .signal-row');
@@ -113,21 +127,20 @@
     const act0StatementGrid = document.getElementById('act0-statement-grid');
     const act1Intro = document.getElementById('act1-section-intro');
     const projectCards = Array.from(document.querySelectorAll('#section-projects .project-bento-card'));
-
     const hudDots = Array.from(document.querySelectorAll('.hud-dot'));
 
-    // Dynamic scroll milestone measurements
-    let topPauseDist0 = 0;  // Soft cushion buffer at very top of Hero
-    let vDist0 = 560;         // Vertical travel distance: Section 2 slides up to sit under chips
-    let pauseDist0 = 240;     // Rest buffer at bottom of Act 0 before transition begins (~3-4 clicks)
-    let tDist01 = 920;        // Title slide & staggered cards transition distance Act 0 -> Act 1
+    // Dynamic scroll milestone distances
+    let topPauseDist0 = 0;   // Immediate responsive scroll at top of Hero
+    let vDist0 = 540;        // Vertical travel distance: Section 2 slides up to sit under chips
+    let pauseDist0 = 80;     // Resting point at end of Act 0 with gentle end-of-act dampening
+    let tDist01 = 650;       // Staggered cards transition distance Act 0 -> Act 1
     let profileOffsetNeeded = 600; // Distance needed to position Section 2 offscreen below fold
     let excessHeight0 = 0;         // Container scroll adjustment for shorter screens
 
-    let topPauseDist1 = 220;  // Rest buffer at top of Act 1 after transition completes (~2-3 clicks)
-    let vDist1 = 750;         // Vertical travel distance Projects -> Stack
-    let pauseDist1 = 340;     // Rest buffer at bottom of Act 1 before zoom begins (~3-4 clicks)
-    let zDist12 = 450;        // Optical zoom transition distance Act 1 -> Act 2
+    let topPauseDist1 = 0;   // Projects immediately accessible at top of Act 1
+    let vDist1 = 750;        // Vertical travel distance Projects -> Stack
+    let pauseDist1 = 80;     // Resting point at end of Act 1 with gentle end-of-act dampening
+    let zDist12 = 400;       // Optical zoom transition distance Act 1 -> Act 2
 
     let M0_START = 0;
     let M0_TOP_PAUSE_END = topPauseDist0;
@@ -145,73 +158,27 @@
     let M2_ZOOM_END = M2_ZOOM_START + zDist12;
     let TOTAL_SCROLL = M2_ZOOM_END;
 
-    // Dynamic coordinate delta from act0Header to act1Header
-    let headerDeltaX = 0;
-    let headerDeltaY = 0;
-
-    function updateHeaderDeltas() {
-      if (!act0Header || !act1Header || !act0 || !act1) return;
-      const prevAct0T = act0.style.transform;
-      const prevAct1T = act1.style.transform;
-      const prevAct0O = act0.style.opacity;
-      const prevAct1O = act1.style.opacity;
-      const prevT0 = act0Header.style.transform;
-      const prevT1 = act1Header.style.transform;
-      const prevProfT = sectionProfile ? sectionProfile.style.transform : '';
-      const prevC0 = act0Container ? act0Container.style.transform : '';
-      const prevC1 = act1Container ? act1Container.style.transform : '';
-
-      // Force true 1:1 scale and clear transforms for exact coordinate measurement
-      act0.style.transform = 'translate3d(0, 0, 0) scale(1)';
-      act1.style.transform = 'translate3d(0, 0, 0) scale(1)';
-      act0.style.filter = 'none';
-      act1.style.filter = 'none';
-
-      act0Header.style.transform = 'none';
-      act1Header.style.transform = 'none';
-
-      if (sectionProfile) sectionProfile.style.transform = 'translate3d(0, 0, 0)';
-      if (act0Container) act0Container.style.transform = `translate3d(0, -${excessHeight0.toFixed(1)}px, 0)`;
-      if (act1Container) act1Container.style.transform = 'translate3d(0, 0, 0)';
-
-      const r0 = act0Header.getBoundingClientRect();
-      const r1 = act1Header.getBoundingClientRect();
-      headerDeltaX = r1.left - r0.left;
-      headerDeltaY = r1.top - r0.top;
-
-      act0.style.transform = prevAct0T;
-      act1.style.transform = prevAct1T;
-      act0.style.opacity = prevAct0O;
-      act1.style.opacity = prevAct1O;
-      act0Header.style.transform = prevT0;
-      act1Header.style.transform = prevT1;
-      if (sectionProfile) sectionProfile.style.transform = prevProfT;
-      if (act0Container) act0Container.style.transform = prevC0;
-      if (act1Container) act1Container.style.transform = prevC1;
-    }
-
     function recalculateMilestones() {
       const vh = window.innerHeight;
       const sh0 = act0Container ? act0Container.scrollHeight : 1200;
       const sh1 = act1Container ? act1Container.scrollHeight : 1400;
 
-      // Section 2 (Profile) slide-up metrics:
-      // Offset needed so Section 2 starts fully below the viewport fold before scrolling
+      // Section 2 (Profile) slide-up metrics
       const profileOffset = sectionProfile ? sectionProfile.offsetTop : 480;
       profileOffsetNeeded = Math.max(0, vh - profileOffset + 40);
 
-      // Scroll container adjustment: only if total docked content exceeds viewport
+      // Scroll container adjustment for short viewports
       excessHeight0 = Math.max(0, sh0 - vh);
 
-      topPauseDist0 = 160;
-      vDist0 = 560;
-      pauseDist0 = 340;
-      tDist01 = 920;
+      topPauseDist0 = 0;
+      vDist0 = 540;
+      pauseDist0 = 80;
+      tDist01 = 650;
 
-      topPauseDist1 = 220;
+      topPauseDist1 = 0;
       vDist1 = Math.max(500, sh1 - vh + 80);
-      pauseDist1 = 340;
-      zDist12 = 450;
+      pauseDist1 = 80;
+      zDist12 = 400;
 
       M0_START = 0;
       M0_TOP_PAUSE_END = topPauseDist0;
@@ -228,20 +195,17 @@
       M2_ZOOM_START = M1_BOTTOM_PAUSE_END;
       M2_ZOOM_END = M2_ZOOM_START + zDist12;
       TOTAL_SCROLL = M2_ZOOM_END;
-
-      updateHeaderDeltas();
     }
 
     recalculateMilestones();
     window.addEventListener('resize', recalculateMilestones);
 
-    // Continuous scroll progress
+    // Continuous scroll progress variables
     let targetScroll = 0;
     let currentScroll = 0;
 
     // HUD update helper
     let currentActIndex = 0;
-
     function updateHUD(actIdx) {
       if (currentActIndex !== actIdx) {
         currentActIndex = actIdx;
@@ -251,82 +215,58 @@
       }
     }
 
-    // Smooth ease-in and ease-out S-curve for vertical content scrolling:
-    // Starts with 0 velocity at p = 0, glides smoothly through the middle,
-    // and coasts to 0 velocity at p = 1. Eliminates harsh starts AND harsh stops.
+    // Smooth ease-in & ease-out S-curve for internal container travel
     function smoothTravel(p) {
       const clamped = Math.max(0, Math.min(1, p));
       return clamped * clamped * (3 - 2 * clamped);
     }
 
-    // Direct Jump
-    function scrollToAct(actIdx) {
-      if (actIdx === 0) targetScroll = 0;
-      else if (actIdx === 1) targetScroll = M1_TRANS_END;
-      else if (actIdx === 2) targetScroll = M2_ZOOM_END;
-    }
-
-    // Dynamic scroll sensitivity cushion: gently softens wheel/touch input
-    // when starting a new act AND when approaching the bottom of an act.
-    function getScrollSensitivity(s, dy) {
-      let baseSens = 0.85;
-
-      // 1. Soft cushion when starting or near the top of Act 0 (Hero)
-      if (dy > 0 && s <= (M0_TOP_PAUSE_END + vDist0 * 0.22)) {
-        const ratio = Math.max(0, s / (M0_TOP_PAUSE_END + vDist0 * 0.22));
-        baseSens = 0.52 + ratio * 0.33;
-      }
-      // 2. Soft cushion near the bottom of Act 0 (Profile)
-      else if (dy > 0 && s >= (M0_VERT_END - vDist0 * 0.25) && s <= M0_BOTTOM_PAUSE_END) {
-        const cushionProgress = (s - (M0_VERT_END - vDist0 * 0.25)) / (M0_BOTTOM_PAUSE_END - (M0_VERT_END - vDist0 * 0.25));
-        baseSens = 0.85 - cushionProgress * 0.35;
-      }
-      // 3. Soft cushion when starting or near the top of Act 1 (Projects, right after transition)
-      else if (dy > 0 && s >= M1_TRANS_END && s <= (M1_TOP_PAUSE_END + vDist1 * 0.22)) {
-        const ratio = Math.max(0, (s - M1_TRANS_END) / (M1_TOP_PAUSE_END + vDist1 * 0.22 - M1_TRANS_END));
-        baseSens = 0.52 + ratio * 0.33;
-      }
-      // 4. Soft cushion near the bottom of Act 1 (Stack)
-      else if (dy > 0 && s >= (M1_VERT_END - vDist1 * 0.25) && s <= M1_BOTTOM_PAUSE_END) {
-        const cushionProgress = (s - (M1_VERT_END - vDist1 * 0.25)) / (M1_BOTTOM_PAUSE_END - (M1_VERT_END - vDist1 * 0.25));
-        baseSens = 0.85 - cushionProgress * 0.35;
-      }
-      // 5. Cushion when scrolling back upwards towards the top of Act 1
-      else if (dy < 0 && s >= M1_TRANS_END && s <= (M1_TOP_PAUSE_END + vDist1 * 0.22)) {
-        const ratio = Math.max(0, (s - M1_TRANS_END) / (M1_TOP_PAUSE_END + vDist1 * 0.22 - M1_TRANS_END));
-        baseSens = 0.52 + ratio * 0.33;
-      }
-      // 6. Cushion when scrolling back upwards towards the top of Act 0
-      else if (dy < 0 && s <= (M0_TOP_PAUSE_END + vDist0 * 0.22)) {
-        const ratio = Math.max(0, s / (M0_TOP_PAUSE_END + vDist0 * 0.22));
-        baseSens = 0.52 + ratio * 0.33;
-      }
-
-      return baseSens;
-    }
-
-    // Main 60/120fps render function
+    // =========================================================================
+    // Core Render Function: Maps scroll position (s) to stage transforms
+    // Safe & fail-safe: every DOM property write checks element existence
+    // =========================================================================
     function render(s) {
-      // 1. Act 0: Overview & Profile (Top Cushion + Smooth S-Curve Travel + Reading Pause)
+      // -----------------------------------------------------------------------
+      // Dynamic Orange-to-Blue Background Gradient
+      // Starts warm orange at bottom of screen, fades to luminous blue at top as user scrolls
+      // -----------------------------------------------------------------------
+      if (bgOrange || bgBlue) {
+        const progress = Math.max(0, Math.min(1, s / (TOTAL_SCROLL || 1)));
+        if (bgOrange) {
+          // Orange is vibrant on bottom (1.0), gradually softens to 0.18 towards end
+          const orangeOpacity = Math.max(0.18, 1.0 - progress * 0.82).toFixed(3);
+          const orangeShiftY = (progress * 45).toFixed(1);
+          bgOrange.style.opacity = orangeOpacity;
+          bgOrange.style.transform = `translate3d(0, ${orangeShiftY}px, 0)`;
+        }
+        if (bgBlue) {
+          // Blue starts subtle (0.12) at top, rises and expands to 1.0 towards Act 1 and Act 2
+          const blueOpacity = Math.min(1.0, 0.12 + progress * 0.88).toFixed(3);
+          const blueShiftY = ((1 - progress) * -35).toFixed(1);
+          bgBlue.style.opacity = blueOpacity;
+          bgBlue.style.transform = `translate3d(0, ${blueShiftY}px, 0)`;
+        }
+      }
+
+      // -----------------------------------------------------------------------
+      // 1. Act 0: Overview & Profile (Hero + Smooth slide-up Profile docking)
+      // -----------------------------------------------------------------------
       if (s <= M0_BOTTOM_PAUSE_END) {
         let p = 0;
         let e = 0;
 
         if (s <= M0_TOP_PAUSE_END) {
-          // At the start: held smoothly at the top of Hero (Section 2 hidden below fold)
           p = 0;
           e = 0;
         } else if (s <= M0_VERT_END) {
-          // Smooth travel: Section 2 slides up from below viewport to dock directly under chips
           p = (s - M0_TOP_PAUSE_END) / vDist0;
           e = smoothTravel(p);
         } else {
-          // At rest in the bottom pause buffer zone of Profile (Section 2 fully docked)
           p = 1;
           e = 1;
         }
 
-        // Section 2 slide-up & fade-in: starts below viewport fold, slides up to 0 (docked directly under chips)
+        // Section 2 (Profile) slide-up & fade-in
         if (sectionProfile) {
           const currentProfileOffset = (1 - e) * profileOffsetNeeded;
           const profileOpacity = Math.min(1, e * 1.8);
@@ -335,7 +275,7 @@
           sectionProfile.style.pointerEvents = e > 0.6 ? 'auto' : 'none';
         }
 
-        // Container adjustment: if viewport is shorter than combined Hero + Profile, smoothly adjust
+        // Container adjustment for shorter screens
         const containerY = -e * excessHeight0;
         if (act0Container) act0Container.style.transform = `translate3d(0, ${containerY.toFixed(1)}px, 0)`;
 
@@ -345,11 +285,7 @@
         act0.style.pointerEvents = 'auto';
         act0.style.zIndex = '10';
 
-        // Ensure Act 0 elements are in natural state before transition begins
-        act0Label.textContent = 'Perspective & Engineering Mindset';
-        act0Header.style.transform = 'none';
-        act0Header.style.opacity = '1';
-
+        // Restore Hero elements to default state
         if (heroQuickLinks) {
           heroQuickLinks.style.opacity = '1';
           heroQuickLinks.style.transform = 'translate3d(0, 0, 0)';
@@ -380,7 +316,10 @@
         act1.style.zIndex = '5';
         if (act1Container) act1Container.style.transform = 'translate3d(0, 0, 0)';
 
-        if (act1Header) act1Header.style.opacity = '0';
+        if (act1Heading) {
+          act1Heading.style.opacity = '0';
+          act1Heading.style.transform = 'translate3d(0, 45px, 0)';
+        }
         if (act1Intro) act1Intro.style.opacity = '0';
         projectCards.forEach(card => {
           card.style.opacity = '0';
@@ -394,7 +333,9 @@
 
         updateHUD(0);
       }
-      // 2. Micro-Animation & Dynamic Slide Transition: Act 0 -> Act 1 (Fully Scrollable & Scrubbable)
+      // -----------------------------------------------------------------------
+      // 2. Transition: Act 0 -> Act 1 (Fade out Hero, Stagger in Projects)
+      // -----------------------------------------------------------------------
       else if (s > M1_TRANS_START && s < M1_TRANS_END) {
         const t = Math.max(0, Math.min(1, (s - M1_TRANS_START) / tDist01));
 
@@ -419,19 +360,7 @@
           sectionProfile.style.opacity = '1';
         }
 
-        // Lazy initialize deltas if 0
-        if (headerDeltaY === 0) {
-          updateHeaderDeltas();
-        }
-
-        // Title Slide to Act 1 location (t: 0 -> 0.65)
-        act0Label.textContent = 'Selected Engineering Projects';
-
-        const pSlide = Math.min(1, t / 0.65);
-        const eSlide = smoothTravel(pSlide);
-        const curX = eSlide * headerDeltaX;
-        const curY = eSlide * headerDeltaY;
-        act0Header.style.transform = `translate3d(${curX.toFixed(1)}px, ${curY.toFixed(1)}px, 0)`;
+        const eSlide = smoothTravel(Math.min(1, t / 0.65));
 
         // Quick link chips slide upward out of view
         if (heroQuickLinks) {
@@ -442,7 +371,7 @@
           heroQuickLinks.style.pointerEvents = eSlide > 0.4 ? 'none' : 'auto';
         }
 
-        // Act 0 body text disappears
+        // Act 0 body text disappears smoothly
         const bodyOpacity = Math.max(0, 1 - eSlide * 1.25).toFixed(3);
         const bodyY = (-eSlide * 28).toFixed(1);
 
@@ -463,6 +392,14 @@
           heroTitle.style.transform = `translate3d(0, ${bodyY}px, 0)`;
         }
 
+        // Act 1 Section Heading scrolls in cleanly with Act 1
+        if (act1Heading) {
+          const pHeading = Math.min(1, Math.max(0, (t - 0.20) / 0.35));
+          const eHeading = smoothTravel(pHeading);
+          act1Heading.style.opacity = eHeading.toFixed(3);
+          act1Heading.style.transform = `translate3d(0, ${((1 - eHeading) * 35).toFixed(1)}px, 0)`;
+        }
+
         // Act 1 Section intro appears
         if (act1Intro) {
           const pIntro = Math.min(1, Math.max(0, (t - 0.30) / 0.30));
@@ -470,13 +407,6 @@
           act1Intro.style.opacity = eIntro.toFixed(3);
           act1Intro.style.transform = `translate3d(0, ${((1 - eIntro) * 24).toFixed(1)}px, 0)`;
         }
-
-        // Hand off header visibility to act1Header at the very end of slide
-        if (act1Header) {
-          act1Header.style.opacity = t >= 0.95 ? '1' : '0';
-          act1Header.style.transform = 'none';
-        }
-        act0Header.style.opacity = t >= 0.95 ? '0' : '1';
 
         // Staggered sequential reveal of project demo boxes (t: 0.45 -> 1.00)
         projectCards.forEach((card, i) => {
@@ -495,14 +425,16 @@
 
         updateHUD(t >= 0.5 ? 1 : 0);
       }
-      // 3. Act 1: Work & Stack (Top Cushion + Smooth S-Curve Travel + Reading Pause)
+      // -----------------------------------------------------------------------
+      // 3. Act 1: Work & Stack (Projects down to Stack via internal scroll)
+      // -----------------------------------------------------------------------
       else if (s >= M1_TRANS_END && s <= M1_BOTTOM_PAUSE_END) {
         act0.style.opacity = '0';
         act0.style.pointerEvents = 'none';
 
-        if (act1Header) {
-          act1Header.style.opacity = '1';
-          act1Header.style.transform = 'none';
+        if (act1Heading) {
+          act1Heading.style.opacity = '1';
+          act1Heading.style.transform = 'none';
         }
         if (act1Intro) {
           act1Intro.style.opacity = '1';
@@ -518,14 +450,11 @@
         let translateY = 0;
 
         if (s <= M1_TOP_PAUSE_END) {
-          // At the start of Act 1: hold smoothly at the top of Selected Work so user can read!
           translateY = 0;
         } else if (s <= M1_VERT_END) {
-          // Smooth travel from Projects down to Stack (soft start + soft stop)
           const p = (s - M1_TOP_PAUSE_END) / vDist1;
           translateY = -smoothTravel(p) * maxOffset1;
         } else {
-          // At rest in the bottom pause buffer zone of Stack
           translateY = -maxOffset1;
         }
 
@@ -538,7 +467,7 @@
 
         // Act 2 pre-staged in background
         act2.style.transform = 'translate3d(0, 0, 0) scale(0.55)';
-        act2.style.filter = 'blur(28px)';
+        act2.style.filter = 'none';
         act2.style.opacity = '0';
         act2.style.pointerEvents = 'none';
         act2.style.zIndex = '5';
@@ -546,42 +475,42 @@
 
         updateHUD(1);
       }
-      // 4. Optical Zoom Transition Act 1 -> Act 2 (Continuously scrubbable & pausable)
+      // -----------------------------------------------------------------------
+      // 4. Optical Zoom Transition: Act 1 -> Act 2 (Pure hardware scale & opacity)
+      // -----------------------------------------------------------------------
       else if (s > M2_ZOOM_START && s < M2_ZOOM_END) {
         const t = Math.max(0, Math.min(1, (s - M2_ZOOM_START) / zDist12));
 
         act0.style.opacity = '0';
         act0.style.pointerEvents = 'none';
 
-        // Act 1 pinned at bottom of stack, zooming forward
         const maxOffset1 = act1Container ? Math.max(0, act1Container.scrollHeight - window.innerHeight) : 0;
         if (act1Container) act1Container.style.transform = `translate3d(0, -${maxOffset1}px, 0)`;
 
         const scale1 = 1.0 + t * 1.25;
-        const blur1 = Math.pow(t, 1.35) * 32;
         const opacity1 = Math.max(0, 1 - Math.pow(t, 1.25));
 
         act1.style.transform = `translate3d(0, 0, 0) scale(${scale1.toFixed(3)})`;
-        act1.style.filter = `blur(${blur1.toFixed(1)}px)`;
+        act1.style.filter = 'none';
         act1.style.opacity = opacity1.toFixed(3);
         act1.style.zIndex = '20';
         act1.style.pointerEvents = t < 0.25 ? 'auto' : 'none';
 
-        // Act 2 zooming in from background
         if (act2Container) act2Container.style.transform = 'translate3d(0, 0, 0)';
         const scale2 = 0.55 + t * 0.45;
-        const blur2 = Math.pow(1 - t, 1.35) * 28;
         const opacity2 = Math.max(0, Math.pow(t, 1.25));
 
         act2.style.transform = `translate3d(0, 0, 0) scale(${scale2.toFixed(3)})`;
-        act2.style.filter = `blur(${blur2.toFixed(1)}px)`;
+        act2.style.filter = 'none';
         act2.style.opacity = opacity2.toFixed(3);
         act2.style.zIndex = '10';
         act2.style.pointerEvents = t > 0.75 ? 'auto' : 'none';
 
         updateHUD(t >= 0.5 ? 2 : 1);
       }
-      // 5. Act 2: Contact
+      // -----------------------------------------------------------------------
+      // 5. Act 2: Contact (Fully active connect stage)
+      // -----------------------------------------------------------------------
       else if (s >= M2_ZOOM_END) {
         act0.style.opacity = '0';
         act0.style.pointerEvents = 'none';
@@ -599,22 +528,84 @@
       }
     }
 
-    // 60/120fps Inertia Physics Loop
-    function animationLoop() {
-      const diff = targetScroll - currentScroll;
-      if (Math.abs(diff) > 0.05) {
-        currentScroll += diff * 0.11;
-      } else {
-        currentScroll = targetScroll;
+    // =========================================================================
+    // Direct, Instantaneous 1:1 Scroll Application (Zero artificial damping)
+    // =========================================================================
+    let lastRenderedScroll = -999999;
+    function applyScroll(val) {
+      targetScroll = Math.max(0, Math.min(TOTAL_SCROLL, val));
+      currentScroll = targetScroll;
+      if (Math.abs(currentScroll - lastRenderedScroll) > 0.01) {
+        render(currentScroll);
+        lastRenderedScroll = currentScroll;
       }
-
-      render(currentScroll);
-      requestAnimationFrame(animationLoop);
     }
 
-    requestAnimationFrame(animationLoop);
+    // Smooth transition exclusively for button & HUD jumps
+    let jumpAnimId = null;
+    function animateScrollTo(dest) {
+      if (jumpAnimId) cancelAnimationFrame(jumpAnimId);
+      const start = currentScroll;
+      const distance = dest - start;
+      if (Math.abs(distance) < 2) {
+        applyScroll(dest);
+        return;
+      }
+      const startTime = performance.now();
+      const duration = Math.min(450, Math.max(220, Math.abs(distance) * 0.3));
 
-    // Wheel input with comfortable sensitivity & progressive cushion damping
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        applyScroll(start + distance * ease);
+
+        if (progress < 1) {
+          jumpAnimId = requestAnimationFrame(step);
+        } else {
+          applyScroll(dest);
+          jumpAnimId = null;
+        }
+      }
+      jumpAnimId = requestAnimationFrame(step);
+    }
+
+    function scrollToAct(actIdx) {
+      let dest = 0;
+      if (actIdx === 0) dest = 0;
+      else if (actIdx === 1) dest = M1_TRANS_END;
+      else if (actIdx === 2) dest = M2_ZOOM_END;
+      animateScrollTo(dest);
+    }
+
+    // =========================================================================
+    // End-of-Act Dampening: Soft tactile cushion only at the boundary of each act
+    // =========================================================================
+    function getActEndDamping(s, dy) {
+      // 1. Soft cushion at the end of Act 0 (Profile resting zone before transition into Act 1)
+      if (dy > 0 && s >= (M0_VERT_END - 50) && s <= (M1_TRANS_START + 30)) {
+        return 0.58;
+      }
+      // 2. Soft cushion at the end of Act 1 (Stack resting zone before optical zoom into Act 2)
+      if (dy > 0 && s >= (M1_VERT_END - 60) && s <= (M2_ZOOM_START + 30)) {
+        return 0.58;
+      }
+      // 3. Soft cushion when scrolling back up near the top of the page
+      if (dy < 0 && s <= 50) {
+        return 0.65;
+      }
+      // 4. Default: 100% direct 1:1 scroll everywhere else
+      return 1.0;
+    }
+
+    // Initial render
+    applyScroll(0);
+
+    // =========================================================================
+    // Input Listeners: Direct 1:1 Tracking with End-of-Act Cushion
+    // =========================================================================
+
+    // Mouse Wheel / Trackpad
     window.addEventListener('wheel', function (e) {
       if (document.body.classList.contains('demo-is-open')) return;
       const specDrawer = document.getElementById('spec-drawer-backdrop');
@@ -626,12 +617,16 @@
       if (e.deltaMode === 1) dy *= 33;
       else if (e.deltaMode === 2) dy *= 300;
 
-      // Dynamic sensitivity: cushions wheel speed as user reaches the bottom of an act
-      const sens = getScrollSensitivity(targetScroll, dy);
-      targetScroll = Math.max(0, Math.min(TOTAL_SCROLL, targetScroll + dy * sens));
+      if (jumpAnimId) {
+        cancelAnimationFrame(jumpAnimId);
+        jumpAnimId = null;
+      }
+
+      const damp = getActEndDamping(currentScroll, dy);
+      applyScroll(currentScroll + dy * damp);
     }, { passive: false });
 
-    // Touch input (Mobile & Tablets)
+    // Touch Swipe (Mobile & Tablets)
     let touchStartY = 0;
     window.addEventListener('touchstart', function (e) {
       if (e.touches && e.touches.length > 0) {
@@ -649,34 +644,43 @@
         const dy = touchStartY - currentY;
         touchStartY = currentY;
 
-        // Apply smooth cushion damping to touch swipes as well
-        const sensRatio = getScrollSensitivity(targetScroll, dy) / 0.85;
-        targetScroll = Math.max(0, Math.min(TOTAL_SCROLL, targetScroll + dy * 1.35 * sensRatio));
+        if (jumpAnimId) {
+          cancelAnimationFrame(jumpAnimId);
+          jumpAnimId = null;
+        }
+
+        const damp = getActEndDamping(currentScroll, dy);
+        applyScroll(currentScroll + dy * damp);
       }
     }, { passive: true });
 
-    // Keyboard navigation
+    // Keyboard Navigation (Arrows, PageUp/Down, Space, Home, End)
     window.addEventListener('keydown', function (e) {
       if (document.body.classList.contains('demo-is-open')) return;
       const specDrawer = document.getElementById('spec-drawer-backdrop');
       if (specDrawer && specDrawer.classList.contains('open')) return;
 
+      if (jumpAnimId) {
+        cancelAnimationFrame(jumpAnimId);
+        jumpAnimId = null;
+      }
+
       if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
         e.preventDefault();
-        targetScroll = Math.min(TOTAL_SCROLL, targetScroll + 260);
+        applyScroll(currentScroll + 220);
       } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
         e.preventDefault();
-        targetScroll = Math.max(0, targetScroll - 260);
+        applyScroll(currentScroll - 220);
       } else if (e.key === 'Home') {
         e.preventDefault();
-        targetScroll = 0;
+        applyScroll(0);
       } else if (e.key === 'End') {
         e.preventDefault();
-        targetScroll = TOTAL_SCROLL;
+        applyScroll(TOTAL_SCROLL);
       }
     });
 
-    // Jump buttons (Hero actions, Footer back to top)
+    // Jump Buttons (.jump-btn with data-target-act="0|1|2")
     document.querySelectorAll('.jump-btn').forEach(btn => {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
@@ -685,7 +689,7 @@
       });
     });
 
-    // HUD dots click
+    // HUD Dot Indicators Click
     hudDots.forEach(dot => {
       dot.addEventListener('click', function () {
         const act = parseInt(dot.getAttribute('data-act'), 10);
@@ -693,16 +697,17 @@
       });
     });
 
+    // Expose Global Engine Interface
     globalEngine = {
       scrollToAct: scrollToAct,
       getTargetScroll: () => targetScroll,
-      setTargetScroll: (v) => { targetScroll = v; }
+      setTargetScroll: (v) => { applyScroll(v); }
     };
   }
 
-  // =========================================================================
-  // 3. Project Stub Demo Pages (Zoom In On Click, Zoom Out On Click Or Scroll)
-  // =========================================================================
+  // ===========================================================================
+  // 4. PROJECT DEMO MODALS CONTROLLER (Zoom-In On Click, Zoom-Out On Scroll)
+  // ===========================================================================
   function initProjectDemos() {
     const demoOverlay = document.getElementById('project-demo-overlay');
     const opticalStage = document.getElementById('optical-stage');
@@ -717,7 +722,7 @@
     function openDemo(demoKey) {
       if (!demoOverlay) return;
 
-      // Select matching view
+      // Select active matching view
       demoViews.forEach(view => {
         const id = view.id.replace('demo-', '');
         if (id === demoKey) {
@@ -759,7 +764,7 @@
       });
     });
 
-    // Also open on clicking project card itself (except when clicking direct source link or specs)
+    // Open on clicking project bento card itself (excluding direct links and specs buttons)
     document.querySelectorAll('.project-bento-card').forEach(card => {
       card.addEventListener('click', function (e) {
         if (e.target.closest('a') || e.target.closest('.inspect-btn')) return;
@@ -773,18 +778,18 @@
     if (demoCloseBtn) demoCloseBtn.addEventListener('click', closeDemo);
     if (demoBottomClose) demoBottomClose.addEventListener('click', closeDemo);
 
-    demoOverlay.addEventListener('click', function (e) {
-      if (e.target === demoOverlay) {
-        closeDemo();
-      }
-    });
+    if (demoOverlay) {
+      demoOverlay.addEventListener('click', function (e) {
+        if (e.target === demoOverlay) {
+          closeDemo();
+        }
+      });
+    }
 
-    // User requirement: "zoom transitions back again on click or scroll"
+    // Exit demo when user deliberately scrolls (> 50px)
     window.addEventListener('wheel', function (e) {
       if (!isDemoOpen) return;
-
       demoScrollAccumulator += Math.abs(e.deltaY);
-      // After a deliberate scroll movement (> 50px), zoom back out to projects!
       if (demoScrollAccumulator > 50) {
         closeDemo();
       }
@@ -815,10 +820,10 @@
     });
 
     // =========================================================================
-    // Interactive Simulation Toys within Demos
+    // 5. INTERACTIVE SIMULATION TOYS WITHIN DEMOS
     // =========================================================================
 
-    // 1. Come Together Compass Simulation
+    // Simulation 1: Come Together Compass
     const compassGeocodeBtn = document.getElementById('compass-geocode-btn');
     const compassWipeBtn = document.getElementById('compass-wipe-btn');
     const compassLatency = document.getElementById('compass-latency-val');
@@ -885,7 +890,7 @@
       });
     }
 
-    // 2. Erised AI (Manifest V3) Simulation
+    // Simulation 2: Erised AI (Manifest V3)
     const erisedExtractBtn = document.getElementById('erised-extract-btn');
     const erisedInjectBtn = document.getElementById('erised-inject-btn');
     const erisedLatency = document.getElementById('erised-latency-val');
@@ -903,18 +908,19 @@
       erisedExtractBtn.addEventListener('click', function () {
         const scene = sampleScenes[sceneIdx % sampleScenes.length];
         sceneIdx++;
+        const randLat = (3.4 + Math.random() * 1.8).toFixed(1);
 
-        if (erisedLatency) erisedLatency.textContent = '3.8 ms';
-        if (erisedFlow) erisedFlow.textContent = 'Prompt Dispatched';
+        if (erisedLatency) erisedLatency.textContent = `${randLat} ms (DOM Parsed)`;
+        if (erisedFlow) erisedFlow.textContent = '0 Reflow (Stable)';
 
         if (erisedLog) {
           const now = new Date().toISOString().substring(11, 23);
           const line1 = document.createElement('div');
-          line1.className = 'term-line text-dim';
-          line1.textContent = `[${now}] [DOM-SCAN] Extracted paragraph text: "${scene.substring(0, 58)}..."`;
+          line1.className = 'term-line text-green';
+          line1.textContent = `[${now}] [DOM-STREAM] Parsed: "${scene.substring(0, 52)}..."`;
           const line2 = document.createElement('div');
-          line2.className = 'term-line text-green';
-          line2.textContent = `[${now}] [MV3-DISPATCH] Headless background worker formulated zero-cost contextual prompt payload.`;
+          line2.className = 'term-line';
+          line2.textContent = `[${now}] [MV3-WORKER] Synthesized prompt payload without external commercial API key.`;
           erisedLog.appendChild(line1);
           erisedLog.appendChild(line2);
           erisedLog.scrollTop = erisedLog.scrollHeight;
@@ -924,45 +930,58 @@
 
     if (erisedInjectBtn) {
       erisedInjectBtn.addEventListener('click', function () {
-        if (erisedLatency) erisedLatency.textContent = '2.4 ms';
-        if (erisedFlow) erisedFlow.textContent = 'Zero Reflow (Injected)';
-
         if (erisedLog) {
           const now = new Date().toISOString().substring(11, 23);
-          const line = document.createElement('div');
-          line.className = 'term-line text-green';
-          line.textContent = `[${now}] [DOM-STREAM] Injected 1024x640 canvas illustration directly into active reader viewport without altering reader scroll offset.`;
-          erisedLog.appendChild(line);
+          const line1 = document.createElement('div');
+          line1.className = 'term-line text-accent';
+          line1.textContent = `[${now}] [CANVAS-RENDER] In-memory blob created. High-resolution illustration injected.`;
+          const line2 = document.createElement('div');
+          line2.className = 'term-line text-green';
+          line2.textContent = `[${now}] [LAYOUT] Render completed with 0 cumulative layout shift (CLS: 0.000).`;
+          erisedLog.appendChild(line1);
+          erisedLog.appendChild(line2);
           erisedLog.scrollTop = erisedLog.scrollHeight;
         }
       });
     }
 
-    // 3. Starlink Congestion Tracker Simulation
+    // Simulation 3: Starlink Tracker
     const starlinkQueryBtn = document.getElementById('starlink-query-btn');
     const starlinkToggleBtn = document.getElementById('starlink-toggle-btn');
     const starlinkLatency = document.getElementById('starlink-latency-val');
+    const starlinkCells = document.getElementById('starlink-cells-val');
     const starlinkStatus = document.getElementById('starlink-status-val');
     const starlinkLog = document.getElementById('starlink-log');
 
-    let surchargeActive = false;
+    const sampleQueries = [
+      { loc: 'Flagstaff, AZ (35.1983° N, 111.6513° W)', cost: '$120/MO', tier: 'STANDARD' },
+      { loc: 'Sedona, AZ (34.8697° N, 111.7610° W)', cost: '$130/MO', tier: 'CONGESTION SURCHARGE (+ $100 Upfront)' },
+      { loc: 'Tucson, AZ (32.2226° N, 110.9747° W)', cost: '$120/MO', tier: 'STANDARD' },
+      { loc: 'Rural Navajo County, AZ (35.3995° N, 110.1542° W)', cost: '$55/MO', tier: 'REGIONAL DISCOUNT ($55/MO)' }
+    ];
+    let queryIdx = 0;
+    let overlayActive = true;
 
     if (starlinkQueryBtn) {
       starlinkQueryBtn.addEventListener('click', function () {
-        const lat = (33.5 + Math.random() * 0.4).toFixed(4);
-        const lon = (-112.0 + Math.random() * 0.4).toFixed(4);
-        const lookupTime = (1.4 + Math.random() * 0.8).toFixed(1);
+        const q = sampleQueries[queryIdx % sampleQueries.length];
+        queryIdx++;
+        const randLat = (1.4 + Math.random() * 0.9).toFixed(1);
 
-        if (starlinkLatency) starlinkLatency.textContent = `${lookupTime} ms`;
+        if (starlinkLatency) starlinkLatency.textContent = `${randLat} ms`;
+        if (starlinkStatus) {
+          starlinkStatus.textContent = q.tier;
+          starlinkStatus.className = q.tier.includes('SURCHARGE') ? 'demo-stat-val text-accent' : (q.tier.includes('DISCOUNT') ? 'demo-stat-val text-accent' : 'demo-stat-val text-green');
+        }
 
         if (starlinkLog) {
           const now = new Date().toISOString().substring(11, 23);
           const line1 = document.createElement('div');
-          line1.className = 'term-line';
-          line1.textContent = `[${now}] [POINT-QUERY] Client ray-casting point (${lat}° N, ${lon}° W) across 2,418 GeoJSON polygons...`;
+          line1.className = 'term-line text-green';
+          line1.textContent = `[${now}] [RAY-CAST] Queried ${q.loc} against 2,418 polygons in ${randLat}ms.`;
           const line2 = document.createElement('div');
-          line2.className = 'term-line text-green';
-          line2.textContent = `[${now}] [CELL-MATCH] Cell #AZ-PHX-084 matched in ${lookupTime}ms. Capacity: 84% (Standard Tier, No Surcharge).`;
+          line2.className = q.tier.includes('SURCHARGE') ? 'term-line text-accent' : 'term-line';
+          line2.textContent = `[${now}] [CLASSIFICATION] Result: ${q.tier} • Base fee: ${q.cost}.`;
           starlinkLog.appendChild(line1);
           starlinkLog.appendChild(line2);
           starlinkLog.scrollTop = starlinkLog.scrollHeight;
@@ -972,38 +991,21 @@
 
     if (starlinkToggleBtn) {
       starlinkToggleBtn.addEventListener('click', function () {
-        surchargeActive = !surchargeActive;
-        if (surchargeActive) {
-          if (starlinkStatus) {
-            starlinkStatus.textContent = 'HIGH-DEMAND SURCHARGE ZONE ($100)';
-            starlinkStatus.className = 'demo-stat-val text-accent';
-          }
-          if (starlinkLog) {
-            const now = new Date().toISOString().substring(11, 23);
-            const line = document.createElement('div');
-            line.className = 'term-line text-accent';
-            line.textContent = `[${now}] [SURCHARGE-ALERT] Mobile node entered high-demand cell boundary. Warning user of relocation fee surcharge.`;
-            starlinkLog.appendChild(line);
-            starlinkLog.scrollTop = starlinkLog.scrollHeight;
-          }
-        } else {
-          if (starlinkStatus) {
-            starlinkStatus.textContent = 'STANDARD TIER ($0)';
-            starlinkStatus.className = 'demo-stat-val text-green';
-          }
-          if (starlinkLog) {
-            const now = new Date().toISOString().substring(11, 23);
-            const line = document.createElement('div');
-            line.className = 'term-line text-green';
-            line.textContent = `[${now}] [SURCHARGE-CLEARED] Cell boundary reset to standard residential service tier.`;
-            starlinkLog.appendChild(line);
-            starlinkLog.scrollTop = starlinkLog.scrollHeight;
-          }
+        overlayActive = !overlayActive;
+        if (starlinkCells) starlinkCells.textContent = overlayActive ? '2,418 Polygons' : '0 (Hidden)';
+
+        if (starlinkLog) {
+          const now = new Date().toISOString().substring(11, 23);
+          const line = document.createElement('div');
+          line.className = 'term-line text-dim';
+          line.textContent = `[${now}] [LAYER-TOGGLE] High-demand surcharge overlay: ${overlayActive ? 'ACTIVE (Layer visible)' : 'DISABLED (Layer hidden)'}.`;
+          starlinkLog.appendChild(line);
+          starlinkLog.scrollTop = starlinkLog.scrollHeight;
         }
       });
     }
 
-    // 4. Healthcare Operations Simulation
+    // Simulation 4: Healthcare Operations Simulation
     const healthSurgeBtn = document.getElementById('health-surge-btn');
     const healthTestBtn = document.getElementById('health-test-btn');
     const healthTps = document.getElementById('health-tps-val');
@@ -1016,50 +1018,34 @@
     if (healthSurgeBtn) {
       healthSurgeBtn.addEventListener('click', function () {
         surgeActive = !surgeActive;
-        if (surgeActive) {
-          if (healthTps) healthTps.textContent = '14,800 events/sec';
-          if (healthQueue) healthQueue.textContent = '39 / 40 ICU Beds (SURGE)';
+        if (healthTps) healthTps.textContent = surgeActive ? '18,400 events/sec' : '5,200 events/sec';
+        if (healthQueue) healthQueue.textContent = surgeActive ? '39 / 40 ICU Beds (SURGE)' : '34 / 40 ICU Beds';
 
-          if (healthLog) {
-            const now = new Date().toISOString().substring(11, 23);
-            const line1 = document.createElement('div');
-            line1.className = 'term-line text-accent';
-            line1.textContent = `[${now}] [SURGE-EVENT] Dispatched 50 triage patient arrivals to ConcurrentPriorityQueue.`;
-            const line2 = document.createElement('div');
-            line2.className = 'term-line text-green';
-            line2.textContent = `[${now}] [SCHEDULER] Acquired re-prioritized worker locks without deadlock. Avg triage wait: 3.2min.`;
-            healthLog.appendChild(line1);
-            healthLog.appendChild(line2);
-            healthLog.scrollTop = healthLog.scrollHeight;
-          }
-        } else {
-          if (healthTps) healthTps.textContent = '5,200 events/sec';
-          if (healthQueue) healthQueue.textContent = '34 / 40 ICU Beds';
-
-          if (healthLog) {
-            const now = new Date().toISOString().substring(11, 23);
-            const line = document.createElement('div');
-            line.className = 'term-line text-green';
-            line.textContent = `[${now}] [STEADY-STATE] ICU surge absorbed. Patient queue restored to nominal baseline.`;
-            healthLog.appendChild(line);
-            healthLog.scrollTop = healthLog.scrollHeight;
-          }
+        if (healthLog) {
+          const now = new Date().toISOString().substring(11, 23);
+          const line1 = document.createElement('div');
+          line1.className = surgeActive ? 'term-line text-accent' : 'term-line text-green';
+          line1.textContent = surgeActive
+            ? `[${now}] [SURGE-ALERT] Mass-casualty triage event injected: 250 arriving patients. Thread pool scaled to 24 workers.`
+            : `[${now}] [STABILIZED] Surge queue drained. Triage returning to nominal baseline throughput.`;
+          healthLog.appendChild(line1);
+          healthLog.scrollTop = healthLog.scrollHeight;
         }
       });
     }
 
     if (healthTestBtn) {
       healthTestBtn.addEventListener('click', function () {
-        if (healthCoverage) healthCoverage.textContent = '96.8% Branch';
+        if (healthCoverage) healthCoverage.textContent = '96.4% Branch (VERIFIED)';
 
         if (healthLog) {
           const now = new Date().toISOString().substring(11, 23);
           const line1 = document.createElement('div');
           line1.className = 'term-line text-green';
-          line1.textContent = `[${now}] [JUNIT-5] Executed 142 parameterized unit tests in 184ms: 142 PASSED, 0 FAILED.`;
+          line1.textContent = `[${now}] [JUNIT-5] Executed 142 discrete-event unit tests in 184ms. 0 failures.`;
           const line2 = document.createElement('div');
-          line2.className = 'term-line text-green';
-          line2.textContent = `[${now}] [SPOTBUGS & JACOCO] 0 high/medium bugs reported. CI verification quality gate PASSED.`;
+          line2.className = 'term-line text-dim';
+          line2.textContent = `[${now}] [JACOCO/SPOTBUGS] 96.4% branch coverage verified. 0 bugs, 0 vulnerability warnings.`;
           healthLog.appendChild(line1);
           healthLog.appendChild(line2);
           healthLog.scrollTop = healthLog.scrollHeight;
@@ -1068,35 +1054,35 @@
     }
   }
 
-  // =========================================================================
-  // 4. Project Specification Database & Drawer
-  // =========================================================================
+  // ===========================================================================
+  // 5. ARCHITECTURAL SPECIFICATION DRAWER CONTROLLER
+  // ===========================================================================
   function initProjectDrawer() {
     const projectDatabase = {
       'compass': {
-        title: 'Come Together Compass — Community Aid & Triage',
-        fileTag: 'COMPASS_GEOSPATIAL_SPEC.md',
+        title: 'Come Together Compass — Community Aid Platform',
+        fileTag: 'COMPASS_ARCHITECTURE.spec',
         image: 'assets/images/project-1.svg',
         repoUrl: 'https://github.com/TimothyH3/come-together-compass',
-        desc: 'Full-stack community aid locator and anonymous triage platform integrating federal geocoding, client-side OpenStreetMap tiles, and zero-retention session privacy.',
-        benchmark: 'Sub-120ms U.S. Census Geocoding resolution • 0-byte persistent data retention for at-risk user privacy',
+        desc: 'Full-stack community aid locator and anonymous triage platform with zero-fee federal geocoding.',
+        benchmark: 'Sub-120ms geocoding lookup • Zero persistent user session retention',
         architecture: [
-          'U.S. Census Bureau Geocoding Pipeline: Intercepts addresses and resolves latitude/longitude without commercial API rate-limits or subscription fees.',
-          'Leaflet / OpenStreetMap Integration: Renders localized mutual aid hubs with custom SVG markers and dynamic bounding-box filtering.',
-          'Zero-Retention Session Architecture: Stores sensitive triage inputs exclusively in volatile Pinia state, wiping state vectors upon session close.'
+          'U.S. Census Bureau REST Integration: Bypasses commercial mapping provider rate-limits and subscription fees through federal endpoint caching.',
+          'Volatile RAM State: All user filter preferences and coordinate inputs reside exclusively in Pinia memory; no local storage or tracking telemetry.',
+          'Emergency Escalation Protocol: Immediate one-click bridge to the 988 Suicide & Crisis Lifeline with instant memory wipe.'
         ],
         decisions: [
-          'Implemented direct client-side sanitization and rapid 988 Crisis Lifeline escalation triggers.',
-          'Used Vitest and TypeScript strict typing to ensure 100% type safety across geospatial coordinates and aid provider payloads.'
+          'Replaced Google Maps API with Leaflet and OpenStreetMap raster tiles to reduce running costs to $0.',
+          'Structured modular API contracts between Express endpoints and the Vue 3 Composition API frontend.'
         ],
         stack: ['Vue 3', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'Leaflet', 'Pinia', 'Vitest']
       },
       'erised-ai': {
-        title: 'Erised AI — Dynamic Literary eBook Illustrator',
+        title: 'Erised AI — Dynamic eBook Scene Illustrator',
         fileTag: 'ERISED_MV3_EXTENSION.spec',
         image: 'assets/images/project-2.svg',
         repoUrl: 'https://github.com/TimothyH3/erised-ai',
-        desc: 'Chrome extension generating real-time, context-aware literary scene artwork using background service workers and in-memory DOM injection pipelines.',
+        desc: 'Chrome extension generating real-time, context-aware literary scene artwork without external API keys.',
         benchmark: '< 5ms DOM rendering latency • Zero external commercial API key dependency',
         architecture: [
           'Manifest V3 Service Worker: Manages headless browser automation channels without maintaining persistent background page overhead.',
@@ -1181,8 +1167,10 @@
         </div>
       `;
 
-      drawerBackdrop.classList.add('open');
-      drawerBackdrop.setAttribute('aria-hidden', 'false');
+      if (drawerBackdrop) {
+        drawerBackdrop.classList.add('open');
+        drawerBackdrop.setAttribute('aria-hidden', 'false');
+      }
 
       const innerClose = drawerContent.querySelector('#inner-drawer-close');
       if (innerClose) innerClose.addEventListener('click', closeDrawer);
@@ -1215,9 +1203,9 @@
     });
   }
 
-  // =========================================================================
-  // 5. One-Click Copy Email & Toast
-  // =========================================================================
+  // ===========================================================================
+  // 6. COPY EMAIL & TOAST NOTIFICATION
+  // ===========================================================================
   function initCopyEmail() {
     const copyBtn = document.getElementById('copy-email-btn');
     const copyBtnText = document.getElementById('copy-btn-text');
@@ -1269,18 +1257,23 @@
     }
   }
 
-  // =========================================================================
-  // 6. Terminal Entrance Intro Animation (In-Place at Hero Name)
-  // =========================================================================
+  // ===========================================================================
+  // 7. TERMINAL ENTRANCE INTRO ANIMATION (In-Place at Hero Name)
+  // Fail-safe: reveals page even if elements are missing or reduced-motion is on
+  // ===========================================================================
   function initIntroAnimation() {
     const terminalLine = document.getElementById('intro-terminal-line');
     const textEl = document.getElementById('intro-text');
     const realName = document.getElementById('hero-real-name');
     const cursorEl = document.getElementById('intro-cursor');
 
-    if (!terminalLine || !textEl || !realName) return;
+    // Fail-safe guard: If intro elements were removed or restructured, reveal page immediately
+    if (!terminalLine || !textEl || !realName) {
+      document.body.classList.remove('intro-active');
+      document.body.classList.add('intro-revealed');
+      return;
+    }
 
-    // Accessibility check: skip immediately if prefers-reduced-motion is requested
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduceMotion) {
       document.body.classList.remove('intro-active');
@@ -1292,14 +1285,12 @@
     let charIndex = 0;
     let isDone = false;
 
-    // Immediately mark body as intro-active (keeps screen blank except prompt line)
     document.body.classList.add('intro-active');
 
     function completeIntro() {
       if (isDone) return;
       isDone = true;
 
-      // 1. Hide terminal line
       if (terminalLine) {
         terminalLine.style.opacity = '0';
         terminalLine.style.transform = 'translateY(14px) scale(0.96)';
@@ -1308,22 +1299,19 @@
         cursorEl.style.opacity = '0';
       }
 
-      // 2. Reveal Timothy Hansen letters in place and smoothly reveal rest of page
       document.body.classList.remove('intro-active');
       document.body.classList.add('intro-revealed');
 
-      // 3. Remove terminal line from flow once morph completes
       setTimeout(() => {
         if (terminalLine) terminalLine.style.display = 'none';
       }, 420);
     }
 
-    // Allow user to click anywhere or press any key to skip immediately
+    // Skip on user interaction
     window.addEventListener('click', completeIntro, { once: true });
     window.addEventListener('keydown', completeIntro, { once: true });
 
-    // Step 1: Blank screen with floating cursor behind > symbol right where name is
-    // Start typing after 140ms
+    // Typing sequence
     setTimeout(() => {
       if (isDone) return;
 
@@ -1343,43 +1331,36 @@
         } else {
           clearInterval(typeInterval);
 
-          // Step 2: Brief pause after typing completes, then Enter key downward bounce
           setTimeout(() => {
             if (isDone) return;
-
-            // All letters do downward bounce signifying Enter key press
             if (terminalLine) terminalLine.classList.add('enter-strike');
 
-            // Step 3: Right as they hit the bottom of the bounce (~140ms into the strike):
-            // Morph into Timothy Hansen letters in the exact formatting and location on the home screen!
             setTimeout(() => {
               completeIntro();
-            }, 140); // 140ms into the bounce
-
-          }, 180); // 180ms delay after typing completes
+            }, 140);
+          }, 180);
         }
-      }, 45); // 45ms interval between typed characters
+      }, 45);
 
-    }, 140); // 140ms before typing starts
+    }, 140);
   }
 
-  // Boot all subsystems
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-      initTheme();
-      initIntroAnimation();
-      initScrollAndZoomEngine();
-      initProjectDemos();
-      initProjectDrawer();
-      initCopyEmail();
-    });
-  } else {
+  // ===========================================================================
+  // 8. SUBSYSTEM BOOTSTRAP
+  // ===========================================================================
+  function boot() {
     initTheme();
     initIntroAnimation();
     initScrollAndZoomEngine();
     initProjectDemos();
     initProjectDrawer();
     initCopyEmail();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 
 })();

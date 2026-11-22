@@ -52,6 +52,58 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
+  // Pointy-topped regular hexagonal honeycomb grid snapping (Zero overlap guaranteed)
+  // Circumradius R = 12.5 km. Column spacing = sqrt(3)*R ~= 21.65 km, Row spacing = 1.5*R = 18.75 km.
+  const HEX_RADIUS_KM = 12.5;
+  const REF_LAT = 38.0;
+  const REF_LNG = -97.0;
+
+  function snapToHexGrid(lat, lng, radiusKm = HEX_RADIUS_KM) {
+    const kmPerLat = 111.132;
+    const kmPerLng = 111.320 * Math.cos(REF_LAT * Math.PI / 180);
+    const x = (lng - REF_LNG) * kmPerLng;
+    const y = (lat - REF_LAT) * kmPerLat;
+    const R = radiusKm;
+
+    const r = (2.0 / 3.0) * (y / R);
+    const q = (Math.sqrt(3) / 3.0) * (x / R) - r / 2.0;
+
+    const xc = q;
+    const zc = r;
+    const yc = -xc - zc;
+
+    let rx = Math.round(xc);
+    let ry = Math.round(yc);
+    let rz = Math.round(zc);
+
+    const xDiff = Math.abs(rx - xc);
+    const yDiff = Math.abs(ry - yc);
+    const zDiff = Math.abs(rz - zc);
+
+    if (xDiff > yDiff && xDiff > zDiff) {
+      rx = -ry - rz;
+    } else if (yDiff > zDiff) {
+      ry = -rx - rz;
+    } else {
+      rz = -rx - ry;
+    }
+
+    const qSnap = rx;
+    const rSnap = rz;
+
+    const xCenter = R * Math.sqrt(3) * (qSnap + rSnap / 2.0);
+    const yCenter = R * (3.0 / 2.0) * rSnap;
+
+    const centerLat = REF_LAT + yCenter / kmPerLat;
+    const centerLng = REF_LNG + xCenter / kmPerLng;
+
+    return {
+      centerLat: Math.round(centerLat * 10000) / 10000,
+      centerLng: Math.round(centerLng * 10000) / 10000,
+      cellKey: `${qSnap}_${rSnap}`
+    };
+  }
+
   // Authentic pricing resolver: Base Plan + Service Price Adjustment = Total Monthly Fee
   function getPointPricing(pt) {
     const surcharge = pt.surcharge_amount || 0;
@@ -60,10 +112,10 @@
 
     if (isUnsampled) {
       return {
-        base: null,
+        base: 120,
         adjustment: 0,
-        total: null,
-        surcharge: null,
+        total: 120,
+        surcharge: 0,
         isUnsampled: true
       };
     }
@@ -71,6 +123,12 @@
     let base = pt.base_service_fee;
     let adj = pt.service_price_adjustment;
     let total = pt.total_monthly_fee ?? pt.monthly_service_fee;
+
+    // Unprobed priority hotspot seeds default to standard $120/mo baseline rate so they do not falsely appear orange
+    if (pt.sample_type === 'hotspot_priority' && !pt.isLiveVerified && adj === 0 && (total === 130 || total === null)) {
+      total = 120;
+      base = 120;
+    }
 
     if (adj !== undefined && adj !== null) {
       adj = Number(adj);
@@ -87,12 +145,12 @@
       if (total !== undefined && total !== null) {
         total = Number(total);
         if (base === undefined || base === null) {
-          base = total >= 130 ? 130 : total < 120 ? 55 : 120;
+          base = total >= 170 ? 170 : total >= 130 ? 130 : total < 85 ? 55 : 120;
         }
         adj = Math.round((total - Number(base)) * 100) / 100;
       } else {
-        total = pt.status === 'discounted' ? 38.5 : pt.status === 'congested' ? 143 : 120;
-        base = total >= 130 ? 130 : total < 120 ? 55 : 120;
+        total = pt.status === 'discounted' ? 55 : pt.status === 'congested' ? 143 : 120;
+        base = total >= 170 ? 170 : total >= 130 ? 130 : total < 85 ? 55 : 120;
         adj = Math.round((total - base) * 100) / 100;
       }
     }
@@ -106,22 +164,26 @@
     };
   }
 
+  // Monthly service tiers matching total cheapest monthly cost:
+  // Green: $55-85, Blue: $85-130, Orange: $130-170, Red: $170+, Purple: Unavailable
   function getTierColor(pt) {
-    if (pt.status === 'sold_out') return '#c084fc';
+    if (pt.status === 'sold_out') return '#c084fc'; // Purple: unavailable
     const pricing = getPointPricing(pt);
-    if (pricing.surcharge > 0) return '#ef4444';
-    if (pricing.adjustment > 0 || (pricing.total !== null && pricing.total > 120)) return '#f97316';
-    if (pricing.adjustment < 0 || (pricing.total !== null && pricing.total < 120)) return '#10b981';
-    return '#38bdf8';
+    const cost = pricing.total !== null ? pricing.total : 120;
+    if (cost < 85) return '#10b981';  // Green: $55 - $85
+    if (cost < 130) return '#38bdf8'; // Blue: $85 - $130
+    if (cost < 170) return '#f97316'; // Orange: $130 - $170
+    return '#ef4444';                 // Red: $170+
   }
 
   function getTierKey(pt) {
-    if (pt.status === 'sold_out') return 'sold_out';
+    if (pt.status === 'sold_out') return 'sold_out'; // Purple: unavailable
     const pricing = getPointPricing(pt);
-    if (pricing.surcharge > 0) return 'high_demand';
-    if (pricing.adjustment > 0 || (pricing.total !== null && pricing.total > 120)) return 'congested';
-    if (pricing.adjustment < 0 || (pricing.total !== null && pricing.total < 120)) return 'discounted';
-    return 'standard';
+    const cost = pricing.total !== null ? pricing.total : 120;
+    if (cost < 85) return 'discounted';  // Green: $55 - $85
+    if (cost < 130) return 'standard';   // Blue: $85 - $130
+    if (cost < 170) return 'congested';  // Orange: $130 - $170
+    return 'high_demand';                // Red: $170+
   }
 
   // Generates geographically invariant regular hexagon coordinates (12.5 km circumradius matching Starlink cells)
@@ -140,7 +202,7 @@
     return coords;
   }
 
-  // Injects SVG radial gradients into Leaflet overlay pane for fading surrounding auras
+  // Injects high-intensity SVG radial gradients into Leaflet overlay pane for fading surrounding auras
   function ensureSvgGradients() {
     const svg = document.querySelector('.leaflet-pane.leaflet-overlay-pane svg');
     if (!svg || svg.querySelector('#hex-aura-congested')) return;
@@ -148,38 +210,43 @@
     const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
     defs.innerHTML = `
       <radialGradient id="hex-aura-congested" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#f97316" stop-opacity="0.55" />
-        <stop offset="25%" stop-color="#f97316" stop-opacity="0.38" />
-        <stop offset="55%" stop-color="#f97316" stop-opacity="0.18" />
-        <stop offset="80%" stop-color="#f97316" stop-opacity="0.05" />
+        <stop offset="0%" stop-color="#f97316" stop-opacity="0.90" />
+        <stop offset="20%" stop-color="#f97316" stop-opacity="0.70" />
+        <stop offset="45%" stop-color="#f97316" stop-opacity="0.45" />
+        <stop offset="70%" stop-color="#f97316" stop-opacity="0.20" />
+        <stop offset="90%" stop-color="#f97316" stop-opacity="0.06" />
         <stop offset="100%" stop-color="#f97316" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="hex-aura-high_demand" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.60" />
-        <stop offset="25%" stop-color="#ef4444" stop-opacity="0.42" />
-        <stop offset="55%" stop-color="#ef4444" stop-opacity="0.20" />
-        <stop offset="80%" stop-color="#ef4444" stop-opacity="0.06" />
+        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.92" />
+        <stop offset="20%" stop-color="#ef4444" stop-opacity="0.72" />
+        <stop offset="45%" stop-color="#ef4444" stop-opacity="0.46" />
+        <stop offset="70%" stop-color="#ef4444" stop-opacity="0.22" />
+        <stop offset="90%" stop-color="#ef4444" stop-opacity="0.07" />
         <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="hex-aura-standard" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.50" />
-        <stop offset="25%" stop-color="#38bdf8" stop-opacity="0.32" />
-        <stop offset="55%" stop-color="#38bdf8" stop-opacity="0.15" />
-        <stop offset="80%" stop-color="#38bdf8" stop-opacity="0.04" />
+        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.88" />
+        <stop offset="20%" stop-color="#38bdf8" stop-opacity="0.68" />
+        <stop offset="45%" stop-color="#38bdf8" stop-opacity="0.42" />
+        <stop offset="70%" stop-color="#38bdf8" stop-opacity="0.18" />
+        <stop offset="90%" stop-color="#38bdf8" stop-opacity="0.05" />
         <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="hex-aura-discounted" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#10b981" stop-opacity="0.55" />
-        <stop offset="25%" stop-color="#10b981" stop-opacity="0.36" />
-        <stop offset="55%" stop-color="#10b981" stop-opacity="0.16" />
-        <stop offset="80%" stop-color="#10b981" stop-opacity="0.05" />
+        <stop offset="0%" stop-color="#10b981" stop-opacity="0.90" />
+        <stop offset="20%" stop-color="#10b981" stop-opacity="0.70" />
+        <stop offset="45%" stop-color="#10b981" stop-opacity="0.44" />
+        <stop offset="70%" stop-color="#10b981" stop-opacity="0.20" />
+        <stop offset="90%" stop-color="#10b981" stop-opacity="0.06" />
         <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="hex-aura-sold_out" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#c084fc" stop-opacity="0.50" />
-        <stop offset="25%" stop-color="#c084fc" stop-opacity="0.32" />
-        <stop offset="55%" stop-color="#c084fc" stop-opacity="0.15" />
-        <stop offset="80%" stop-color="#c084fc" stop-opacity="0.04" />
+        <stop offset="0%" stop-color="#c084fc" stop-opacity="0.88" />
+        <stop offset="20%" stop-color="#c084fc" stop-opacity="0.66" />
+        <stop offset="45%" stop-color="#c084fc" stop-opacity="0.40" />
+        <stop offset="70%" stop-color="#c084fc" stop-opacity="0.18" />
+        <stop offset="90%" stop-color="#c084fc" stop-opacity="0.05" />
         <stop offset="100%" stop-color="#c084fc" stop-opacity="0" />
       </radialGradient>
     `;
@@ -304,16 +371,20 @@
       const s = pt.surcharge_amount || 0;
       const pricing = getPointPricing(pt);
       const isSold = pt.status === 'sold_out';
+      const cost = pricing.total !== null ? pricing.total : 120;
 
       if (!pricing.isUnsampled && pricing.total !== null) {
         sumMonthly += pricing.total;
       }
 
-      if (isSold) soldCount++;
-      if (s > 0) surchargeCount++;
-      if (!isSold && (pricing.adjustment < 0 || pricing.total < 120)) discountCount++;
-      else if (!isSold && pricing.adjustment === 0 && pricing.total === 120) standardCount++;
-      else if (!isSold && (pricing.adjustment > 0 || pricing.total > 120)) congestedCount++;
+      if (isSold) {
+        soldCount++;
+      } else {
+        if (cost < 85) discountCount++;
+        else if (cost < 130) standardCount++;
+        else if (cost < 170) congestedCount++;
+        else surchargeCount++; // Red: $170+
+      }
     }
 
     const avgMonthly = total > 0 ? Math.round(sumMonthly / total) : 120;
@@ -335,7 +406,7 @@
     setText('count-sold', `(${soldCount})`);
   }
 
-  // Render Starlink Hexagonal Cells & Radial Fading Auras
+  // Render Starlink Hexagonal Cells & Radial Fading Auras (Zero overlap guaranteed)
   function renderMarkers() {
     markersLayer.clearLayers();
     let visible = 0;
@@ -343,23 +414,42 @@
     // Filter points based on active tier checkboxes
     const activePoints = surchargePoints.filter(pt => {
       const pricing = getPointPricing(pt);
-      const s = pricing.surcharge || 0;
-      const fee = pricing.total;
+      const fee = pricing.total !== null ? pricing.total : 120;
       const isSold = pt.status === 'sold_out';
 
       if (isSold && !tierFilters.tierSoldOut) return false;
-      if (s > 0 && !tierFilters.tierSurcharge) return false;
-      if (!isSold && s === 0 && (pricing.adjustment < 0 || fee < 120) && !tierFilters.tierDiscount) return false;
-      if (!isSold && s === 0 && pricing.adjustment === 0 && fee === 120 && !tierFilters.tierStandard) return false;
-      if (!isSold && s === 0 && (pricing.adjustment > 0 || fee > 120) && !tierFilters.tierCongested) return false;
+      if (!isSold) {
+        if (fee < 85 && !tierFilters.tierDiscount) return false;
+        if (fee >= 85 && fee < 130 && !tierFilters.tierStandard) return false;
+        if (fee >= 130 && fee < 170 && !tierFilters.tierCongested) return false;
+        if (fee >= 170 && !tierFilters.tierSurcharge) return false;
+      }
       return true;
     });
 
-    // Pass 1: Render outer fading gradient auras spanning a large surrounding area (65 km ground radius)
+    // Deduplicate points by mathematical honeycomb grid so NO two hexes can ever overlap
+    const cellMap = new Map();
     for (const pt of activePoints) {
-      const tierKey = getTierKey(pt);
-      const aura = L.circle([pt.lat, pt.lng], {
-        radius: 65000, // 65 km real-world geographic ground radius
+      const snapped = snapToHexGrid(pt.lat, pt.lng);
+      const key = snapped.cellKey;
+      if (!cellMap.has(key)) {
+        cellMap.set(key, { ...pt, centerLat: snapped.centerLat, centerLng: snapped.centerLng, cellKey: key });
+      } else {
+        const existing = cellMap.get(key);
+        const existingTime = new Date(existing.sampled_at || 0).getTime();
+        const newTime = new Date(pt.sampled_at || 0).getTime();
+        if (newTime > existingTime || pt.isLiveVerified) {
+          cellMap.set(key, { ...pt, centerLat: snapped.centerLat, centerLng: snapped.centerLng, cellKey: key });
+        }
+      }
+    }
+    const uniqueCells = Array.from(cellMap.values());
+
+    // Pass 1: Render outer high-intensity fading gradient auras spanning a large surrounding area (125 km ground radius)
+    for (const cell of uniqueCells) {
+      const tierKey = getTierKey(cell);
+      const aura = L.circle([cell.centerLat, cell.centerLng], {
+        radius: 125000, // 125 km real-world geographic ground radius
         stroke: false,
         interactive: false,
         className: `starlink-hex-aura starlink-aura-${tierKey}`
@@ -371,36 +461,36 @@
     ensureSvgGradients();
 
     // Pass 2: Render crisp central Starlink cell hexagons (12.5 km circumradius matching Starlink cells)
-    for (const pt of activePoints) {
+    for (const cell of uniqueCells) {
       visible++;
-      const pricing = getPointPricing(pt);
+      const pricing = getPointPricing(cell);
       const s = pricing.surcharge || 0;
-      const fee = pricing.total;
-      const isSold = pt.status === 'sold_out';
-      const color = getTierColor(pt);
+      const fee = pricing.total !== null ? pricing.total : 120;
+      const isSold = cell.status === 'sold_out';
+      const color = getTierColor(cell);
 
-      const hexCoords = getHexagonLatLngs(pt.lat, pt.lng, 12.5);
+      const hexCoords = getHexagonLatLngs(cell.centerLat, cell.centerLng, 12.5);
       const hex = L.polygon(hexCoords, {
         color: '#ffffff',
-        weight: 1.8,
-        opacity: 0.95,
+        weight: 2.2,
+        opacity: 0.98,
         fillColor: color,
-        fillOpacity: 0.72,
+        fillOpacity: 0.88,
         className: 'starlink-cell-hex'
       });
 
-      // Hover tooltip showing exact formula: Base + Adjustment = Total
+      // Hover tooltip showing exact cheapest rate tier and surcharge if any
       let tipText = '';
       if (isSold) {
-        tipText = 'Waitlist / Capacity Sold Out';
-      } else if (s > 0) {
-        tipText = `${formatMoney(fee)}/mo (+${formatMoney(s)} Upfront Surcharge)`;
-      } else if (pricing.adjustment > 0) {
-        tipText = `${formatMoney(fee)}/mo (${formatMoney(pricing.base)} base + ${formatMoney(pricing.adjustment)} Congestion)`;
-      } else if (pricing.adjustment < 0) {
-        tipText = `${formatMoney(fee)}/mo (${formatMoney(pricing.base)} base - ${formatMoney(Math.abs(pricing.adjustment))} Discount)`;
+        tipText = 'Unavailable (Capacity Sold Out)';
+      } else if (fee >= 170) {
+        tipText = `${formatMoney(fee)}/mo (Red: $170+ High Cost)` + (s > 0 ? ` [+$${s} Surcharge]` : '');
+      } else if (fee >= 130) {
+        tipText = `${formatMoney(fee)}/mo (Orange: $130–$170 Congestion Adjusted)` + (s > 0 ? ` [+$${s} Surcharge]` : '');
+      } else if (fee >= 85) {
+        tipText = `${formatMoney(fee)}/mo (Blue: $85–$130 Standard Rate)`;
       } else {
-        tipText = `${formatMoney(fee)}/mo Standard Base Plan`;
+        tipText = `${formatMoney(fee)}/mo (Green: $55–$85 Cheapest / Discount)`;
       }
 
       hex.bindTooltip(tipText, {
@@ -411,30 +501,30 @@
 
       hex.on('mouseover', function () {
         this.setStyle({
-          weight: 3.0,
-          color: '#38bdf8',
-          fillOpacity: 0.94
+          weight: 3.2,
+          color: '#ffffff',
+          fillOpacity: 0.96
         });
       });
 
       hex.on('mouseout', function () {
         this.setStyle({
-          weight: 1.8,
+          weight: 2.2,
           color: '#ffffff',
-          fillOpacity: 0.72
+          fillOpacity: 0.88
         });
       });
 
       hex.on('click', function (e) {
         L.DomEvent.stopPropagation(e);
-        displayPointDetails(pt, 0);
+        displayPointDetails(cell, 0);
       });
 
       markersLayer.addLayer(hex);
     }
 
     const counter = document.getElementById('visible-nodes-count');
-    if (counter) counter.textContent = `${visible} NODES`;
+    if (counter) counter.textContent = `${visible} CELLS SHOWN`;
   }
 
   // Proximity Cache Check (25 km threshold)
@@ -489,18 +579,19 @@
     const baseMonthly = pricing.base;
     const adjustment = pricing.adjustment;
 
+    const cost = totalMonthly !== null ? totalMonthly : 120;
     let tierClass = isSold ? 'tier-waitlist' :
-      surcharge > 0 ? 'tier-high' :
-      adjustment > 0 || (totalMonthly !== null && totalMonthly > 120) ? 'tier-congested' :
-      adjustment < 0 || (totalMonthly !== null && totalMonthly < 120) ? 'tier-discount' :
-      'tier-standard';
+      cost >= 170 ? 'tier-high' :
+      cost >= 130 ? 'tier-congested' :
+      cost >= 85 ? 'tier-standard' :
+      'tier-discount';
 
-    let tierTitle = isSold ? 'SOLD OUT / WAITLIST' :
-      surcharge > 0 ? 'CONGESTION SURCHARGE ZONE' :
-      adjustment > 0 ? 'CONGESTION ADJUSTMENT ACTIVE' :
-      adjustment < 0 ? 'REGIONAL DISCOUNT ACTIVE' :
+    let tierTitle = isSold ? 'UNAVAILABLE (SOLD OUT)' :
+      cost >= 170 ? '$170+ HIGH CONGESTION COST' :
+      cost >= 130 ? '$130–$170 CONGESTION ADJUSTED' :
+      cost >= 85 ? '$85–$130 STANDARD BASE RATE' :
       isUnsampled ? 'UNSAMPLED CELL' :
-      'STANDARD RESIDENTIAL PLAN';
+      '$55–$85 CHEAPEST / DISCOUNTED';
 
     let feeDisplay = isUnsampled ? 'PENDING' : `${formatMoney(totalMonthly)}/mo`;
 
@@ -631,11 +722,11 @@
       liveBtn.innerHTML = '<span class="btn-spinner"></span> <span>PROBING STARLINK CHECKOUT...</span>';
     }
 
-    const targetUrl = `${CONFIG.WORKER_API_URL}?lat=${lat.toFixed(4)}&lng=${lng.toFixed(4)}`;
+    const targetUrl = `${CONFIG.WORKER_API_URL}?lat=${lat.toFixed(4)}&lng=${lng.toFixed(4)}&force=true`;
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 12000);
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
 
       const resp = await fetch(targetUrl, { signal: controller.signal });
       clearTimeout(timeoutId);
@@ -654,13 +745,18 @@
             status: result.status,
             sampled_at: result.timestamp || new Date().toISOString(),
             location_name: result.location_name || `Coordinate: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`,
-            isLiveVerified: result.source === 'verified_live',
+            isLiveVerified: true,
             adjustment_description: result.adjustment_description,
             isUnsampled: false
           };
 
-          // Check if already in points list
-          const existingIdx = surchargePoints.findIndex(p => Math.abs(p.lat - updated.lat) < 0.001 && Math.abs(p.lng - updated.lng) < 0.001);
+          // Check if already in points list by matching snapped hex cell or proximity
+          const snapped = snapToHexGrid(lat, lng);
+          const existingIdx = surchargePoints.findIndex(p => {
+            const s = snapToHexGrid(p.lat, p.lng);
+            return s.cellKey === snapped.cellKey || haversineKm(p.lat, p.lng, lat, lng) < 22;
+          });
+
           if (existingIdx >= 0) {
             surchargePoints[existingIdx] = updated;
           } else {
@@ -669,7 +765,7 @@
 
           updateStats();
           renderMarkers();
-          displayPointDetails(updated, result.distance_km || 0);
+          displayPointDetails(updated, 0);
         } else {
           // Unsampled result returned
           displayPointDetails({

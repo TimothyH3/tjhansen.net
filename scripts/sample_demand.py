@@ -461,15 +461,15 @@ def probe_starlink_availability(lat: float, lng: float) -> Optional[Dict[str, An
             total_monthly = round(base_service + service_adjustment, 2)
 
             if deposit > 0:
-                status = "sold_out"
-            elif surcharge > 0:
-                status = "high_demand"
-            elif service_adjustment > 0 or total_monthly > 120:
-                status = "congested"
-            elif service_adjustment < 0 or total_monthly < 120:
-                status = "discounted"
+                status = "sold_out"       # Purple: unavailable
+            elif total_monthly >= 170:
+                status = "high_demand"    # Red: $170+
+            elif total_monthly >= 130:
+                status = "congested"      # Orange: $130 - $170
+            elif total_monthly >= 85:
+                status = "standard"       # Blue: $85 - $130
             else:
-                status = "standard"
+                status = "discounted"     # Green: $55 - $85
 
             logger.info(f"Verified Live: ({lat}, {lng}) -> Base: ${base_service}/mo, Adj: {'+' if service_adjustment >= 0 else ''}${service_adjustment}/mo, Total: ${total_monthly}/mo, Surcharge: ${surcharge}, Status: {status}")
 

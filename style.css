@@ -23,6 +23,9 @@
   --accent-glow: rgba(56, 189, 248, 0.22);
   --accent-secondary: #818CF8;
 
+  --orange-glow: rgba(249, 115, 22, 0.26);
+  --blue-glow: rgba(56, 189, 248, 0.28);
+
   --asu-gold: #FFC627;
   --asu-maroon: #8C1D40;
 
@@ -56,6 +59,9 @@
   --accent: #0284C7;
   --accent-glow: rgba(2, 132, 199, 0.14);
   --accent-secondary: #4F46E5;
+
+  --orange-glow: rgba(251, 146, 60, 0.22);
+  --blue-glow: rgba(2, 132, 199, 0.20);
 
   --asu-gold: #D97706;
   --asu-maroon: #881337;
@@ -146,28 +152,35 @@ button {
 }
 
 /* --------------------------------------------------
-   3. Ambient Atmospheric Glow
+   3. Dynamic Atmospheric Orange/Blue Background
    -------------------------------------------------- */
-.ambient-glow {
+.dynamic-gradient-container {
   position: fixed;
-  top: 15%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 750px;
-  height: 480px;
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 68%);
-  filter: blur(140px);
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
   z-index: 0;
-  transition: opacity 300ms ease;
+  overflow: hidden;
 }
 
-.ambient-glow.glow-secondary {
-  top: 55%;
-  left: 30%;
-  width: 500px;
-  height: 350px;
-  background: radial-gradient(circle, rgba(129, 140, 248, 0.05) 0%, transparent 70%);
+.dynamic-bg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.dynamic-bg-orange {
+  background: radial-gradient(ellipse 110% 75% at 50% 108%, var(--orange-glow) 0%, transparent 72%);
+  opacity: 1;
+}
+
+.dynamic-bg-blue {
+  background: radial-gradient(ellipse 110% 75% at 50% -8%, var(--blue-glow) 0%, transparent 72%);
+  opacity: 0.15;
 }
 
 /* --------------------------------------------------
@@ -309,10 +322,9 @@ button {
   height: 100%;
   overflow: hidden;
   transform-origin: center center;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
   pointer-events: none;
   opacity: 0;
-  filter: blur(28px);
   transform: translate3d(0, 0, 0) scale(0.55);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -534,10 +546,6 @@ button {
   color: var(--text-muted);
 }
 
-#act0-chapter-header {
-  will-change: transform;
-}
-
 /* --------------------------------------------------
    8. Scene 1: About / Perspective
    -------------------------------------------------- */
@@ -624,6 +632,16 @@ button {
 /* --------------------------------------------------
    9. Scene 2: Selected Work (Bento Grid)
    -------------------------------------------------- */
+.section-headline {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: 0.85rem;
+  line-height: 1.2;
+  will-change: transform, opacity;
+}
+
 .section-intro {
   font-size: 0.98rem;
   color: var(--text-secondary);
