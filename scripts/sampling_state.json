@@ -1,6 +1,6 @@
 {
   "current_week_index": 47,
-  "blanket_cursor": 0,
+  "blanket_cursor": 4,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -8,24 +8,17 @@
       "lng": -82.5515,
       "last_surcharge": 0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-11T22:41:42.471704+00:00",
-      "last_monthly_fee": 130
+      "last_checked": "2026-11-22T22:28:46.924698+00:00",
+      "last_monthly_fee": 143.0
     },
     {
       "name": "Gatlinburg Great Smoky Mtns, TN",
       "lat": 35.7143,
       "lng": -83.5102,
       "last_surcharge": 0,
-      "consecutive_zeros": 1,
-      "last_checked": "2026-11-07T23:37:59.450770+00:00"
-    },
-    {
-      "name": "Aspen Roaring Fork, CO",
-      "lat": 39.1911,
-      "lng": -106.837,
-      "last_surcharge": 0,
-      "consecutive_zeros": 1,
-      "last_checked": "2026-11-08T13:20:54.019210+00:00"
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-22T22:28:50.919940+00:00",
+      "last_monthly_fee": 156.0
     },
     {
       "name": "Kalispell Flathead Basin, MT",
@@ -34,14 +27,6 @@
       "last_surcharge": 0,
       "consecutive_zeros": 1,
       "last_checked": "2026-11-08T22:52:32.426498+00:00"
-    },
-    {
-      "name": "Bend Deschutes Corridor, OR",
-      "lat": 44.0582,
-      "lng": -121.3153,
-      "last_surcharge": 0,
-      "consecutive_zeros": 1,
-      "last_checked": "2026-11-09T11:27:18.939748+00:00"
     },
     {
       "name": "Flagstaff Coconino, AZ",
@@ -366,11 +351,11 @@
       "consecutive_zeros": 0
     }
   ],
-  "hotspot_cursor": 0,
+  "hotspot_cursor": 4,
   "stats": {
-    "total_probes_run": 1130,
-    "high_demand_hits_found": 3,
+    "total_probes_run": 1141,
+    "high_demand_hits_found": 4,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-22T19:38:23.853902+00:00"
+  "last_run_timestamp": "2026-11-22T22:29:26.730047+00:00"
 }
