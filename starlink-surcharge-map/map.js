@@ -271,12 +271,21 @@
   }
 
   function formatDate(dStr) {
+    if (!dStr) return 'Awaiting check';
     try {
       const d = new Date(dStr);
-      const days = Math.floor((new Date() - d) / (86400000));
-      if (days <= 0) return 'Today (Live)';
-      if (days === 1) return 'Yesterday';
-      return `${days} days ago`;
+      if (isNaN(d.getTime())) return dStr;
+      const datePart = d.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+      const timePart = d.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+      return `${datePart}, ${timePart}`;
     } catch (e) {
       return dStr;
     }
@@ -659,8 +668,8 @@
             <span class="prop-value font-sans">${cleanLocationName(pt.location_name)}</span>
           </div>
           <div class="prop-row">
-            <span class="prop-name">LAST SAMPLED:</span>
-            <span class="prop-value">${isUnsampled ? 'Awaiting check' : formatDate(pt.sampled_at)}</span>
+            <span class="prop-name">LAST CHECKED:</span>
+            <span class="prop-value">${isUnsampled ? 'Awaiting check' : formatDate(pt.last_checked || pt.sampled_at)}</span>
           </div>
         </div>
         <div class="card-footer">
@@ -733,6 +742,7 @@
             monthly_service_fee: result.total_monthly_fee,
             surcharge_amount: result.surcharge_amount,
             status: result.status,
+            last_checked: result.last_checked || result.timestamp || new Date().toISOString(),
             sampled_at: result.timestamp || new Date().toISOString(),
             location_name: result.location_name || `Coordinate: ${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W`,
             isLiveVerified: true,
@@ -767,6 +777,7 @@
             monthly_service_fee: null,
             surcharge_amount: result.surcharge_amount,
             status: result.status || 'unsampled',
+            last_checked: result.last_checked || result.timestamp || new Date().toISOString(),
             sampled_at: result.timestamp || new Date().toISOString(),
             location_name: result.location_name || `Coordinate (${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W)`,
             isUnsampled: true

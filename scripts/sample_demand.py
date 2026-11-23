@@ -559,6 +559,7 @@ def upsert_batch_to_supabase(records: List[Dict[str, Any]]) -> int:
                     "sample_type": rec["sample_type"],
                     "location_name": rec.get("location_name"),
                     "adjustment_description": rec.get("adjustment_description", "Service Price Adjustment"),
+                    "last_checked": datetime.now(timezone.utc).isoformat(),
                     "sampled_at": datetime.now(timezone.utc).isoformat()
                 }
 

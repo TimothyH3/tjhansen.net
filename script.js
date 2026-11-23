@@ -15,9 +15,7 @@
  * 5. ARCHITECTURAL SPEC DRAWER: Technical deep dives, concurrency specs & metrics
  * 6. INTERACTIVE SIMULATION TOYS:
  *    - Come Together Compass (Census Geocoder & 988 Crisis Wipe)
- *    - Erised AI (DOM Stream & In-Memory Canvas Pipeline)
  *    - Starlink Tracker (Ray-Casting Intersect Query & Surcharge Overlay)
- *    - Healthcare Operations Sim (Discrete Event Queue & Concurrency Surge)
  * 7. UTILITIES: One-click clipboard copy with animated toast notification
  * 8. TERMINAL ENTRANCE: Graceful in-place typing morph for hero title
  * =============================================================================
@@ -543,8 +541,18 @@
 
     // Smooth transition exclusively for button & HUD jumps
     let jumpAnimId = null;
+    let momentumAnimId = null;
+
+    function cancelMomentum() {
+      if (momentumAnimId) {
+        cancelAnimationFrame(momentumAnimId);
+        momentumAnimId = null;
+      }
+    }
+
     function animateScrollTo(dest) {
       if (jumpAnimId) cancelAnimationFrame(jumpAnimId);
+      cancelMomentum();
       const start = currentScroll;
       const distance = dest - start;
       if (Math.abs(distance) < 2) {
@@ -571,6 +579,7 @@
     }
 
     function scrollToAct(actIdx) {
+      cancelMomentum();
       let dest = 0;
       if (actIdx === 0) dest = 0;
       else if (actIdx === 1) dest = M1_TRANS_END;
@@ -602,7 +611,7 @@
     applyScroll(0);
 
     // =========================================================================
-    // Input Listeners: Direct 1:1 Tracking with End-of-Act Cushion
+    // Input Listeners: Direct 1:1 Tracking with End-of-Act Cushion & Touch Momentum
     // =========================================================================
 
     // Mouse Wheel / Trackpad
@@ -621,16 +630,33 @@
         cancelAnimationFrame(jumpAnimId);
         jumpAnimId = null;
       }
+      cancelMomentum();
+      cancelMomentum();
 
       const damp = getActEndDamping(currentScroll, dy);
       applyScroll(currentScroll + dy * damp);
     }, { passive: false });
 
-    // Touch Swipe (Mobile & Tablets)
+    // Touch Handling with Smooth Inertial Momentum Physics (Mobile & Tablets)
     let touchStartY = 0;
+    let touchHistory = []; // stores recent { y, time }
+
     window.addEventListener('touchstart', function (e) {
+      if (document.body.classList.contains('demo-is-open')) return;
+      const specDrawer = document.getElementById('spec-drawer-backdrop');
+      if (specDrawer && specDrawer.classList.contains('open')) return;
+
+      // Finger tap instantly catches/cancels any gliding momentum or jump
+      cancelMomentum();
+      if (jumpAnimId) {
+        cancelAnimationFrame(jumpAnimId);
+        jumpAnimId = null;
+      }
+      cancelMomentum();
+
       if (e.touches && e.touches.length > 0) {
         touchStartY = e.touches[0].clientY;
+        touchHistory = [{ y: touchStartY, time: performance.now() }];
       }
     }, { passive: true });
 
@@ -641,8 +667,15 @@
 
       if (e.touches && e.touches.length > 0) {
         const currentY = e.touches[0].clientY;
+        const now = performance.now();
         const dy = touchStartY - currentY;
         touchStartY = currentY;
+
+        // Keep last 120ms of movement for accurate release velocity
+        touchHistory.push({ y: currentY, time: now });
+        while (touchHistory.length > 1 && (now - touchHistory[0].time) > 120) {
+          touchHistory.shift();
+        }
 
         if (jumpAnimId) {
           cancelAnimationFrame(jumpAnimId);
@@ -654,6 +687,79 @@
       }
     }, { passive: true });
 
+    function handleTouchEnd() {
+      if (document.body.classList.contains('demo-is-open')) return;
+      const specDrawer = document.getElementById('spec-drawer-backdrop');
+      if (specDrawer && specDrawer.classList.contains('open')) return;
+
+      if (touchHistory.length < 2) {
+        touchHistory = [];
+        return;
+      }
+
+      const now = performance.now();
+      const lastPoint = touchHistory[touchHistory.length - 1];
+      // Only compute velocity if finger was actively moving right up to release (< 100ms)
+      if (now - lastPoint.time > 100) {
+        touchHistory = [];
+        return;
+      }
+
+      const firstPoint = touchHistory[0];
+      const dt = lastPoint.time - firstPoint.time;
+      if (dt < 15) {
+        touchHistory = [];
+        return;
+      }
+
+      // totalDy > 0 means finger dragged up (page scrolls down)
+      const totalDy = firstPoint.y - lastPoint.y;
+      let velocity = totalDy / dt; // px/ms
+
+      // Ignore micro-drags
+      if (Math.abs(velocity) < 0.18) {
+        touchHistory = [];
+        return;
+      }
+
+      // Clamp max velocity
+      const maxVelocity = 3.2; // px/ms
+      velocity = Math.max(-maxVelocity, Math.min(maxVelocity, velocity));
+
+      let lastFrameTime = performance.now();
+      const friction = 0.948; // Natural exponential deceleration per 16ms frame
+
+      function momentumStep(frameTime) {
+        const elapsed = Math.min(48, frameTime - lastFrameTime);
+        lastFrameTime = frameTime;
+
+        velocity *= Math.pow(friction, elapsed / 16);
+
+        if (Math.abs(velocity) < 0.02) {
+          momentumAnimId = null;
+          return;
+        }
+
+        const stepDy = velocity * elapsed;
+        const damp = getActEndDamping(currentScroll, stepDy);
+        applyScroll(currentScroll + stepDy * damp);
+
+        if (currentScroll <= 0 || currentScroll >= TOTAL_SCROLL) {
+          momentumAnimId = null;
+          return;
+        }
+
+        momentumAnimId = requestAnimationFrame(momentumStep);
+      }
+
+      cancelMomentum();
+      momentumAnimId = requestAnimationFrame(momentumStep);
+      touchHistory = [];
+    }
+
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+
     // Keyboard Navigation (Arrows, PageUp/Down, Space, Home, End)
     window.addEventListener('keydown', function (e) {
       if (document.body.classList.contains('demo-is-open')) return;
@@ -664,6 +770,7 @@
         cancelAnimationFrame(jumpAnimId);
         jumpAnimId = null;
       }
+      cancelMomentum();
 
       if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
         e.preventDefault();
@@ -890,62 +997,7 @@
       });
     }
 
-    // Simulation 2: Erised AI (Manifest V3)
-    const erisedExtractBtn = document.getElementById('erised-extract-btn');
-    const erisedInjectBtn = document.getElementById('erised-inject-btn');
-    const erisedLatency = document.getElementById('erised-latency-val');
-    const erisedFlow = document.getElementById('erised-flow-val');
-    const erisedLog = document.getElementById('erised-log');
-
-    const sampleScenes = [
-      'Chapter IV: The lantern cast long shadows across the cobblestones, catching mist in amber light.',
-      'Chapter VII: Rain beat against the stained-glass window, reflecting azure geometry along the stone hearth.',
-      'Chapter XII: Beyond the fortress ramparts, a silent fleet glided across the star-strewn harbor.'
-    ];
-    let sceneIdx = 0;
-
-    if (erisedExtractBtn) {
-      erisedExtractBtn.addEventListener('click', function () {
-        const scene = sampleScenes[sceneIdx % sampleScenes.length];
-        sceneIdx++;
-        const randLat = (3.4 + Math.random() * 1.8).toFixed(1);
-
-        if (erisedLatency) erisedLatency.textContent = `${randLat} ms (DOM Parsed)`;
-        if (erisedFlow) erisedFlow.textContent = '0 Reflow (Stable)';
-
-        if (erisedLog) {
-          const now = new Date().toISOString().substring(11, 23);
-          const line1 = document.createElement('div');
-          line1.className = 'term-line text-green';
-          line1.textContent = `[${now}] [DOM-STREAM] Parsed: "${scene.substring(0, 52)}..."`;
-          const line2 = document.createElement('div');
-          line2.className = 'term-line';
-          line2.textContent = `[${now}] [MV3-WORKER] Synthesized prompt payload without external commercial API key.`;
-          erisedLog.appendChild(line1);
-          erisedLog.appendChild(line2);
-          erisedLog.scrollTop = erisedLog.scrollHeight;
-        }
-      });
-    }
-
-    if (erisedInjectBtn) {
-      erisedInjectBtn.addEventListener('click', function () {
-        if (erisedLog) {
-          const now = new Date().toISOString().substring(11, 23);
-          const line1 = document.createElement('div');
-          line1.className = 'term-line text-accent';
-          line1.textContent = `[${now}] [CANVAS-RENDER] In-memory blob created. High-resolution illustration injected.`;
-          const line2 = document.createElement('div');
-          line2.className = 'term-line text-green';
-          line2.textContent = `[${now}] [LAYOUT] Render completed with 0 cumulative layout shift (CLS: 0.000).`;
-          erisedLog.appendChild(line1);
-          erisedLog.appendChild(line2);
-          erisedLog.scrollTop = erisedLog.scrollHeight;
-        }
-      });
-    }
-
-    // Simulation 3: Starlink Tracker
+    // Simulation 2: Starlink Tracker
     const starlinkQueryBtn = document.getElementById('starlink-query-btn');
     const starlinkToggleBtn = document.getElementById('starlink-toggle-btn');
     const starlinkLatency = document.getElementById('starlink-latency-val');
@@ -1004,54 +1056,6 @@
         }
       });
     }
-
-    // Simulation 4: Healthcare Operations Simulation
-    const healthSurgeBtn = document.getElementById('health-surge-btn');
-    const healthTestBtn = document.getElementById('health-test-btn');
-    const healthTps = document.getElementById('health-tps-val');
-    const healthCoverage = document.getElementById('health-coverage-val');
-    const healthQueue = document.getElementById('health-queue-val');
-    const healthLog = document.getElementById('health-log');
-
-    let surgeActive = false;
-
-    if (healthSurgeBtn) {
-      healthSurgeBtn.addEventListener('click', function () {
-        surgeActive = !surgeActive;
-        if (healthTps) healthTps.textContent = surgeActive ? '18,400 events/sec' : '5,200 events/sec';
-        if (healthQueue) healthQueue.textContent = surgeActive ? '39 / 40 ICU Beds (SURGE)' : '34 / 40 ICU Beds';
-
-        if (healthLog) {
-          const now = new Date().toISOString().substring(11, 23);
-          const line1 = document.createElement('div');
-          line1.className = surgeActive ? 'term-line text-accent' : 'term-line text-green';
-          line1.textContent = surgeActive
-            ? `[${now}] [SURGE-ALERT] Mass-casualty triage event injected: 250 arriving patients. Thread pool scaled to 24 workers.`
-            : `[${now}] [STABILIZED] Surge queue drained. Triage returning to nominal baseline throughput.`;
-          healthLog.appendChild(line1);
-          healthLog.scrollTop = healthLog.scrollHeight;
-        }
-      });
-    }
-
-    if (healthTestBtn) {
-      healthTestBtn.addEventListener('click', function () {
-        if (healthCoverage) healthCoverage.textContent = '96.4% Branch (VERIFIED)';
-
-        if (healthLog) {
-          const now = new Date().toISOString().substring(11, 23);
-          const line1 = document.createElement('div');
-          line1.className = 'term-line text-green';
-          line1.textContent = `[${now}] [JUNIT-5] Executed 142 discrete-event unit tests in 184ms. 0 failures.`;
-          const line2 = document.createElement('div');
-          line2.className = 'term-line text-dim';
-          line2.textContent = `[${now}] [JACOCO/SPOTBUGS] 96.4% branch coverage verified. 0 bugs, 0 vulnerability warnings.`;
-          healthLog.appendChild(line1);
-          healthLog.appendChild(line2);
-          healthLog.scrollTop = healthLog.scrollHeight;
-        }
-      });
-    }
   }
 
   // ===========================================================================
@@ -1077,24 +1081,6 @@
         ],
         stack: ['Vue 3', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'Leaflet', 'Pinia', 'Vitest']
       },
-      'erised-ai': {
-        title: 'Erised AI — Dynamic eBook Scene Illustrator',
-        fileTag: 'ERISED_MV3_EXTENSION.spec',
-        image: 'assets/images/project-2.svg',
-        repoUrl: 'https://github.com/TimothyH3/erised-ai',
-        desc: 'Chrome extension generating real-time, context-aware literary scene artwork without external API keys.',
-        benchmark: '< 5ms DOM rendering latency • Zero external commercial API key dependency',
-        architecture: [
-          'Manifest V3 Service Worker: Manages headless browser automation channels without maintaining persistent background page overhead.',
-          'Contextual Passage Chunking: Analyzes narrative paragraphs in the DOM and extracts semantic visual anchors for prompt formulation.',
-          'In-Memory Canvas Pipeline: Streams generated illustration payloads directly to in-memory blob URLs, eliminating disk writes and reading stutter.'
-        ],
-        decisions: [
-          'Decoupled prompt synthesis from the reading DOM to ensure standard EPUB/web page layouts never reflow or lose reader scroll position.',
-          'Configured fallback procedural placeholders during transient network disconnections.'
-        ],
-        stack: ['JavaScript', 'TypeScript', 'Chrome Extensions (MV3)', 'Headless Automation', 'DOM APIs', 'Canvas']
-      },
       'starlink-tracker': {
         title: 'Starlink Congestion & Relocation Tracker',
         fileTag: 'STARLINK_GEOSPATIAL_OVERLAY.spec',
@@ -1112,24 +1098,6 @@
           'Built automated Python pipeline to fetch and refresh cell state delta updates.'
         ],
         stack: ['Vue 3', 'TypeScript', 'Python', 'GeoJSON', 'Leaflet', 'Pinia']
-      },
-      'healthcare-sim': {
-        title: 'Healthcare Operations Simulation — Enterprise Logistics',
-        fileTag: 'HEALTHCARE_LOGISTICS_JAVA.spec',
-        image: 'assets/images/project-4.svg',
-        repoUrl: 'https://github.com/TimothyH3',
-        desc: 'Enterprise discrete-event hospital logistics engine and resource optimization simulator engineered in Java with comprehensive test coverage.',
-        benchmark: 'Simulates 50,000 patient-nurse interactions in < 350ms • 96.4% branch coverage via JUnit 5',
-        architecture: [
-          'Thread-Safe Event Queue: ConcurrentPriorityQueue schedules asynchronous triage assessments, bed transfers, and doctor consultations.',
-          'Resource Contention Arbiter: Optimizes ICU bed utilization, preventing deadlock during simultaneous emergency room arrivals.',
-          'CI/CD Quality Gate: Enforces zero SpotBugs warnings, Checkstyle formatting, and 95%+ JaCoCo branch coverage on every commit.'
-        ],
-        decisions: [
-          'Adopted immutable patient event records to guarantee deterministic simulation reproducibility.',
-          'Built JavaFX telemetry dashboards to visualize real-time bed utilization bottlenecks.'
-        ],
-        stack: ['Java 17', 'JavaFX', 'JUnit 5', 'JaCoCo', 'SpotBugs', 'Checkstyle', 'Concurrency']
       }
     };
 
