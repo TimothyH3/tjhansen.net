@@ -1,5 +1,5 @@
 {
-  "current_week_index": 47,
+  "current_week_index": 48,
   "blanket_cursor": 4,
   "known_hotspots": [
     {
@@ -37,14 +37,6 @@
       "last_checked": "2026-11-10T04:37:51.997014+00:00"
     },
     {
-      "name": "Show Low White Mtns, AZ",
-      "lat": 34.2542,
-      "lng": -110.0831,
-      "last_surcharge": 0,
-      "consecutive_zeros": 1,
-      "last_checked": "2026-11-10T20:49:04.149489+00:00"
-    },
-    {
       "name": "Minocqua Northwoods, WI",
       "lat": 45.8944,
       "lng": -89.6886,
@@ -59,7 +51,7 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-14T22:58:22.055913+00:00"
+      "last_checked": "2026-11-23T00:50:16.186929+00:00"
     },
     {
       "name": "76QWCJ7H+QJ",
@@ -68,14 +60,16 @@
       "last_surcharge": 0,
       "last_monthly_fee": 130.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-17T03:50:43.846398+00:00"
+      "last_checked": "2026-11-23T00:50:26.136594+00:00"
     },
     {
       "name": "Boone Watauga High Country, NC",
       "lat": 36.2168,
       "lng": -81.6758,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 0,
+      "last_monthly_fee": 60.5,
+      "last_checked": "2026-11-23T00:50:33.943095+00:00"
     },
     {
       "name": "Chattanooga Cumberland Plateau, TN",
@@ -349,13 +343,22 @@
       "lng": -94.1574,
       "last_surcharge": 0,
       "consecutive_zeros": 0
+    },
+    {
+      "name": "JWC4+J3 Islandia, FL, USA",
+      "lat": 25.6216,
+      "lng": -80.0948,
+      "last_surcharge": 0,
+      "last_monthly_fee": 130.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-23T00:50:45.825169+00:00"
     }
   ],
-  "hotspot_cursor": 4,
+  "hotspot_cursor": 8,
   "stats": {
-    "total_probes_run": 1141,
-    "high_demand_hits_found": 4,
+    "total_probes_run": 1151,
+    "high_demand_hits_found": 5,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-22T22:29:26.730047+00:00"
+  "last_run_timestamp": "2026-11-23T00:51:11.171950+00:00"
 }
