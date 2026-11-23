@@ -260,6 +260,47 @@ html, body {
   gap: 16px;
 }
 
+/* Map Display Mode Segmented Switcher */
+.map-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 180ms ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.mode-pill-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.mode-pill-btn.active {
+  background: var(--accent);
+  color: #041019;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.45);
+}
+
 .status-badge-container {
   display: flex;
   align-items: center;
@@ -382,7 +423,7 @@ html, body {
 .starlink-cell-hex:hover {
   stroke: #ffffff !important;
   stroke-width: 2.8px !important;
-  fill-opacity: 0.94 !important;
+  fill-opacity: 0.78 !important;
   filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.7));
 }
 
@@ -414,6 +455,39 @@ html, body {
 
 .starlink-aura-sold_out {
   fill: url(#hex-aura-sold_out) !important;
+  stroke: none !important;
+}
+
+/* Macro Mesh Blended Gradient Layer (Overview Mode) */
+.starlink-mesh-aura {
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: blur(10px);
+  opacity: 0.88;
+}
+
+.starlink-mesh-congested {
+  fill: url(#mesh-aura-congested) !important;
+  stroke: none !important;
+}
+
+.starlink-mesh-high_demand {
+  fill: url(#mesh-aura-high_demand) !important;
+  stroke: none !important;
+}
+
+.starlink-mesh-standard {
+  fill: url(#mesh-aura-standard) !important;
+  stroke: none !important;
+}
+
+.starlink-mesh-discounted {
+  fill: url(#mesh-aura-discounted) !important;
+  stroke: none !important;
+}
+
+.starlink-mesh-sold_out {
+  fill: url(#mesh-aura-sold_out) !important;
   stroke: none !important;
 }
 

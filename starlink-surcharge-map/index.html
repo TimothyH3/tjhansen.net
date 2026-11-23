@@ -71,6 +71,14 @@
 
       <!-- Controls -->
       <div class="hud-controls">
+        <div class="map-mode-toggle font-mono" role="group" aria-label="Map Display Mode">
+          <button id="view-mode-cells" class="mode-pill-btn active" title="Show authentic Starlink H3 hexagonal cells">
+            <span>HEX CELLS</span>
+          </button>
+          <button id="view-mode-blended" class="mode-pill-btn" title="Show high-level blended regional gradient map (no cells)">
+            <span>BLENDED OVERVIEW</span>
+          </button>
+        </div>
         <div class="status-badge-container">
           <span id="status-dot" class="pulse-dot"></span>
           <span id="status-text" class="font-mono">SUPABASE SYNCED</span>
