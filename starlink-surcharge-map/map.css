@@ -375,21 +375,20 @@ html, body {
 /* Starlink Hexagon Cells & Radial Fading Auras */
 .starlink-cell-hex {
   cursor: pointer;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
+  filter: none !important;
   transition: stroke 160ms ease, stroke-width 160ms ease, fill-opacity 160ms ease;
 }
 
 .starlink-cell-hex:hover {
   stroke: #ffffff !important;
   stroke-width: 2.8px !important;
-  fill-opacity: 0.78 !important;
-  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.7));
+  fill-opacity: 0.95 !important;
+  filter: none !important;
 }
 
 .starlink-hex-aura {
   pointer-events: none;
-  mix-blend-mode: screen;
-  filter: blur(2px);
+  opacity: 1.0;
 }
 
 .starlink-aura-congested {

@@ -234,87 +234,87 @@
 
     const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
     defs.innerHTML = `
-      <!-- Standard cell auras (zoomed in): starts at 0.60 opacity to match cell and stays strong through cell core -->
+      <!-- Standard cell auras (zoomed in): high visibility, bold center, smooth fade -->
       <radialGradient id="hex-aura-congested" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#f97316" stop-opacity="0.60" />
-        <stop offset="20%" stop-color="#f97316" stop-opacity="0.60" />
-        <stop offset="40%" stop-color="#f97316" stop-opacity="0.45" />
-        <stop offset="65%" stop-color="#f97316" stop-opacity="0.25" />
-        <stop offset="85%" stop-color="#f97316" stop-opacity="0.08" />
+        <stop offset="0%" stop-color="#f97316" stop-opacity="0.88" />
+        <stop offset="22%" stop-color="#f97316" stop-opacity="0.84" />
+        <stop offset="45%" stop-color="#f97316" stop-opacity="0.62" />
+        <stop offset="70%" stop-color="#f97316" stop-opacity="0.32" />
+        <stop offset="88%" stop-color="#f97316" stop-opacity="0.10" />
         <stop offset="100%" stop-color="#f97316" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="hex-aura-high_demand" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.60" />
-        <stop offset="20%" stop-color="#ef4444" stop-opacity="0.60" />
-        <stop offset="40%" stop-color="#ef4444" stop-opacity="0.45" />
-        <stop offset="65%" stop-color="#ef4444" stop-opacity="0.25" />
-        <stop offset="85%" stop-color="#ef4444" stop-opacity="0.08" />
+        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.88" />
+        <stop offset="22%" stop-color="#ef4444" stop-opacity="0.84" />
+        <stop offset="45%" stop-color="#ef4444" stop-opacity="0.62" />
+        <stop offset="70%" stop-color="#ef4444" stop-opacity="0.32" />
+        <stop offset="88%" stop-color="#ef4444" stop-opacity="0.10" />
         <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="hex-aura-standard" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.60" />
-        <stop offset="20%" stop-color="#38bdf8" stop-opacity="0.60" />
-        <stop offset="40%" stop-color="#38bdf8" stop-opacity="0.45" />
-        <stop offset="65%" stop-color="#38bdf8" stop-opacity="0.25" />
-        <stop offset="85%" stop-color="#38bdf8" stop-opacity="0.08" />
+        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.88" />
+        <stop offset="22%" stop-color="#38bdf8" stop-opacity="0.84" />
+        <stop offset="45%" stop-color="#38bdf8" stop-opacity="0.62" />
+        <stop offset="70%" stop-color="#38bdf8" stop-opacity="0.32" />
+        <stop offset="88%" stop-color="#38bdf8" stop-opacity="0.10" />
         <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="hex-aura-discounted" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#10b981" stop-opacity="0.60" />
-        <stop offset="20%" stop-color="#10b981" stop-opacity="0.60" />
-        <stop offset="40%" stop-color="#10b981" stop-opacity="0.45" />
-        <stop offset="65%" stop-color="#10b981" stop-opacity="0.25" />
-        <stop offset="85%" stop-color="#10b981" stop-opacity="0.08" />
+        <stop offset="0%" stop-color="#10b981" stop-opacity="0.88" />
+        <stop offset="22%" stop-color="#10b981" stop-opacity="0.84" />
+        <stop offset="45%" stop-color="#10b981" stop-opacity="0.62" />
+        <stop offset="70%" stop-color="#10b981" stop-opacity="0.32" />
+        <stop offset="88%" stop-color="#10b981" stop-opacity="0.10" />
         <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="hex-aura-sold_out" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#c084fc" stop-opacity="0.60" />
-        <stop offset="20%" stop-color="#c084fc" stop-opacity="0.60" />
-        <stop offset="40%" stop-color="#c084fc" stop-opacity="0.45" />
-        <stop offset="65%" stop-color="#c084fc" stop-opacity="0.25" />
-        <stop offset="85%" stop-color="#c084fc" stop-opacity="0.08" />
+        <stop offset="0%" stop-color="#c084fc" stop-opacity="0.88" />
+        <stop offset="22%" stop-color="#c084fc" stop-opacity="0.84" />
+        <stop offset="45%" stop-color="#c084fc" stop-opacity="0.62" />
+        <stop offset="70%" stop-color="#c084fc" stop-opacity="0.32" />
+        <stop offset="88%" stop-color="#c084fc" stop-opacity="0.10" />
         <stop offset="100%" stop-color="#c084fc" stop-opacity="0" />
       </radialGradient>
 
       <!-- Macro Blended Mesh (zoomed out): flat regional gradient map without borders -->
       <radialGradient id="mesh-aura-congested" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#f97316" stop-opacity="0.60" />
-        <stop offset="25%" stop-color="#f97316" stop-opacity="0.55" />
-        <stop offset="50%" stop-color="#f97316" stop-opacity="0.38" />
-        <stop offset="75%" stop-color="#f97316" stop-opacity="0.18" />
-        <stop offset="90%" stop-color="#f97316" stop-opacity="0.06" />
+        <stop offset="0%" stop-color="#f97316" stop-opacity="0.88" />
+        <stop offset="25%" stop-color="#f97316" stop-opacity="0.80" />
+        <stop offset="50%" stop-color="#f97316" stop-opacity="0.55" />
+        <stop offset="75%" stop-color="#f97316" stop-opacity="0.25" />
+        <stop offset="90%" stop-color="#f97316" stop-opacity="0.08" />
         <stop offset="100%" stop-color="#f97316" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="mesh-aura-high_demand" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.60" />
-        <stop offset="25%" stop-color="#ef4444" stop-opacity="0.55" />
-        <stop offset="50%" stop-color="#ef4444" stop-opacity="0.38" />
-        <stop offset="75%" stop-color="#ef4444" stop-opacity="0.18" />
-        <stop offset="90%" stop-color="#ef4444" stop-opacity="0.06" />
+        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.88" />
+        <stop offset="25%" stop-color="#ef4444" stop-opacity="0.80" />
+        <stop offset="50%" stop-color="#ef4444" stop-opacity="0.55" />
+        <stop offset="75%" stop-color="#ef4444" stop-opacity="0.25" />
+        <stop offset="90%" stop-color="#ef4444" stop-opacity="0.08" />
         <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="mesh-aura-standard" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.60" />
-        <stop offset="25%" stop-color="#38bdf8" stop-opacity="0.55" />
-        <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.38" />
-        <stop offset="75%" stop-color="#38bdf8" stop-opacity="0.18" />
-        <stop offset="90%" stop-color="#38bdf8" stop-opacity="0.06" />
+        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.88" />
+        <stop offset="25%" stop-color="#38bdf8" stop-opacity="0.80" />
+        <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.55" />
+        <stop offset="75%" stop-color="#38bdf8" stop-opacity="0.25" />
+        <stop offset="90%" stop-color="#38bdf8" stop-opacity="0.08" />
         <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="mesh-aura-discounted" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#10b981" stop-opacity="0.60" />
-        <stop offset="25%" stop-color="#10b981" stop-opacity="0.55" />
-        <stop offset="50%" stop-color="#10b981" stop-opacity="0.38" />
-        <stop offset="75%" stop-color="#10b981" stop-opacity="0.18" />
-        <stop offset="90%" stop-color="#10b981" stop-opacity="0.06" />
+        <stop offset="0%" stop-color="#10b981" stop-opacity="0.88" />
+        <stop offset="25%" stop-color="#10b981" stop-opacity="0.80" />
+        <stop offset="50%" stop-color="#10b981" stop-opacity="0.55" />
+        <stop offset="75%" stop-color="#10b981" stop-opacity="0.25" />
+        <stop offset="90%" stop-color="#10b981" stop-opacity="0.08" />
         <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
       </radialGradient>
       <radialGradient id="mesh-aura-sold_out" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#c084fc" stop-opacity="0.60" />
-        <stop offset="25%" stop-color="#c084fc" stop-opacity="0.55" />
-        <stop offset="50%" stop-color="#c084fc" stop-opacity="0.38" />
-        <stop offset="75%" stop-color="#c084fc" stop-opacity="0.18" />
-        <stop offset="90%" stop-color="#c084fc" stop-opacity="0.06" />
+        <stop offset="0%" stop-color="#c084fc" stop-opacity="0.88" />
+        <stop offset="25%" stop-color="#c084fc" stop-opacity="0.80" />
+        <stop offset="50%" stop-color="#c084fc" stop-opacity="0.55" />
+        <stop offset="75%" stop-color="#c084fc" stop-opacity="0.25" />
+        <stop offset="90%" stop-color="#c084fc" stop-opacity="0.08" />
         <stop offset="100%" stop-color="#c084fc" stop-opacity="0" />
       </radialGradient>
     `;
@@ -609,9 +609,9 @@
       const hex = L.polygon(hexCoords, {
         color: '#ffffff',
         weight: 1.8,
-        opacity: 0.75,
+        opacity: 0.90,
         fillColor: color,
-        fillOpacity: 0.60, // Translucent to clearly reveal underlying basemap roads, cities, topography
+        fillOpacity: 0.85,
         className: 'starlink-cell-hex'
       });
 
@@ -630,7 +630,7 @@
           weight: 2.8,
           color: '#ffffff',
           opacity: 1.0,
-          fillOpacity: 0.85
+          fillOpacity: 0.98
         });
       });
 
@@ -638,8 +638,8 @@
         this.setStyle({
           weight: 1.8,
           color: '#ffffff',
-          opacity: 0.75,
-          fillOpacity: 0.60
+          opacity: 0.90,
+          fillOpacity: 0.85
         });
       });
 
