@@ -65,6 +65,11 @@
       if (themeModeText) {
         themeModeText.textContent = resolvedTheme.toUpperCase();
       }
+
+      if (themeToggleBtn) {
+        themeToggleBtn.setAttribute('aria-checked', resolvedTheme === 'dark' ? 'true' : 'false');
+        themeToggleBtn.setAttribute('title', `Current theme: ${resolvedTheme === 'dark' ? 'Dark' : 'Light'} (click to switch)`);
+      }
     }
 
     applyTheme(savedTheme);
