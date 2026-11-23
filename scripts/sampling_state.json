@@ -1,6 +1,6 @@
 {
   "current_week_index": 48,
-  "blanket_cursor": 4,
+  "blanket_cursor": 9,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -76,7 +76,9 @@
       "lat": 35.0456,
       "lng": -85.3097,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 60.5,
+      "last_checked": "2026-11-23T16:07:11.318029+00:00"
     },
     {
       "name": "Knoxville Ridge Corridor, TN",
@@ -354,11 +356,11 @@
       "last_checked": "2026-11-23T00:50:45.825169+00:00"
     }
   ],
-  "hotspot_cursor": 8,
+  "hotspot_cursor": 9,
   "stats": {
-    "total_probes_run": 1151,
+    "total_probes_run": 1157,
     "high_demand_hits_found": 5,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-23T00:51:11.171950+00:00"
+  "last_run_timestamp": "2026-11-23T16:07:39.312645+00:00"
 }
