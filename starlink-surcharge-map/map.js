@@ -124,7 +124,7 @@
   // Authentic pricing resolver: Base Plan + Service Price Adjustment = Total Monthly Fee
   function getPointPricing(pt) {
     const surcharge = pt.surcharge_amount || 0;
-    const isUnsampled = !!pt.isUnsampled || pt.status === 'unsampled' || 
+    const isUnsampled = !!pt.isUnsampled || pt.status === 'unsampled' ||
       (pt.monthly_service_fee === null && pt.total_monthly_fee === null && pt.base_service_fee === null);
 
     if (isUnsampled) {
@@ -499,17 +499,7 @@
 
       // Hover tooltip showing exact cheapest rate tier and surcharge if any
       let tipText = '';
-      if (isSold) {
-        tipText = 'Unavailable (Capacity Sold Out)';
-      } else if (fee >= 170) {
-        tipText = `${formatMoney(fee)}/mo (Red: $170+ High Cost)` + (s > 0 ? ` [+$${s} Surcharge]` : '');
-      } else if (fee >= 130) {
-        tipText = `${formatMoney(fee)}/mo (Orange: $130–$170 Congestion Adjusted)` + (s > 0 ? ` [+$${s} Surcharge]` : '');
-      } else if (fee >= 85) {
-        tipText = `${formatMoney(fee)}/mo (Blue: $85–$130 Standard Rate)`;
-      } else {
-        tipText = `${formatMoney(fee)}/mo (Green: $55–$85 Cheapest / Discount)`;
-      }
+      tipText = `${formatMoney(fee)}/mo` + (s > 0 ? ` [+$${s} Surcharge]` : '');
 
       hex.bindTooltip(tipText, {
         className: 'font-mono starlink-hex-tooltip',
@@ -597,20 +587,20 @@
     const cost = totalMonthly !== null ? totalMonthly : 120;
     let tierClass = isSold ? 'tier-waitlist' :
       cost >= 170 ? 'tier-high' :
-      cost >= 130 ? 'tier-congested' :
-      cost >= 85 ? 'tier-standard' :
-      'tier-discount';
+        cost >= 130 ? 'tier-congested' :
+          cost >= 85 ? 'tier-standard' :
+            'tier-discount';
 
     let tierTitle = isSold ? 'UNAVAILABLE (SOLD OUT)' :
       cost >= 170 ? '$170+ HIGH CONGESTION COST' :
-      cost >= 130 ? '$130–$170 CONGESTION ADJUSTED' :
-      cost >= 85 ? '$85–$130 STANDARD BASE RATE' :
-      isUnsampled ? 'UNSAMPLED CELL' :
-      '$55–$85 CHEAPEST / DISCOUNTED';
+        cost >= 130 ? '$130–$170 CONGESTION ADJUSTED' :
+          cost >= 85 ? '$85–$130 STANDARD BASE RATE' :
+            isUnsampled ? 'UNSAMPLED CELL' :
+              '$55–$85 CHEAPEST / DISCOUNTED';
 
     let feeDisplay = isUnsampled ? 'PENDING' : `${formatMoney(totalMonthly)}/mo`;
 
-    const cacheLabel = isLive 
+    const cacheLabel = isLive
       ? 'Verified Live from Starlink Checkout'
       : distKm !== null && distKm !== undefined
         ? (distKm === 0 ? 'Verified Ingested Node' : `Ingested Sample (${distKm.toFixed(1)} km away)`)
@@ -675,14 +665,14 @@
         </div>
         <div class="card-footer">
           <button id="btn-live-worker" class="worker-action-btn font-mono">
-            <span>⚡ CHECK LIVE STARLINK SERVICE COST</span>
+            <span>CHECK SERVICE COST</span>
           </button>
           <p class="card-note font-sans">
-            ${isLive 
-              ? 'Directly qualified from Starlink checkout session via Cloudflare Worker proxy.' 
-              : isUnsampled 
-                ? 'Click above to query live Starlink address qualification and checkout pricing.' 
-                : 'Verified sample from Supabase PostGIS.'}
+            ${isLive
+        ? 'Directly qualified from Starlink checkout session via Cloudflare Worker proxy.'
+        : isUnsampled
+          ? 'Click above to query live Starlink address qualification and checkout pricing.'
+          : 'Verified sample from Supabase PostGIS.'}
           </p>
         </div>
       </div>
@@ -784,7 +774,7 @@
         }
       } else {
         let errBody = '';
-        try { errBody = await resp.text(); } catch (e) {}
+        try { errBody = await resp.text(); } catch (e) { }
         displayLiveQueryError(lat, lng, `HTTP ${resp.status} (${resp.statusText}): ${errBody || 'Proxy returned an error'}`, targetUrl);
       }
     } catch (e) {
@@ -1012,7 +1002,7 @@
       sidebarToggle.addEventListener('click', function () {
         sidebar.classList.toggle('collapsed');
         const isCollapsed = sidebar.classList.contains('collapsed');
-        this.querySelector('span').textContent = isCollapsed ? 'PANEL' : 'HIDE';
+        this.querySelector('span').textContent = isCollapsed ? 'DETAILS' : 'HIDE';
         setTimeout(() => map.invalidateSize(), 250);
       });
     }

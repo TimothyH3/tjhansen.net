@@ -314,6 +314,14 @@ def generate_us_blanket_hex_grid(spacing_km: float = 115.0, week_offset: int = 0
         lat += lat_step * 0.75  # Hexagonal vertical step height
         row += 1
 
+    # Interleave points across the nation so each batch samples nationwide rather than clustering by latitude line
+    n = len(points)
+    if n > 0:
+        stride = 71
+        while math.gcd(stride, n) != 1:
+            stride += 2
+        return [points[(i * stride) % n] for i in range(n)]
+
     return points
 
 

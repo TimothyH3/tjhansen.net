@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Starlink Service Cost Map — Timothy Hansen</title>
-  
-  <meta name="description" content="Interactive geospatial map tracking Starlink monthly service costs ($55 Regional Discount, $120 Standard, $130+ Congestion Adjustment) and upfront congestion surcharges across the United States.">
+
+  <meta name="description"
+    content="Interactive geospatial map tracking Starlink monthly service costs ($55 Regional Discount, $120 Standard, $130+ Congestion Adjustment) and upfront congestion surcharges across the United States.">
   <meta name="author" content="Timothy Hansen">
   <link rel="canonical" href="https://tjhansen.net/starlink-surcharge-map">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Starlink Service Cost & Congestion Fee Map">
-  <meta property="og:description" content="Real-time interactive US map tracking Starlink regional monthly subscription costs ($55–$130+/mo) and demand surcharges powered by PostGIS and Cloudflare Workers.">
+  <meta property="og:description"
+    content="Real-time interactive US map tracking Starlink regional monthly subscription costs ($55–$130+/mo) and demand surcharges powered by PostGIS and Cloudflare Workers.">
   <meta property="og:url" content="https://tjhansen.net/starlink-surcharge-map">
   <meta property="og:type" content="website">
 
@@ -20,11 +23,13 @@
   <link rel="preload" href="fonts/D-DIN-Bold.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
   <!-- Native Stylesheet -->
   <link rel="stylesheet" href="map.css">
 </head>
+
 <body>
 
   <!-- Ambient Glow Overlays -->
@@ -45,25 +50,20 @@
         </a>
         <span class="hud-divider">/</span>
         <div class="hud-title-group">
-          <h1 class="hud-title">Starlink Service Cost Map</h1>
-          <span class="hud-badge font-mono">LIVE TELEMETRY</span>
+          <h1 class="hud-title">Starlink Residential Cost Map</h1>
         </div>
       </div>
 
       <!-- Quick Search Bar -->
       <div class="hud-search-bar">
         <div class="search-input-wrapper">
-          <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input
-            type="text"
-            id="search-input"
-            class="search-input font-sans"
-            placeholder="Search US address or city (e.g. Denver CO, Asheville NC, Dallas TX)..."
-            autocomplete="off"
-          />
+          <input type="text" id="search-input" class="search-input font-sans"
+            placeholder="Search US address or city (e.g. Denver CO, Asheville NC, Dallas TX)..." autocomplete="off" />
           <button id="btn-clear-search" class="search-clear-btn" aria-label="Clear Search">✕</button>
         </div>
         <ul id="search-dropdown" class="search-dropdown"></ul>
@@ -99,31 +99,31 @@
           <label class="legend-row">
             <input type="checkbox" id="filter-tierDiscount" checked />
             <span class="swatch swatch-green"></span>
-            <span>$55–$85 Cheapest / Discount</span>
+            <span>$0–$85</span>
             <span class="tier-badge" id="count-discount">(-)</span>
           </label>
           <label class="legend-row">
             <input type="checkbox" id="filter-tierStandard" checked />
             <span class="swatch swatch-cyan"></span>
-            <span>$85–$130 Standard Base Rate</span>
+            <span>$85–$130</span>
             <span class="tier-badge" id="count-standard">(-)</span>
           </label>
           <label class="legend-row">
             <input type="checkbox" id="filter-tierCongested" checked />
             <span class="swatch swatch-orange"></span>
-            <span>$130–$170 Congestion Adjusted</span>
+            <span>$130–$170</span>
             <span class="tier-badge" id="count-congested">(-)</span>
           </label>
           <label class="legend-row">
             <input type="checkbox" id="filter-tierSurcharge" checked />
             <span class="swatch swatch-red"></span>
-            <span>$170+ High Congestion Cost</span>
+            <span>$170+</span>
             <span class="tier-badge" id="count-surcharge">(-)</span>
           </label>
           <label class="legend-row">
             <input type="checkbox" id="filter-tierSoldOut" checked />
             <span class="swatch swatch-purple"></span>
-            <span>Unavailable (Sold Out)</span>
+            <span>Unavailable</span>
             <span class="tier-badge" id="count-sold">(-)</span>
           </label>
         </div>
@@ -148,7 +148,8 @@
           <div id="inspector-content">
             <div class="empty-state">
               <div class="empty-state-icon">🛰️</div>
-              <p class="empty-state-text">Click anywhere on the map or search an address to inspect local Starlink monthly service rates and congestion fees.</p>
+              <p class="empty-state-text">Click anywhere on the map or search an address to inspect local Starlink
+                monthly service rates and congestion fees.</p>
             </div>
           </div>
         </section>
@@ -158,7 +159,8 @@
   </div>
 
   <!-- Leaflet Library -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- Uber H3 Discrete Global Grid Library (Official Starlink Map Resolution 5) -->
   <script src="h3-js.umd.js"></script>
@@ -166,4 +168,5 @@
   <!-- Application Engine -->
   <script src="map.js"></script>
 </body>
+
 </html>
