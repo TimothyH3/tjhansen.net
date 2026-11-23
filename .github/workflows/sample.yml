@@ -2,14 +2,14 @@ name: Starlink Adaptive Surcharge Sampler
 
 on:
   schedule:
-    # Runs every 20 minutes (at :05, :25, :45) to cycle the ~948 CONUS lattice cells in ~13 days
-    - cron: '5,25,45 * * * *'
+    # Runs once an hour (at minute 17) to probe 6 coordinates per hour (~1-week full CONUS cycle)
+    - cron: '17 * * * *'
   workflow_dispatch:
     inputs:
       batch_size:
-        description: 'Number of blanket hex coordinates to probe'
+        description: 'Number of coordinates to probe per batch'
         required: false
-        default: '1'
+        default: '6'
       hotspots_only:
         description: 'Only probe known hotspots list (true/false)'
         required: false
@@ -56,7 +56,7 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             FLAGS="$FLAGS --dry-run"
           fi
-          BATCH_SIZE="${{ github.event.inputs.batch_size || '1' }}"
+          BATCH_SIZE="${{ github.event.inputs.batch_size || '6' }}"
           python scripts/sample_demand.py --batch-size "$BATCH_SIZE" $FLAGS
 
       - name: Persist Sampling State

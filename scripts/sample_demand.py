@@ -351,8 +351,8 @@ def probe_starlink_availability(lat: float, lng: float) -> Optional[Dict[str, An
 
     for attempt in range(max_retries):
         try:
-            # Jitter delay (1.5 to 3.5 seconds) to avoid rate limits
-            jitter = random.uniform(1.5, 3.5)
+            # Polite human browsing delay (3.5 to 6.5 seconds) to avoid any server strain
+            jitter = random.uniform(3.5, 6.5)
             time.sleep(jitter)
 
             # 1. Reverse-geocode coordinate
@@ -363,6 +363,9 @@ def probe_starlink_availability(lat: float, lng: float) -> Optional[Dict[str, An
                 headers=browser_headers,
                 timeout=12.0
             )
+            if rg_code == 429:
+                logger.warning("Starlink returned HTTP 429 (Too Many Requests). Circuit breaker tripped.")
+                return None
             if rg_code != 200 or not isinstance(rg_data, dict):
                 logger.warning(f"Reverse geocode returned HTTP {rg_code} on attempt {attempt+1}")
                 continue
@@ -642,7 +645,7 @@ def save_sampling_state(state: Dict[str, Any]):
 # ---------------------------------------------------------------------------
 # ADAPTIVE BATCH RUNNER
 # ---------------------------------------------------------------------------
-def run_sampling_batch(batch_size: int = 1, hotspots_only: bool = False, dry_run: bool = False):
+def run_sampling_batch(batch_size: int = 6, hotspots_only: bool = False, dry_run: bool = False):
     """
     Executes a single micro-batch:
     - 1-2 known hotspots checked first.
@@ -669,21 +672,11 @@ def run_sampling_batch(batch_size: int = 1, hotspots_only: bool = False, dry_run
     hotspots_checked = 0
     if hotspots_only:
         max_hotspots_per_batch = min(len(hotspots), batch_size)
-        remaining_blanket_quota = 0
-    elif batch_size == 1:
-        # Micro-batch (e.g. 1 cell every 20 minutes to complete the ~948 cell lattice in ~13 days)
-        # 3 out of 4 runs traverse the blanket lattice; every 4th run re-verifies an active hotspot
-        run_count = state.get("stats", {}).get("total_runs", 0)
-        state.setdefault("stats", {})["total_runs"] = run_count + 1
-        if run_count % 4 == 0 and hotspots:
-            max_hotspots_per_batch = 1
-            remaining_blanket_quota = 0
-        else:
-            max_hotspots_per_batch = 0
-            remaining_blanket_quota = 1
     else:
-        max_hotspots_per_batch = min(len(hotspots), max(1, batch_size // 4))
-        remaining_blanket_quota = max(1, batch_size - max_hotspots_per_batch)
+        # Check 1 priority hotspot per batch (leaving 5 coordinates for blanket lattice in a batch of 6)
+        max_hotspots_per_batch = min(len(hotspots), 1 if batch_size <= 6 else max(1, batch_size // 4))
+
+    remaining_blanket_quota = max(0, batch_size - max_hotspots_per_batch)
 
     while hotspots and hotspots_checked < max_hotspots_per_batch:
         hotspot_idx = state.get("hotspot_cursor", 0) % len(hotspots)
@@ -864,7 +857,7 @@ def run_sampling_batch(batch_size: int = 1, hotspots_only: bool = False, dry_run
 # ---------------------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser(description="Starlink Adaptive Sparse Congestion Sampler")
-    parser.add_argument("--batch-size", type=int, default=1, help="Number of blanket grid coordinates to probe in this run")
+    parser.add_argument("--batch-size", type=int, default=6, help="Number of coordinates to probe in this run")
     parser.add_argument("--hotspots-only", action="store_true", help="Only probe known hotspots; skip blanket grid")
     parser.add_argument("--dry-run", action="store_true", help="Probe endpoints without writing to Supabase")
     parser.add_argument("--reset-state", action="store_true", help="Reset cursor to 0 and reinitialize state file")
