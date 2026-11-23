@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timothy Hansen — Full-Stack Software Engineer &amp; LLM Tooling Developer</title>
+
+  <!-- =========================================================================
+       SEO & METADATA
+       ========================================================================= -->
+  <meta name="description"
+    content="Full-Stack Software Engineer &amp; LLM Tooling Developer graduating May 2026 with a B.S. in Software Engineering from Arizona State University. Local browser automation, geospatial web, and distributed systems.">
+  <meta name="author" content="Timothy Hansen">
+  <meta name="keywords"
+    content="Timothy Hansen, Software Engineer, LLM Tooling Developer, Full-Stack Developer, ASU, Arizona State University, Vue 3, TypeScript, Python, Node.js">
+
+  <!-- Canonical & Social Sharing (OpenGraph) -->
+  <link rel="canonical" href="https://tjhansen.net">
+  <meta property="og:title" content="Timothy Hansen — Full-Stack Software Engineer &amp; LLM Tooling Developer">
+  <meta property="og:description"
+    content="Full-Stack Software Engineer &amp; LLM Tooling Developer graduating May 2026 with a B.S. in Software Engineering from Arizona State University.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tjhansen.net">
+
+  <!-- =========================================================================
+       ZERO-FLASH THEME LOADER
+       ========================================================================= -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('portfolio-theme-mode');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = (saved === 'light' || saved === 'dark') ? saved : (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
+  <!-- =========================================================================
+       GITHUB PAGES SPA ROUTING FALLBACK
+       ========================================================================= -->
+  <script>
+    (function (l) {
+      if (l.search[1] === '/') {
+        var decoded = l.search.slice(1).split('&').map(function (s) {
+          return s.replace(/~and~/g, '&');
+        }).join('?');
+        var target = l.pathname.slice(0, -1) + decoded + l.hash;
+        if (target.indexOf('/starlink-surcharge-map') !== -1 || target.indexOf('/StarlinkSurchargeMap') !== -1) {
+          window.location.replace('/starlink-surcharge-map/');
+        } else {
+          window.history.replaceState(null, null, target);
+        }
+      }
+    })(window.location);
+  </script>
+
+  <!-- =========================================================================
+       TYPOGRAPHY: Inter (Sans) & JetBrains Mono (Code/Mono)
+       ========================================================================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Main Stylesheet (bump query ?v= to clear browser cache on updates) -->
+  <link rel="stylesheet" crossorigin href="/assets/index-CvX0vz9H.css">
+</head>
+
+<body>
+
+  <!-- =========================================================================
+       DYNAMIC BACKGROUND
+       ========================================================================= -->
+  <div class="dynamic-gradient-container" id="dynamic-gradient-bg" aria-hidden="true">
+    <div class="dynamic-bg-layer dynamic-bg-orange" id="bg-orange"></div>
+    <div class="dynamic-bg-layer dynamic-bg-blue" id="bg-blue"></div>
+  </div>
+
+  <!-- =========================================================================
+       NAVIGATION HUD 
+       ========================================================================= -->
+  <nav class="floating-hud" id="hud" aria-label="Portfolio navigation">
+    <div class="hud-pill">
+
+      <!-- Stage Dots -->
+      <div class="hud-dots">
+        <button class="hud-dot active" data-act="0" aria-label="Jump to Overview &amp; Profile"
+          title="Overview &amp; Profile"></button>
+        <button class="hud-dot" data-act="1" aria-label="Jump to Selected Work &amp; Stack"
+          title="Work &amp; Stack"></button>
+        <button class="hud-dot" data-act="2" aria-label="Jump to Contact &amp; Connect" title="Contact"></button>
+      </div>
+
+      <span class="hud-divider">/</span>
+
+      <!-- Theme Switch Toggle -->
+      <button class="theme-switch" id="theme-toggle-btn" role="switch" aria-checked="true"
+        aria-label="Toggle color theme (Light / Dark)" title="Switch theme mode">
+        <span class="theme-switch-thumb" aria-hidden="true"></span>
+        <span class="theme-switch-icons" aria-hidden="true">
+          <svg class="theme-switch-icon icon-sun" width="12" height="12" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="theme-switch-icon icon-moon" width="12" height="12" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- =========================================================================
+       MAIN STAGE
+       ========================================================================= -->
+  <main class="optical-stage" id="optical-stage">
+
+    <!-- -----------------------------------------------------------------------
+         ACT 0: OVERVIEW & PROFILE 
+         ----------------------------------------------------------------------- -->
+    <div class="stage-act active" id="act-0" data-act-id="0" data-act-name="Overview &amp; Profile">
+      <div class="act-scroll-container">
+
+        <!-- SECTION 1: HERO (Terminal intro, Name, Focus, Action links) -->
+        <section class="act-section" id="section-hero">
+          <div class="content-block">
+
+            <!-- Hero Name (Includes terminal typing animation elements) -->
+            <h1 class="hero-name" id="hero-title" aria-label="Timothy Hansen">
+              <span class="intro-terminal-line font-mono" id="intro-terminal-line" aria-hidden="true">
+                <span class="intro-prompt" id="intro-prompt">&gt;</span>
+                <span class="intro-text" id="intro-text"></span>
+                <span class="intro-cursor" id="intro-cursor"></span>
+              </span>
+              <span class="hero-real-name" id="hero-real-name">Timothy Hansen</span>
+            </h1>
+
+            <!-- Subtitle / Elevator Pitch -->
+            <p class="hero-statement">
+              Software Engineer graduating from <strong>Arizona State University</strong> with a B.S. in Software
+              Engineering. Building distributed backends and high-performance web systems.
+            </p>
+
+            <!-- Quick Signal Badges -->
+            <div class="signal-row">
+              <div class="signal-tag">
+                <span class="signal-label">Focus</span>
+                <span class="signal-value">Distributed Systems &amp; Web</span>
+              </div>
+              <div class="signal-tag">
+                <span class="signal-label">Degree</span>
+                <span class="signal-value">B.S. Software Engineering (ASU)</span>
+              </div>
+              <div class="signal-tag">
+                <span class="signal-label">Status</span>
+                <span class="signal-value text-accent">Graduating May 2026</span>
+              </div>
+            </div>
+
+            <!-- Action Buttons (Jump to Projects, View Resume, Jump to Contact) -->
+            <div class="quick-links" id="hero-quick-links">
+              <button class="action-link jump-btn" data-target-act="1">
+                <span>Explore Projects</span>
+                <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </button>
+              <a href="resume.pdf" target="_blank" class="action-link secondary">
+                <span>Resume</span>
+                <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </a>
+              <button class="action-link secondary jump-btn" data-target-act="2">
+                <span>Get in Touch</span>
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECTION 2: PROFILE & PHILOSOPHY (Background & Academic Details) -->
+        <section class="act-section" id="section-profile">
+          <div class="content-block">
+
+            <div class="statement-grid" id="act0-statement-grid">
+
+              <!-- Left Column: Core Engineering Mindset -->
+              <div class="main-statement">
+                <p class="large-text">
+                  I care about engineering software that is <em>resilient under load</em>, <em>predictable in
+                    failure</em>, and <em>clean to maintain</em>.
+                </p>
+                <div class="asu-quote-badge font-mono">
+                  <span class="asu-dot"></span>
+                  <span>Ira A. Fulton Schools of Engineering • Class of May 2026</span>
+                </div>
+              </div>
+
+              <!-- Right Column: Narrative & Key Credentials -->
+              <div class="narrative-body">
+                <p>
+                  Completing my Software Engineering degree at Arizona State University gave me a rigorous foundation in
+                  concurrent programming, data structures, and system design.
+                </p>
+                <p>
+                  I spend my time dissecting how systems behave at scale: reducing network roundtrips, managing memory
+                  efficiently, and crafting APIs with clear boundary contracts.
+                </p>
+
+                <!-- Key Metrics Strip -->
+                <div class="stats-strip">
+                  <div class="stat-col">
+                    <span class="stat-val font-mono">May 2026</span>
+                    <span class="stat-desc">Graduation Date</span>
+                  </div>
+                  <div class="stat-col">
+                    <span class="stat-val font-mono">ASU</span>
+                    <span class="stat-desc">B.S. Software Eng.</span>
+                  </div>
+                  <div class="stat-col">
+                    <span class="stat-val font-mono">U.S.</span>
+                    <span class="stat-desc">Authorized (No Sponsor)</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         ACT 1: WORK & STACK (Featured Projects Bento Grid & Technical Arsenal)
+         ----------------------------------------------------------------------- -->
+    <div class="stage-act" id="act-1" data-act-id="1" data-act-name="Work &amp; Stack">
+      <div class="act-scroll-container">
+
+        <!-- SECTION 3: SELECTED PROJECTS (Bento Grid of Top Engineering Builds) -->
+        <section class="act-section" id="section-projects">
+          <div class="content-block wide">
+
+            <!-- Section Headline (Bold, clean, scrolls in with Act 1) -->
+            <h2 class="section-headline" id="act1-heading">Here's some of my work</h2>
+
+            <!-- Section Intro Paragraph -->
+            <p class="section-intro" id="act1-section-intro">
+              Top engineering systems solving full-stack community aid distribution, context-aware generative browser
+              tooling, real-time satellite geospatial tracking, and enterprise concurrent logistics. Click any card for
+              interactive live simulations or architectural specifications.
+            </p>
+
+            <!-- Projects Bento Grid (2x2 on desktop, single column on mobile) -->
+            <div class="project-bento-grid" id="project-bento-grid">
+
+              <!-- ===========================================================
+                   PROJECT 1: Come Together Compass
+                   =========================================================== -->
+              <article class="project-bento-card" data-project-key="compass">
+                <div class="bento-top">
+                  <span class="project-index font-mono">01 // GEOSPATIAL AID</span>
+                  <span class="project-badge font-mono">Vue 3 • Node • Leaflet • Pinia</span>
+                </div>
+                <h3 class="bento-title">Come Together Compass</h3>
+                <p class="bento-desc">Full-stack community aid locator and anonymous triage platform with zero-fee
+                  federal geocoding.</p>
+                <div class="bento-metric font-mono">⚡ Sub-120ms Geocoding • 0-Byte Session Retention</div>
+                <ul class="bento-bullet-list font-mono">
+                  <li><span class="bullet">•</span><span>Integrates U.S. Census Bureau Geocoding with
+                      Leaflet/OpenStreetMap to eliminate commercial API fees.</span></li>
+                  <li><span class="bullet">•</span><span>RAM-only state management via Pinia for zero-retention session
+                      privacy and instant 988 Crisis Lifeline escalation.</span></li>
+                </ul>
+                <div class="bento-actions">
+                  <button class="demo-trigger-btn primary-demo-btn" data-demo="compass">
+                    <span>Live Demo</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </button>
+                  <button class="inspect-btn" data-project="compass">
+                    <span>Specs</span>
+                  </button>
+                  <a href="https://github.com/TimothyH3/come-together-compass" target="_blank" rel="noopener noreferrer"
+                    class="code-link font-mono">GitHub ↗</a>
+                </div>
+              </article>
+
+              <!-- ===========================================================
+                   PROJECT 2: Starlink Service Cost Map
+                   =========================================================== -->
+              <article class="project-bento-card" data-project-key="starlink-tracker">
+                <div class="bento-top">
+                  <span class="project-index font-mono">02 // SATELLITE GEOSPATIAL</span>
+                  <span class="project-badge font-mono">Vue 3 • Python • GeoJSON • Leaflet</span>
+                </div>
+                <h3 class="bento-title">Starlink Service Cost Map</h3>
+                <p class="bento-desc">Interactive geospatial tool tracking monthly Starlink service costs
+                  ($55–$130+/mo), regional price adjustments, and congestion surcharges.</p>
+                <div class="bento-metric font-mono">⚡ 1.8ms Client Ray-Casting • 2,400+ Polygons</div>
+                <ul class="bento-bullet-list font-mono">
+                  <li><span class="bullet">•</span><span>Visualizes real-time polygon boundary overlays for Starlink
+                      regional pricing tiers ($55 discount, $120 standard, $130+ congestion).</span></li>
+                  <li><span class="bullet">•</span><span>Direct 4-step Starlink qualification probe identifying upfront
+                      congestion surcharges and monthly price adjustments.</span></li>
+                </ul>
+                <div class="bento-actions">
+                  <a href="/starlink-surcharge-map" class="demo-trigger-btn primary-demo-btn"
+                    style="text-decoration:none;">
+                    <span>Live Map ↗</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </a>
+                  <button class="demo-trigger-btn" data-demo="starlink-tracker">
+                    <span>Sim Demo</span>
+                  </button>
+                  <button class="inspect-btn" data-project="starlink-tracker">
+                    <span>Specs</span>
+                  </button>
+                  <a href="https://github.com/TimothyH3/starlink-tracker" target="_blank" rel="noopener noreferrer"
+                    class="code-link font-mono">GitHub ↗</a>
+                </div>
+              </article>
+
+              <!-- ===========================================================
+                   PROJECT 3: Placeholder
+                   =========================================================== -->
+              <article class="project-bento-card placeholder-card" data-project-key="placeholder-1">
+                <div class="bento-top">
+                  <span class="project-index font-mono">03 // UPCOMING PROJECT</span>
+                  <span class="project-badge font-mono placeholder-badge">Stack / Tooling</span>
+                </div>
+                <h3 class="bento-title">Project Title</h3>
+                <p class="bento-desc">Project description placeholder detailing key technical objectives, architecture decisions, and system outcomes.</p>
+                <div class="bento-metric font-mono">⚡ Performance Metric / Architecture Outcome</div>
+                <ul class="bento-bullet-list font-mono">
+                  <li><span class="bullet">•</span><span>Core technical capability or algorithm design placeholder.</span></li>
+                  <li><span class="bullet">•</span><span>Data flow, concurrency model, or testing pipeline summary.</span></li>
+                </ul>
+                <div class="bento-actions">
+                  <span class="placeholder-status font-mono">[ Spec in Progress ]</span>
+                </div>
+              </article>
+
+              <!-- ===========================================================
+                   PROJECT 4: Placeholder
+                   =========================================================== -->
+              <article class="project-bento-card placeholder-card" data-project-key="placeholder-2">
+                <div class="bento-top">
+                  <span class="project-index font-mono">04 // UPCOMING PROJECT</span>
+                  <span class="project-badge font-mono placeholder-badge">Stack / Tooling</span>
+                </div>
+                <h3 class="bento-title">Project Title</h3>
+                <p class="bento-desc">Project description placeholder detailing key technical objectives, architecture decisions, and system outcomes.</p>
+                <div class="bento-metric font-mono">⚡ Performance Metric / Architecture Outcome</div>
+                <ul class="bento-bullet-list font-mono">
+                  <li><span class="bullet">•</span><span>Core technical capability or algorithm design placeholder.</span></li>
+                  <li><span class="bullet">•</span><span>Data flow, concurrency model, or testing pipeline summary.</span></li>
+                </ul>
+                <div class="bento-actions">
+                  <span class="placeholder-status font-mono">[ Spec in Progress ]</span>
+                </div>
+              </article>
+
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECTION 4: TECHNICAL STACK & COMPETENCIES -->
+        <section class="act-section" id="section-stack">
+          <div class="content-block">
+
+            <div class="chapter-header">
+              <span class="font-mono chapter-num">&gt;</span>
+              <span class="chapter-label">Technical Competencies</span>
+            </div>
+
+            <div class="stack-grid">
+
+              <!-- Category 1: Programming Languages -->
+              <div class="stack-category">
+                <h3 class="stack-cat-title font-mono">01 // Languages</h3>
+                <ul class="stack-items font-mono">
+                  <li>TypeScript</li>
+                  <li>JavaScript</li>
+                  <li>Python</li>
+                  <li>Java</li>
+                  <li>SQL (PostgreSQL, MySQL)</li>
+                  <li>C</li>
+                  <li>C#</li>
+                </ul>
+              </div>
+
+              <!-- Category 2: Web & Backend Frameworks -->
+              <div class="stack-category">
+                <h3 class="stack-cat-title font-mono">02 // Web &amp; Frameworks</h3>
+                <ul class="stack-items font-mono">
+                  <li>Vue 3 (Composition API)</li>
+                  <li>Pinia</li>
+                  <li>Vite</li>
+                  <li>Node.js</li>
+                  <li>Express</li>
+                  <li>Leaflet / OpenStreetMap</li>
+                  <li>REST APIs</li>
+                  <li>HTML5 / CSS3</li>
+                </ul>
+              </div>
+
+              <!-- Category 3: Quality Assurance & Static Analysis -->
+              <div class="stack-category">
+                <h3 class="stack-cat-title font-mono">03 // Quality Assurance &amp; Testing</h3>
+                <ul class="stack-items font-mono">
+                  <li>Vitest</li>
+                  <li>JUnit 5</li>
+                  <li>JaCoCo Code Coverage</li>
+                  <li>SpotBugs</li>
+                  <li>Checkstyle</li>
+                  <li>Static Code Analysis</li>
+                </ul>
+              </div>
+
+              <!-- Category 4: DevOps, Cloud & Development Tools -->
+              <div class="stack-category">
+                <h3 class="stack-cat-title font-mono">04 // DevOps &amp; Tools</h3>
+                <ul class="stack-items font-mono">
+                  <li>Git &amp; GitHub</li>
+                  <li>GitHub Actions (CI/CD)</li>
+                  <li>Linux CLI &amp; Bash</li>
+                  <li>Chrome Extension API (MV3)</li>
+                  <li>Custom Domain &amp; Edge Deploy</li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         ACT 2: CONTACT & CONNECT
+         ----------------------------------------------------------------------- -->
+    <div class="stage-act" id="act-2" data-act-id="2" data-act-name="Contact">
+      <div class="act-scroll-container">
+
+        <!-- SECTION 5: CONTACT BOX & DIRECT ACTION LINKS -->
+        <section class="act-section" id="section-contact">
+          <div class="content-block">
+
+            <div class="contact-box">
+              <h2 class="contact-headline">
+                I'd love to hear from you.
+              </h2>
+              <p class="contact-sub">
+                Actively interviewing for full-time Software Engineer &amp; LLM Tooling positions. Graduating from
+                Arizona State University with a B.S. in Software Engineering (May 2026). Open to remote and on-site
+                roles
+                nationwide.
+              </p>
+
+              <!-- Interactive Email Box & Direct Mail Button -->
+              <div class="contact-interactive">
+                <div class="email-display">
+                  <span class="email-address font-mono" id="email-text">t@tjhansen.net</span>
+                  <button class="minimal-btn copy-btn" id="copy-email-btn" aria-label="Copy email address">
+                    <span id="copy-btn-text">Copy Email</span>
+                  </button>
+                </div>
+
+                <a href="mailto:t@tjhansen.net" class="minimal-btn primary-btn">
+                  <span>Write Email ↗</span>
+                </a>
+              </div>
+
+              <!-- Direct Outbound Social Links -->
+              <div class="contact-links-row">
+                <a href="https://github.com/TimothyH3" target="_blank" rel="noopener noreferrer"
+                  class="link-item font-mono">
+                  GitHub ↗
+                </a>
+                <span class="link-separator">•</span>
+                <a href="https://linkedin.com/in/timothy-hansen-dev" target="_blank" rel="noopener noreferrer"
+                  class="link-item font-mono">
+                  LinkedIn ↗
+                </a>
+              </div>
+            </div>
+
+            <!-- Minimal Footer with Dynamic Year & Jump to Top -->
+            <footer class="minimal-footer">
+              <span class="font-mono"> © <span id="year"></span> Timothy Hansen • tjhansen.net</span>
+              <button class="back-top-link font-mono jump-btn" data-target-act="0">Back to start ↑</button>
+            </footer>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- =========================================================================
+       FULL-SCREEN PROJECT DEMO OVERLAY (Zoom-In On Click, Zoom-Out On Scroll/Click)
+       ========================================================================= -->
+  <aside class="project-demo-overlay" id="project-demo-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="demo-modal" id="demo-modal">
+
+      <!-- Top Bar: Back Action & Scroll Cue -->
+      <div class="demo-top-bar font-mono">
+        <button class="demo-back-btn" id="demo-back-btn" aria-label="Return to projects">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          <span>Return to Projects</span>
+        </button>
+
+        <div class="demo-scroll-pill">
+          <span class="demo-indicator-dot"></span>
+          <span>Scroll wheel or touch to exit</span>
+        </div>
+
+        <button class="demo-close-btn" id="demo-close-btn" aria-label="Close demo">✕</button>
+      </div>
+
+      <!-- DEMO VIEW 1: Come Together Compass -->
+      <div class="demo-view" id="demo-compass">
+        <div class="demo-header">
+          <div class="demo-tag font-mono">01 // GEOSPATIAL AID LOCATOR &amp; ANONYMOUS TRIAGE</div>
+          <h2 class="demo-title">Come Together Compass Triage Engine</h2>
+          <p class="demo-intro">Full-stack community aid locator and anonymous triage platform. Integrates U.S. Census
+            Bureau Geocoding with Leaflet/OpenStreetMap to eliminate commercial mapping fees, with zero-retention Pinia
+            RAM state for crisis privacy.</p>
+        </div>
+
+        <div class="demo-stats-grid font-mono">
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">GEOCODER</span>
+            <span class="demo-stat-val text-green" id="compass-geocoder-val">Census Gov ($0 Fee)</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">LOOKUP TIME</span>
+            <span class="demo-stat-val" id="compass-latency-val">118 ms</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">PINIA RETENTION</span>
+            <span class="demo-stat-val text-accent" id="compass-retention-val">0 Bytes (RAM-Only)</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">EMERGENCY PROTOCOL</span>
+            <span class="demo-stat-val text-green" id="compass-emergency-val">988 Lifeline Armed</span>
+          </div>
+        </div>
+
+        <div class="demo-interactive-stage">
+          <div class="demo-controls-bar">
+            <button class="minimal-btn primary-btn font-mono" id="compass-geocode-btn">📍 Resolve Address via Census
+              Geocoder</button>
+            <button class="minimal-btn font-mono" id="compass-wipe-btn">🔒 Trigger 988 Escalation &amp; Zero-Retention
+              Wipe</button>
+          </div>
+
+          <div class="demo-terminal font-mono" id="compass-log">
+            <div class="term-line text-dim">[16:04:02.100] [COMPASS-CORE] Vue 3 Pinia RAM-only session initialized.
+              LocalStorage persistence: DISABLED.</div>
+            <div class="term-line">[16:04:02.320] [GEOCODER] Client connected to geocoding.geo.census.gov REST endpoint
+              (CORS bypass active).</div>
+            <div class="term-line text-green">[16:04:02.450] [LEAFLET] OpenStreetMap raster tiles loaded. 18 mutual aid
+              hubs rendered within Phoenix bounding box.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMO VIEW 2: Starlink Service Cost Tracker -->
+      <div class="demo-view" id="demo-starlink-tracker">
+        <div class="demo-header">
+          <div class="demo-tag font-mono">02 // SATELLITE GEOSPATIAL ANALYSIS</div>
+          <h2 class="demo-title">Starlink Service Cost &amp; Congestion Tracker</h2>
+          <p class="demo-intro">Interactive geospatial tool tracking monthly Starlink service subscription costs
+            ($55 regional discount, $120 standard base rate, $130+ congestion adjustment) and upfront demand surcharges.
+          </p>
+        </div>
+
+        <div class="demo-stats-grid font-mono">
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">POLYGON ENGINE</span>
+            <span class="demo-stat-val text-green">GeoJSON + Leaflet</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">LOOKUP TIME</span>
+            <span class="demo-stat-val" id="starlink-latency-val">1.8 ms</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">CELLS LOADED</span>
+            <span class="demo-stat-val" id="starlink-cells-val">2,418 Polygons</span>
+          </div>
+          <div class="demo-stat-box">
+            <span class="demo-stat-lbl">MONTHLY SERVICE</span>
+            <span class="demo-stat-val text-green" id="starlink-status-val">STANDARD ($120/MO)</span>
+          </div>
+        </div>
+
+        <div class="demo-interactive-stage">
+          <div class="demo-controls-bar">
+            <button class="minimal-btn primary-btn font-mono" id="starlink-query-btn">🛰️ Test Ray-Casting Intersect
+              Query</button>
+            <button class="minimal-btn font-mono" id="starlink-toggle-btn">⚠️ Toggle High-Demand Surcharge Polygon
+              Overlay</button>
+            <a href="/starlink-surcharge-map" class="minimal-btn primary-btn font-mono"
+              style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+              🚀 Open Fullscreen Service Cost Map Subpage ↗
+            </a>
+          </div>
+
+          <div class="demo-terminal font-mono" id="starlink-log">
+            <div class="term-line text-dim">[11:20:00.080] [GEOJSON] Ingested 2,418 Starlink cell polygon coordinates
+              into client memory.</div>
+            <div class="term-line">[11:20:00.220] [SPATIAL-INDEX] R-Tree bounding-box index built in 8.4ms for
+              sub-millisecond point lookups.</div>
+            <div class="term-line text-green">[11:20:00.350] [LEAFLET] Real-time polygon overlay rendered. Ready for GPS
+              and coordinate queries.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demo Modal Footer Details -->
+      <div class="demo-footer-strip font-mono">
+        <a href="https://github.com/TimothyH3" target="_blank" rel="noopener noreferrer"
+          class="minimal-btn primary-btn">View Code on GitHub ↗</a>
+        <button class="minimal-btn copy-btn" id="demo-bottom-close">Return to Portfolio</button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       ARCHITECTURAL SPECIFICATION DRAWER
+       ========================================================================= -->
+  <aside class="spec-drawer-backdrop" id="spec-drawer-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="spec-drawer" id="spec-drawer">
+      <div class="drawer-header">
+        <span class="drawer-tag font-mono" id="drawer-file-tag">ARCH_SPEC.md</span>
+        <button class="drawer-close" id="drawer-close-btn" aria-label="Close specifications">✕</button>
+      </div>
+      <div class="drawer-content" id="drawer-content">
+        <!-- Injected dynamically via script.js -->
+      </div>
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       TOAST NOTIFICATION (Copy Email Confirmation)
+       ========================================================================= -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="font-mono" id="toast-text">Email copied to clipboard</span>
+  </div>
+
+  <!-- Main Engine Script -->
+  <script src="script.js?v=35"></script>
+</body>
+
+</html>

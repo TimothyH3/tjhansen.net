@@ -321,7 +321,6 @@
     svg.insertBefore(defs, svg.firstChild);
     return true;
   }
-  }
 
   // Algorithmic regional downsampling for the high-level blended gradient map
   function getMacroMeshPoints(points, minDistanceKm = 160) {
