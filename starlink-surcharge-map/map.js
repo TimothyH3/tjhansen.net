@@ -23,6 +23,7 @@
   let map = null;
   let markersLayer = null;
   let activeRadarPin = null;
+  let activeSelectionHex = null;
   let surchargePoints = [];
   let currentlyInspected = null;
 
@@ -541,40 +542,43 @@
     }
   }
 
-  // Proximity Cache Check (25 km threshold)
+  // Hex Grid Selection (exact H3 cell lookup)
   function handleCoordinateSelection(lat, lng) {
-    let nearest = null;
-    let minKm = Infinity;
+    const snapped = snapToHexGrid(lat, lng);
 
+    // Find if an already sampled/verified point exists in this exact H3 cell
+    let existingInCell = null;
     for (const pt of surchargePoints) {
-      const dist = haversineKm(lat, lng, pt.lat, pt.lng);
-      if (dist < minKm) {
-        minKm = dist;
-        nearest = pt;
+      const ptSnapped = snapToHexGrid(pt.lat, pt.lng);
+      if (ptSnapped.cellKey === snapped.cellKey) {
+        existingInCell = pt;
+        break;
       }
     }
 
-    const isWithin25Km = minKm <= 25.0;
-
-    if (isWithin25Km && nearest) {
-      displayPointDetails(nearest, minKm);
+    if (existingInCell) {
+      displayPointDetails(existingInCell, 0);
+      dropRadarPin(snapped.centerLat, snapped.centerLng, snapped.boundary, false);
     } else {
       displayPointDetails({
-        lat,
-        lng,
+        lat: snapped.centerLat,
+        lng: snapped.centerLng,
+        targetLat: lat,
+        targetLng: lng,
         base_service_fee: null,
         service_price_adjustment: 0,
         total_monthly_fee: null,
         monthly_service_fee: null,
         surcharge_amount: null,
         status: 'unsampled',
-        location_name: `Uncached Coordinate (${lat.toFixed(3)}°, ${lng.toFixed(3)}°)`,
+        location_name: `Unsampled Cell (${snapped.centerLat.toFixed(3)}°, ${snapped.centerLng.toFixed(3)}°)`,
         sampled_at: new Date().toISOString(),
-        isUnsampled: true
-      }, minKm < 1000 ? minKm : null);
+        isUnsampled: true,
+        cellKey: snapped.cellKey,
+        boundary: snapped.boundary
+      }, null);
+      dropRadarPin(snapped.centerLat, snapped.centerLng, snapped.boundary, true);
     }
-
-    dropRadarPin(lat, lng);
   }
 
   // Render Selection Details in Sidebar
@@ -694,13 +698,29 @@
       });
     }
 
-    dropRadarPin(pt.lat, pt.lng);
+    dropRadarPin(pt.lat, pt.lng, pt.boundary, !!pt.isUnsampled);
   }
 
-  // Pin with Radar Wave Animation
-  function dropRadarPin(lat, lng) {
+  // Pin with Radar Wave Animation & Cell Selection Outline
+  function dropRadarPin(lat, lng, boundary, isUnsampled) {
     if (activeRadarPin) {
       map.removeLayer(activeRadarPin);
+      activeRadarPin = null;
+    }
+    if (activeSelectionHex) {
+      map.removeLayer(activeSelectionHex);
+      activeSelectionHex = null;
+    }
+
+    if (boundary && isUnsampled) {
+      activeSelectionHex = L.polygon(boundary, {
+        color: '#06b6d4',
+        weight: 2.5,
+        dashArray: '5, 5',
+        fillColor: '#06b6d4',
+        fillOpacity: 0.18,
+        interactive: false
+      }).addTo(map);
     }
 
     const icon = L.divIcon({
@@ -750,11 +770,11 @@
             isUnsampled: false
           };
 
-          // Check if already in points list by matching snapped hex cell or proximity
+          // Check if already in points list by matching snapped hex cell
           const snapped = snapToHexGrid(lat, lng);
           const existingIdx = surchargePoints.findIndex(p => {
             const s = snapToHexGrid(p.lat, p.lng);
-            return s.cellKey === snapped.cellKey || haversineKm(p.lat, p.lng, lat, lng) < 22;
+            return s.cellKey === snapped.cellKey;
           });
 
           if (existingIdx >= 0) {
@@ -768,9 +788,10 @@
           displayPointDetails(updated, 0);
         } else {
           // Unsampled result returned
+          const snapped = snapToHexGrid(lat, lng);
           displayPointDetails({
-            lat: result.lat,
-            lng: result.lng,
+            lat: snapped.centerLat,
+            lng: snapped.centerLng,
             base_service_fee: null,
             service_price_adjustment: 0,
             total_monthly_fee: null,
@@ -779,8 +800,10 @@
             status: result.status || 'unsampled',
             last_checked: result.last_checked || result.timestamp || new Date().toISOString(),
             sampled_at: result.timestamp || new Date().toISOString(),
-            location_name: result.location_name || `Coordinate (${lat.toFixed(3)}°N, ${lng.toFixed(3)}°W)`,
-            isUnsampled: true
+            location_name: result.location_name || `Coordinate (${snapped.centerLat.toFixed(3)}°N, ${snapped.centerLng.toFixed(3)}°W)`,
+            isUnsampled: true,
+            cellKey: snapped.cellKey,
+            boundary: snapped.boundary
           }, null);
         }
       } else {
