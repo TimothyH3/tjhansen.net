@@ -41,6 +41,36 @@
     return num % 1 === 0 ? `$${num.toFixed(0)}` : `$${num.toFixed(2)}`;
   }
 
+  // Clean address helper: extract city/state/region and strip specific street address numbers, suites, zip codes
+  function cleanLocationName(raw) {
+    if (!raw || typeof raw !== 'string') return 'US Coordinate';
+    let s = raw.trim();
+    // Remove country indicator
+    s = s.replace(/,\s*(United States of America|United States|USA|US)$/i, '');
+    // Remove zip code
+    s = s.replace(/\s+\d{5}(-\d{4})?$/, '');
+
+    // Keep coordinate or relative area strings as-is
+    if (/coordinate|area near/i.test(s) || /^-?\d+\.\d+/.test(s)) {
+      return s;
+    }
+
+    const parts = s.split(',').map(p => p.trim()).filter(Boolean);
+    if (parts.length >= 3) {
+      const state = parts[parts.length - 1].replace(/\s+\d{5}(-\d{4})?$/, '').trim();
+      const city = parts[parts.length - 2].trim();
+      return `${city}, ${state}`;
+    } else if (parts.length === 2) {
+      let p0 = parts[0];
+      let p1 = parts[1].replace(/\s+\d{5}(-\d{4})?$/, '').trim();
+      if (/^\d+\s+/.test(p0)) {
+        p0 = p0.replace(/^\d+[\w\s.-]+?\s+(Ave|St|Street|Avenue|Rd|Road|Blvd|Boulevard|Dr|Drive|Way|Ct|Court|Ln|Lane)\b/i, '').trim() || p0;
+      }
+      return `${p0}, ${p1}`;
+    }
+    return s;
+  }
+
   // Haversine Distance (km)
   function haversineKm(lat1, lon1, lat2, lon2) {
     const R = 6371;
@@ -510,9 +540,6 @@
 
       markersLayer.addLayer(hex);
     }
-
-    const counter = document.getElementById('visible-nodes-count');
-    if (counter) counter.textContent = `${visible} CELLS SHOWN`;
   }
 
   // Proximity Cache Check (25 km threshold)
@@ -589,20 +616,13 @@
         ? (distKm === 0 ? 'Verified Ingested Node' : `Ingested Sample (${distKm.toFixed(1)} km away)`)
         : 'No verified sample in database';
 
-    // Surcharge callout banner
+    // Surcharge callout banner (only shown if there is an active surcharge)
     let surchargeBanner = '';
     if (surcharge > 0) {
       surchargeBanner = `
         <div class="surcharge-banner-callout font-mono">
           <span>⚠️</span>
           <span>+${formatMoney(surcharge)} ONE-TIME DEMAND SURCHARGE</span>
-        </div>
-      `;
-    } else if (!isUnsampled && !isSold) {
-      surchargeBanner = `
-        <div class="surcharge-none-callout font-mono">
-          <span>✓</span>
-          <span>No upfront surcharge ($0 demand fee)</span>
         </div>
       `;
     }
@@ -645,20 +665,8 @@
             <span class="prop-value" style="color: ${surcharge > 0 ? '#ef4444' : '#34d399'}">${isUnsampled ? 'Pending' : (surcharge > 0 ? `+${formatMoney(surcharge)}` : '$0')}</span>
           </div>
           <div class="prop-row">
-            <span class="prop-name">COORDINATES:</span>
-            <span class="prop-value">${pt.lat.toFixed(4)}°N, ${pt.lng.toFixed(4)}°W</span>
-          </div>
-          <div class="prop-row">
-            <span class="prop-name">STARLINK H3 CELL:</span>
-            <span class="prop-value font-mono" style="color: #38bdf8;">${pt.cellId || (typeof h3 !== 'undefined' && h3.latLngToCell ? h3.latLngToCell(pt.lat, pt.lng, 5) : 'H3 Res 5')}</span>
-          </div>
-          <div class="prop-row">
             <span class="prop-name">LOCATION:</span>
-            <span class="prop-value font-sans">${pt.location_name || 'US Coordinate'}</span>
-          </div>
-          <div class="prop-row">
-            <span class="prop-name">DATA STATUS:</span>
-            <span class="prop-value">${cacheLabel}</span>
+            <span class="prop-value font-sans">${cleanLocationName(pt.location_name)}</span>
           </div>
           <div class="prop-row">
             <span class="prop-name">LAST SAMPLED:</span>

@@ -15,10 +15,9 @@
   <meta property="og:url" content="https://tjhansen.net/starlink-surcharge-map">
   <meta property="og:type" content="website">
 
-  <!-- Fonts: Inter & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Fonts: D-DIN Webfont -->
+  <link rel="preload" href="fonts/D-DIN.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/D-DIN-Bold.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -95,7 +94,6 @@
       <div class="floating-legend font-mono">
         <div class="legend-header">
           <span>MONTHLY SERVICE TIERS</span>
-          <span id="visible-nodes-count">-- NODES</span>
         </div>
         <div class="legend-items">
           <label class="legend-row">
@@ -153,40 +151,6 @@
               <p class="empty-state-text">Click anywhere on the map or search an address to inspect local Starlink monthly service rates and congestion fees.</p>
             </div>
           </div>
-        </section>
-
-        <!-- National Aggregate Statistics -->
-        <section class="sidebar-panel">
-          <h2 class="panel-title font-mono">NETWORK PRICING METRICS</h2>
-          <div class="stats-2x2 font-mono">
-            <div class="stat-cell">
-              <span id="stat-total-nodes" class="stat-metric accent-val">0</span>
-              <span class="stat-sub">TOTAL PROBES</span>
-            </div>
-            <div class="stat-cell">
-              <span id="stat-discount-nodes" class="stat-metric green-val">0</span>
-              <span class="stat-sub">DISCOUNT NODES</span>
-            </div>
-            <div class="stat-cell">
-              <span id="stat-avg-cost" class="stat-metric orange-val">$0</span>
-              <span class="stat-sub">AVG SERVICE COST</span>
-            </div>
-            <div class="stat-cell">
-              <span id="stat-surcharge-nodes" class="stat-metric crimson-val">0</span>
-              <span class="stat-sub">SURCHARGES FOUND</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- Architecture Stack -->
-        <section class="sidebar-panel">
-          <h2 class="panel-title font-mono">INFRASTRUCTURE ARCHITECTURE</h2>
-          <ul class="stack-items font-mono">
-            <li><span class="bullet">•</span> 4-Step Starlink Qualification Pipeline</li>
-            <li><span class="bullet">•</span> Cloudflare Worker Edge Spatial Proxy</li>
-            <li><span class="bullet">•</span> PostGIS Proximity Caching (25 km radius)</li>
-            <li><span class="bullet">•</span> Weekly Rotating Hexagonal Grid Sampler</li>
-          </ul>
         </section>
       </aside>
     </main>
