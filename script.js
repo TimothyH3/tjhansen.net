@@ -68,7 +68,7 @@
 
       if (themeToggleBtn) {
         themeToggleBtn.setAttribute('aria-checked', resolvedTheme === 'dark' ? 'true' : 'false');
-        themeToggleBtn.setAttribute('title', `Current theme: ${resolvedTheme === 'dark' ? 'Dark' : 'Light'} (click to switch)`);
+        themeToggleBtn.setAttribute('title', `Switch to ${resolvedTheme === 'dark' ? 'Light' : 'Dark'} Mode`);
       }
     }
 
