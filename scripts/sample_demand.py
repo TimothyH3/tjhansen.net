@@ -642,7 +642,7 @@ def save_sampling_state(state: Dict[str, Any]):
 # ---------------------------------------------------------------------------
 # ADAPTIVE BATCH RUNNER
 # ---------------------------------------------------------------------------
-def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run: bool = False):
+def run_sampling_batch(batch_size: int = 1, hotspots_only: bool = False, dry_run: bool = False):
     """
     Executes a single micro-batch:
     - 1-2 known hotspots checked first.
@@ -665,9 +665,25 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
     logger.info(f"Batch Size: {batch_size} points")
     logger.info("==========================================================")
 
-    # 1. Target Known Hotspots First (Priority Queue)
+    # 1. Allocate checks between Priority Hotspots Queue and Blanket Hex Lattice
     hotspots_checked = 0
-    max_hotspots_per_batch = min(len(hotspots), batch_size if hotspots_only else max(2, min(4, batch_size // 2)))
+    if hotspots_only:
+        max_hotspots_per_batch = min(len(hotspots), batch_size)
+        remaining_blanket_quota = 0
+    elif batch_size == 1:
+        # Micro-batch (e.g. 1 cell every 20 minutes to complete the ~948 cell lattice in ~13 days)
+        # 3 out of 4 runs traverse the blanket lattice; every 4th run re-verifies an active hotspot
+        run_count = state.get("stats", {}).get("total_runs", 0)
+        state.setdefault("stats", {})["total_runs"] = run_count + 1
+        if run_count % 4 == 0 and hotspots:
+            max_hotspots_per_batch = 1
+            remaining_blanket_quota = 0
+        else:
+            max_hotspots_per_batch = 0
+            remaining_blanket_quota = 1
+    else:
+        max_hotspots_per_batch = min(len(hotspots), max(1, batch_size // 4))
+        remaining_blanket_quota = max(1, batch_size - max_hotspots_per_batch)
 
     while hotspots and hotspots_checked < max_hotspots_per_batch:
         hotspot_idx = state.get("hotspot_cursor", 0) % len(hotspots)
@@ -690,27 +706,32 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
         if probe_res:
             surcharge = probe_res["surcharge_amount"]
             monthly_service = probe_res.get("monthly_service_fee", 120)
+            base_service = float(probe_res.get("base_service_fee", 120.0))
             target_hotspot["last_surcharge"] = surcharge
             target_hotspot["last_monthly_fee"] = monthly_service
             target_hotspot["last_checked"] = datetime.now(timezone.utc).isoformat()
 
+            # Hotspot criteria:
+            # - Standard minimum baseline is $55/mo
+            # - Any cell requiring residential max ($120 baseline) is a hotspot
+            # - A $55 baseline plan with price adjustments is NOT a hotspot
+            # - One-time demand surcharge > 0 or sold_out capacity is a hotspot
             is_congested_hotspot = (
-                (surcharge > 0) or 
-                (probe_res.get("service_price_adjustment", 0) > 0) or 
-                (monthly_service > 120) or 
-                (probe_res.get("status") in ("congested", "high_demand"))
+                (base_service >= 120.0) or
+                (surcharge > 0) or
+                (probe_res.get("status") == "sold_out")
             )
 
             if is_congested_hotspot:
                 target_hotspot["consecutive_zeros"] = 0
-                logger.info(f"  -> Hotspot Active: ${monthly_service}/mo (${surcharge} surcharge) congestion maintained.")
+                logger.info(f"  -> Hotspot Active: Base ${base_service}/mo, Total ${monthly_service}/mo (${surcharge} surcharge) congestion maintained.")
             else:
                 target_hotspot["consecutive_zeros"] = target_hotspot.get("consecutive_zeros", 0) + 1
-                logger.info(f"  -> Hotspot returned non-congested rate (strikes: {target_hotspot['consecutive_zeros']}/2).")
+                logger.info(f"  -> Cell qualifies for $55 minimum baseline (strikes: {target_hotspot['consecutive_zeros']}/2).")
 
                 # Auto-demote after 2 consecutive non-congested checks
                 if target_hotspot["consecutive_zeros"] >= 2:
-                    logger.info(f"  -> Demoting {h_name} from priority hotspots.")
+                    logger.info(f"  -> Demoting {h_name} from priority hotspots (returned to $55 baseline tier).")
                     hotspots.remove(target_hotspot)
 
             records_to_upsert.append({
@@ -734,91 +755,94 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
         total_grid_points = len(grid)
 
         # Remaining quota in this batch
-        remaining_quota = max(1, batch_size - hotspots_checked)
-        start_idx = blanket_cursor % total_grid_points
-        end_idx = start_idx + remaining_quota
-        batch_coords = grid[start_idx:end_idx]
+        remaining_quota = remaining_blanket_quota if batch_size == 1 else max(0, batch_size - hotspots_checked)
+        if remaining_quota > 0:
+            start_idx = blanket_cursor % total_grid_points
+            end_idx = start_idx + remaining_quota
+            batch_coords = grid[start_idx:end_idx]
 
-        logger.info(f"Blanket Lattice Slice: Points {start_idx} to {end_idx} of {total_grid_points}")
+            logger.info(f"Blanket Lattice Slice: Points {start_idx} to {end_idx} of {total_grid_points}")
 
-        for idx, (b_lat, b_lng) in enumerate(batch_coords, start=1):
-            logger.info(f"[Blanket Hex {idx}/{len(batch_coords)}] Probing ({b_lat}, {b_lng})")
-            probe_res = probe_starlink_availability(b_lat, b_lng)
+            for idx, (b_lat, b_lng) in enumerate(batch_coords, start=1):
+                logger.info(f"[Blanket Hex {idx}/{len(batch_coords)}] Probing ({b_lat}, {b_lng})")
+                probe_res = probe_starlink_availability(b_lat, b_lng)
 
-            if not probe_res:
-                continue
+                if not probe_res:
+                    continue
 
-            surcharge = probe_res["surcharge_amount"]
-            monthly_service = probe_res.get("monthly_service_fee", 120)
-            status = probe_res["status"]
-            loc_name = probe_res.get("location_name") or f"US Cell ({b_lat:.3f}°N, {b_lng:.3f}°W)"
+                surcharge = probe_res["surcharge_amount"]
+                monthly_service = probe_res.get("monthly_service_fee", 120)
+                status = probe_res["status"]
+                base_service = float(probe_res.get("base_service_fee", 120.0))
+                loc_name = probe_res.get("location_name") or f"US Cell ({b_lat:.3f}°N, {b_lng:.3f}°W)"
 
-            records_to_upsert.append({
-                "lat": b_lat,
-                "lng": b_lng,
-                "base_service_fee": probe_res.get("base_service_fee", 120.0),
-                "service_price_adjustment": probe_res.get("service_price_adjustment", 0.0),
-                "total_monthly_fee": probe_res.get("total_monthly_fee", monthly_service),
-                "monthly_service_fee": probe_res.get("total_monthly_fee", monthly_service),
-                "surcharge_amount": surcharge,
-                "status": status,
-                "sample_type": "blanket_grid",
-                "location_name": loc_name,
-                "adjustment_description": probe_res.get("adjustment_description", "Service Price Adjustment")
-            })
+                records_to_upsert.append({
+                    "lat": b_lat,
+                    "lng": b_lng,
+                    "base_service_fee": base_service,
+                    "service_price_adjustment": probe_res.get("service_price_adjustment", 0.0),
+                    "total_monthly_fee": probe_res.get("total_monthly_fee", monthly_service),
+                    "monthly_service_fee": probe_res.get("total_monthly_fee", monthly_service),
+                    "surcharge_amount": surcharge,
+                    "status": status,
+                    "sample_type": "blanket_grid",
+                    "location_name": loc_name,
+                    "adjustment_description": probe_res.get("adjustment_description", "Service Price Adjustment")
+                })
 
-            # 3. Discovery: If Surcharge > 0 OR congestion detected, promote & scatter!
-            is_discovered_congestion = (
-                surcharge > 0 or 
-                probe_res.get("service_price_adjustment", 0) > 0 or 
-                monthly_service > 120 or 
-                status in ("congested", "high_demand")
-            )
-            if is_discovered_congestion:
-                logger.info(f"  -> CONGESTION ZONE DISCOVERED! ${monthly_service}/mo (+${surcharge} surcharge) at {loc_name}")
-                state["stats"]["high_demand_hits_found"] = state["stats"].get("high_demand_hits_found", 0) + 1
+                # 3. Discovery: If cell requires residential max ($120 baseline) or surcharge > 0, promote!
+                # The $55 baseline plan with price adjustments is NOT marked as a hotspot.
+                is_discovered_congestion = (
+                    (base_service >= 120.0) or
+                    (surcharge > 0) or
+                    (status == "sold_out")
+                )
+                if is_discovered_congestion:
+                    logger.info(f"  -> CONGESTION ZONE DISCOVERED! Base: ${base_service}/mo, Total: ${monthly_service}/mo (+${surcharge} surcharge) at {loc_name}")
+                    state["stats"]["high_demand_hits_found"] = state["stats"].get("high_demand_hits_found", 0) + 1
 
-                # Promote to Known Hotspots (strictly within CONUS)
-                if is_point_in_conus(b_lat, b_lng) and not any(abs(h["lat"] - b_lat) < 0.1 and abs(h["lng"] - b_lng) < 0.1 for h in hotspots):
-                    hotspots.append({
-                        "name": loc_name,
-                        "lat": b_lat,
-                        "lng": b_lng,
-                        "last_surcharge": surcharge,
-                        "last_monthly_fee": monthly_service,
-                        "consecutive_zeros": 0,
-                        "last_checked": datetime.now(timezone.utc).isoformat()
-                    })
-
-                # Fire 4-point perimeter scatter (~25 km)
-                logger.info("  -> Triggering 4-point perimeter radial scatter...")
-                scatters = generate_radial_scatter_points(b_lat, b_lng)
-                for sc in scatters:
-                    s_res = probe_starlink_availability(sc["lat"], sc["lng"])
-                    if s_res:
-                        records_to_upsert.append({
-                            "lat": sc["lat"],
-                            "lng": sc["lng"],
-                            "base_service_fee": s_res.get("base_service_fee", 120.0),
-                            "service_price_adjustment": s_res.get("service_price_adjustment", 0.0),
-                            "total_monthly_fee": s_res.get("total_monthly_fee", s_res.get("monthly_service_fee", 120)),
-                            "monthly_service_fee": s_res.get("total_monthly_fee", s_res.get("monthly_service_fee", 120)),
-                            "surcharge_amount": s_res["surcharge_amount"],
-                            "status": s_res["status"],
-                            "sample_type": "radial_scatter",
-                            "location_name": s_res.get("location_name") or f"{loc_name} {sc['name']}",
-                            "adjustment_description": s_res.get("adjustment_description", "Service Price Adjustment")
+                    # Promote to Known Hotspots (strictly within CONUS)
+                    if is_point_in_conus(b_lat, b_lng) and not any(abs(h["lat"] - b_lat) < 0.1 and abs(h["lng"] - b_lng) < 0.1 for h in hotspots):
+                        hotspots.append({
+                            "name": loc_name,
+                            "lat": b_lat,
+                            "lng": b_lng,
+                            "last_surcharge": surcharge,
+                            "last_monthly_fee": monthly_service,
+                            "consecutive_zeros": 0,
+                            "last_checked": datetime.now(timezone.utc).isoformat()
                         })
 
-        # Advance cursor and check for cycle wrap
-        new_cursor = end_idx % total_grid_points
-        if end_idx >= total_grid_points:
-            state["stats"]["cycles_completed"] = state["stats"].get("cycles_completed", 0) + 1
-            logger.info("==========================================================")
-            logger.info(f"Full Blanket Grid Cycle Complete! Total Cycles: {state['stats']['cycles_completed']}")
-            logger.info("==========================================================")
+                    # Fire 4-point perimeter scatter (~25 km) if batch allows
+                    if batch_size > 1:
+                        logger.info("  -> Triggering 4-point perimeter radial scatter...")
+                        scatters = generate_radial_scatter_points(b_lat, b_lng)
+                        for sc in scatters:
+                            s_res = probe_starlink_availability(sc["lat"], sc["lng"])
+                            if s_res:
+                                records_to_upsert.append({
+                                    "lat": sc["lat"],
+                                    "lng": sc["lng"],
+                                    "base_service_fee": s_res.get("base_service_fee", 120.0),
+                                    "service_price_adjustment": s_res.get("service_price_adjustment", 0.0),
+                                    "total_monthly_fee": s_res.get("total_monthly_fee", s_res.get("monthly_service_fee", 120)),
+                                    "monthly_service_fee": s_res.get("total_monthly_fee", s_res.get("monthly_service_fee", 120)),
+                                    "surcharge_amount": s_res["surcharge_amount"],
+                                    "status": s_res["status"],
+                                    "sample_type": "radial_scatter",
+                                    "location_name": s_res.get("location_name") or f"{loc_name} {sc['name']}",
+                                    "adjustment_description": s_res.get("adjustment_description", "Service Price Adjustment")
+                                })
 
-        state["blanket_cursor"] = new_cursor
+            # Advance cursor and check for cycle wrap
+            new_cursor = end_idx % total_grid_points
+            if end_idx >= total_grid_points:
+                state["stats"]["cycles_completed"] = state["stats"].get("cycles_completed", 0) + 1
+                logger.info("==========================================================")
+                logger.info(f"Full Blanket Grid Cycle Complete! Total Cycles: {state['stats']['cycles_completed']}")
+                logger.info("==========================================================")
+
+            state["blanket_cursor"] = new_cursor
 
     state["stats"]["total_probes_run"] = state["stats"].get("total_probes_run", 0) + len(records_to_upsert)
 
@@ -840,7 +864,7 @@ def run_sampling_batch(batch_size: int = 8, hotspots_only: bool = False, dry_run
 # ---------------------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser(description="Starlink Adaptive Sparse Congestion Sampler")
-    parser.add_argument("--batch-size", type=int, default=8, help="Number of blanket grid coordinates to probe in this run")
+    parser.add_argument("--batch-size", type=int, default=1, help="Number of blanket grid coordinates to probe in this run")
     parser.add_argument("--hotspots-only", action="store_true", help="Only probe known hotspots; skip blanket grid")
     parser.add_argument("--dry-run", action="store_true", help="Probe endpoints without writing to Supabase")
     parser.add_argument("--reset-state", action="store_true", help="Reset cursor to 0 and reinitialize state file")
