@@ -1,6 +1,6 @@
 {
   "current_week_index": 48,
-  "blanket_cursor": 9,
+  "blanket_cursor": 14,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -85,7 +85,9 @@
       "lat": 36.0104,
       "lng": -84.388,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 60.5,
+      "last_checked": "2026-11-24T02:56:55.437548+00:00"
     },
     {
       "name": "Dahlonega North GA Mtns, GA",
@@ -356,11 +358,11 @@
       "last_checked": "2026-11-23T00:50:45.825169+00:00"
     }
   ],
-  "hotspot_cursor": 9,
+  "hotspot_cursor": 10,
   "stats": {
-    "total_probes_run": 1157,
+    "total_probes_run": 1163,
     "high_demand_hits_found": 5,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-23T16:07:39.312645+00:00"
+  "last_run_timestamp": "2026-11-24T02:57:43.400702+00:00"
 }
