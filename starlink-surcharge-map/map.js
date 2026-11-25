@@ -413,9 +413,6 @@
 
   // Load Data from Worker edge cache (or Supabase PostGIS)
   async function loadData() {
-    const statusDot = document.getElementById('status-dot');
-    const statusText = document.getElementById('status-text');
-
     // 1. Primary: Load verified points via Cloudflare Worker edge cache
     const pointsUrl = CONFIG.WORKER_API_URL.replace(/\/api\/check-fee.*$/, '/api/points').replace(/\/check-fee.*$/, '/api/points');
     try {
@@ -424,8 +421,6 @@
         const data = await resp.json();
         if (Array.isArray(data) && data.length > 0) {
           surchargePoints = data;
-          if (statusDot) statusDot.className = 'pulse-dot';
-          if (statusText) statusText.textContent = `${data.length} NODES SYNCED`;
           updateStats();
           renderMarkers();
           return;
@@ -449,8 +444,6 @@
           const data = await resp.json();
           if (Array.isArray(data) && data.length > 0) {
             surchargePoints = data;
-            if (statusDot) statusDot.className = 'pulse-dot';
-            if (statusText) statusText.textContent = `${data.length} NODES SYNCED`;
             updateStats();
             renderMarkers();
             return;
@@ -463,8 +456,6 @@
 
     // 3. Database is reachable but currently empty or awaiting initial seed/qualification
     surchargePoints = [];
-    if (statusDot) statusDot.className = 'pulse-dot';
-    if (statusText) statusText.textContent = 'READY (0 NODES)';
     updateStats();
     renderMarkers();
   }

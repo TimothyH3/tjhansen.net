@@ -251,7 +251,7 @@
           const p2 = Math.min(1, (relativeScroll - travelPhase1) / exitDistance);
 
           const exitEnd = 0.35;
-          const enterStart = 0.62;
+          const enterStart = 0;
           const cardsRevealProgress = 0.82;
 
           if (p2 <= exitEnd) {
@@ -708,22 +708,22 @@
         stack: ['Vue 3', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'Leaflet', 'Pinia', 'Vitest']
       },
       'starlink-tracker': {
-        title: 'Starlink Congestion & Relocation Tracker',
+        title: 'Starlink Residential Service Cost Map',
         fileTag: 'STARLINK_GEOSPATIAL_OVERLAY.spec',
         image: 'assets/images/project-3.svg',
         repoUrl: 'https://github.com/TimothyH3/starlink-tracker',
-        desc: 'Interactive geospatial tool identifying satellite cell demand, capacity bottlenecks, and relocation surcharge zones.',
-        benchmark: '1.8ms client-side ray-casting coordinate intersection across 2,400+ GeoJSON cell polygons',
+        desc: 'Nationwide geospatial intelligence tool built out of personal necessity as a full-time traveler to forecast Starlink monthly residential rates ($27.50–$170+/mo), regional discounts, and congestion surcharges.',
+        benchmark: '25km PostGIS geodetic proximity caching with respectful 10-minute edge micro-sampling (6–12 reqs/hr)',
         architecture: [
-          'Polygon Boundary Parser: Ingests Starlink service cell boundaries from GeoJSON datasets and projects them onto Leaflet layers.',
-          'Point-in-Polygon Ray-Casting: Runs lightweight point-in-polygon checks client-side, eliminating server roundtrips for address validation.',
-          'Surcharge Zone Detection: Automatically flags mobile users when migrating across high-demand cell borders to avert unexpected billing fees.'
+          'Uber H3 Hexagonal Tessellation: Renders mathematically invariant resolution 5 hexagonal cells (~12.5 km circumradius) matching physical Starlink spot beams.',
+          'PostGIS Spatial Proximity Caching: Uses ST_DWithin geodetic queries to serve pricing within 25 km instantaneously, eliminating redundant upstream requests to Starlink.',
+          'Ethical Edge Rate Engineering: Employs a Cloudflare Worker Cron Trigger running only once every 10 minutes with ray-casting water body exclusion (Great Lakes & oceans) to strictly protect Starlink infrastructure.'
         ],
         decisions: [
-          'Pre-indexed cell bounding boxes in a spatial R-tree to achieve sub-millisecond point queries on mobile devices.',
-          'Built automated Python pipeline to fetch and refresh cell state delta updates.'
+          'Architected 100% free-tier serverless topology ($0/mo cost) uniting Cloudflare Worker edge isolates with Supabase PostGIS.',
+          'Integrated OpenStreetMap Nominatim with debounced autocomplete and animated fly-to camera controls.'
         ],
-        stack: ['Vue 3', 'TypeScript', 'Python', 'GeoJSON', 'Leaflet', 'Pinia']
+        stack: ['Cloudflare Workers', 'TypeScript', 'Supabase PostGIS', 'Leaflet', 'Uber H3', 'Vue 3']
       }
     };
 
