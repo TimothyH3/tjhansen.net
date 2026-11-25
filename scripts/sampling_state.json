@@ -1,6 +1,6 @@
 {
   "current_week_index": 48,
-  "blanket_cursor": 29,
+  "blanket_cursor": 30,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -130,7 +130,9 @@
       "lat": 38.4496,
       "lng": -78.8689,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 55.0,
+      "last_checked": "2026-11-25T11:11:14.051162+00:00"
     },
     {
       "name": "Seattle Puget Sound, WA",
@@ -402,11 +404,11 @@
       "last_checked": "2026-11-24T16:49:20.956943+00:00"
     }
   ],
-  "hotspot_cursor": 14,
+  "hotspot_cursor": 15,
   "stats": {
-    "total_probes_run": 1198,
+    "total_probes_run": 1200,
     "high_demand_hits_found": 9,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-24T16:50:02.080925+00:00"
+  "last_run_timestamp": "2026-11-25T11:11:23.841747+00:00"
 }
