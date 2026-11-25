@@ -25,6 +25,7 @@
   let activeRadarPin = null;
   let activeSelectionHex = null;
   let surchargePoints = [];
+  let surchargeMacroHexes = [];
   let currentlyInspected = null;
 
   const tierFilters = {
@@ -413,12 +414,24 @@
 
   // Load Data from Worker edge cache (or Supabase PostGIS)
   async function loadData() {
-    // 1. Primary: Load verified points via Cloudflare Worker edge cache
+    // 1. Primary: Load verified points and precalculated macro hexes via Cloudflare Worker edge cache
     const pointsUrl = CONFIG.WORKER_API_URL.replace(/\/api\/check-fee.*$/, '/api/points').replace(/\/check-fee.*$/, '/api/points');
+    const macroUrl = pointsUrl.replace(/\/api\/points.*$/, '/api/macro-hexes');
     try {
-      const resp = await fetch(pointsUrl);
-      if (resp.ok) {
-        const data = await resp.json();
+      const [pResp, mResp] = await Promise.all([
+        fetch(pointsUrl).catch(err => { console.warn('Worker points fetch failed:', err); return null; }),
+        fetch(macroUrl).catch(err => { console.warn('Worker macro hexes fetch failed:', err); return null; })
+      ]);
+
+      if (mResp && mResp.ok) {
+        const mData = await mResp.json();
+        if (Array.isArray(mData) && mData.length > 0) {
+          surchargeMacroHexes = mData;
+        }
+      }
+
+      if (pResp && pResp.ok) {
+        const data = await pResp.json();
         if (Array.isArray(data) && data.length > 0) {
           surchargePoints = data;
           updateStats();
@@ -427,7 +440,7 @@
         }
       }
     } catch (err) {
-      console.warn('Worker /api/points fetch attempt failed:', err);
+      console.warn('Worker edge fetch attempt failed:', err);
     }
 
     // 2. Secondary: Direct Supabase fetch if anon key is available
@@ -554,20 +567,25 @@
     const isOverview = map ? map.getZoom() <= 5 : true;
 
     if (isOverview) {
-      // Zoomed out (majority of US visible): render flat blended regional gradient map (no cells, no borders)
-      const macroPoints = getMacroMeshPoints(activePoints, 160);
-      for (const pt of macroPoints) {
-        visible++;
-        const tierKey = getTierKey(pt);
-        const meshAura = L.circle([pt.lat, pt.lng], {
-          radius: 260000, // 260 km regional ground radius for smooth overlapping gradient mesh
-          stroke: false,
+      // Overview mode (zoom <= 5): Precalculated Uber H3 Resolution 4 macro hexagons representing regional averages
+      for (const m of surchargeMacroHexes) {
+        if (m.tier === 'sold_out' && !tierFilters.tierSoldOut) continue;
+        if (m.tier === 'discounted' && !tierFilters.tierDiscount) continue;
+        if (m.tier === 'standard' && !tierFilters.tierStandard) continue;
+        if (m.tier === 'congested' && !tierFilters.tierCongested) continue;
+        if (m.tier === 'high_demand' && !tierFilters.tierSurcharge) continue;
+
+        const hex = L.polygon(m.boundary, {
+          color: '#ffffff',
+          weight: 1.2,
+          opacity: 0.70,
+          fillColor: m.color,
+          fillOpacity: 0.60,
           interactive: false,
-          className: `starlink-mesh-aura starlink-mesh-${tierKey}`
+          className: 'starlink-macro-hex'
         });
-        markersLayer.addLayer(meshAura);
+        markersLayer.addLayer(hex);
       }
-      ensureSvgGradients();
       return;
     }
 
