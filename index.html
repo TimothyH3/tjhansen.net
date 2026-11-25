@@ -24,6 +24,16 @@
   <meta property="og:url" content="https://tjhansen.net">
 
   <!-- =========================================================================
+       PAGE RELOAD SCROLL RESTORATION (Always start at top on refresh)
+       ========================================================================= -->
+  <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  </script>
+
+  <!-- =========================================================================
        ZERO-FLASH THEME LOADER
        ========================================================================= -->
   <script>
@@ -68,7 +78,7 @@
     rel="stylesheet">
 
   <!-- Main Stylesheet (bump query ?v= to clear browser cache on updates) -->
-  <link rel="stylesheet" href="style.css?v=62">
+  <link rel="stylesheet" href="style.css?v=63">
 </head>
 
 <body>
@@ -641,7 +651,7 @@
   </div>
 
   <!-- Main Engine Script -->
-  <script src="script.js?v=62"></script>
+  <script src="script.js?v=63"></script>
 </body>
 
 </html>

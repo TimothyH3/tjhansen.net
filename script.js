@@ -24,6 +24,15 @@
 (function () {
   'use strict';
 
+  // Force browser to always restore scroll to top on reload/refresh
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.addEventListener('beforeunload', function () {
+    window.scrollTo(0, 0);
+  });
+  window.scrollTo(0, 0);
+
   // ===========================================================================
   // 1. SAFE STORAGE HELPER
   // Prevents SecurityError on restricted origins (e.g., file:// or private sandbox)
@@ -161,10 +170,10 @@
       const docHeight = Math.max(1, scrollHeight - vh);
 
       const act0Top = act0 ? act0.offsetTop : 0;
-      const act0Height = act0 ? act0.offsetHeight : vh * 1.9;
+      const act0Height = act0 ? act0.offsetHeight : vh * 1.55;
       const act0Scrollable = Math.max(vh * 0.35, act0Height - vh);
-      const travelPhase1 = act0Scrollable * 0.55;
-      const exitDistance = Math.max(60, act0Scrollable - travelPhase1);
+      const travelPhase1 = act0Scrollable * 0.48;
+      const exitDistance = Math.max(50, act0Scrollable - travelPhase1);
 
       const act1Top = act1 ? act1.offsetTop : 0;
       const act2Top = act2 ? act2.offsetTop : 0;
@@ -305,9 +314,9 @@
           sectionProfile.style.pointerEvents = 'auto';
 
           const p2 = Math.min(1, (relativeScroll - travelPhase1) / exitDistance);
-          const exitEnd = 0.35;
-          const enterStart = 0.35;
-          const cardsRevealProgress = 0.82;
+          const exitEnd = 0.30;
+          const enterStart = 0.18;
+          const cardsRevealProgress = 0.60;
 
           if (p2 <= exitEnd) {
             const exitP = p2 / exitEnd;
@@ -384,40 +393,38 @@
         }
       }
 
-      // Skills (Stack) Dynamic Scale-Up, Docking & Slide-Away Upward
+      // Skills (Stack) Dynamic Container Expansion & Accelerated Slide-Off
       if (stackCard && stackTop) {
-        // Entrance: As user scrolls down past Bento Cards, Skills scales up (0.92 -> 1.0) and slides up directly beneath
-        const stackInStart = stackTop - vh * 0.95;
-        const stackInDist = vh * 0.65;
+        // Entrance: As user scrolls down past Bento Cards, container expands (840px -> 1040px)
+        // and slides up without any text scaling or opacity fading.
+        const stackInStart = stackTop - vh * 0.90;
+        const stackInDist = vh * 0.55;
 
-        // Exit: As Contact approaches center, Skills slides away upward and gently fades
-        const stackOutStart = act2Top - vh * 0.85;
-        const stackOutDist = vh * 0.60;
+        // Accelerated Slide-Off: When user scrolls past Skills towards Contact,
+        // it slides off upward at >2.5x standard scroll speed so it disappears.
+        const stackOutStart = act2Top - vh * 0.95;
 
         if (scrollY < stackInStart) {
-          stackCard.style.transform = 'scale(0.92) translate3d(0, 48px, 0)';
-          stackCard.style.opacity = '0.35';
+          stackCard.style.maxWidth = '840px';
+          stackCard.style.transform = 'translate3d(0, 40px, 0)';
           stackCard.style.pointerEvents = 'none';
         } else if (scrollY < stackInStart + stackInDist) {
           const pIn = Math.min(1, Math.max(0, (scrollY - stackInStart) / stackInDist));
           const easeIn = pIn * pIn * (3 - 2 * pIn);
-          const currentScale = (0.92 + 0.08 * easeIn).toFixed(3);
-          const currentY = ((1 - easeIn) * 48).toFixed(1);
-          const currentOp = (0.35 + 0.65 * easeIn).toFixed(3);
-          stackCard.style.transform = `scale(${currentScale}) translate3d(0, ${currentY}px, 0)`;
-          stackCard.style.opacity = currentOp;
+          const currentW = Math.round(840 + (1040 - 840) * easeIn);
+          const currentY = ((1 - easeIn) * 40).toFixed(1);
+          stackCard.style.maxWidth = `${currentW}px`;
+          stackCard.style.transform = `translate3d(0, ${currentY}px, 0)`;
           stackCard.style.pointerEvents = easeIn > 0.5 ? 'auto' : 'none';
         } else if (scrollY > stackOutStart) {
-          const pOut = Math.min(1, Math.max(0, (scrollY - stackOutStart) / stackOutDist));
-          const easeOut = pOut * pOut * (3 - 2 * pOut);
-          const currentY = (-easeOut * 80).toFixed(1);
-          const currentOp = Math.max(0, 1 - easeOut * 1.05).toFixed(3);
-          stackCard.style.transform = `scale(1) translate3d(0, ${currentY}px, 0)`;
-          stackCard.style.opacity = currentOp;
-          stackCard.style.pointerEvents = pOut > 0.75 ? 'none' : 'auto';
+          const scrollDelta = scrollY - stackOutStart;
+          const extraUpwardY = scrollDelta * 2.2;
+          stackCard.style.maxWidth = '1040px';
+          stackCard.style.transform = `translate3d(0, -${extraUpwardY.toFixed(1)}px, 0)`;
+          stackCard.style.pointerEvents = extraUpwardY > (vh * 0.75) ? 'none' : 'auto';
         } else {
-          stackCard.style.transform = 'scale(1) translate3d(0, 0, 0)';
-          stackCard.style.opacity = '1';
+          stackCard.style.maxWidth = '1040px';
+          stackCard.style.transform = 'translate3d(0, 0, 0)';
           stackCard.style.pointerEvents = 'auto';
         }
       }

@@ -392,8 +392,8 @@ button {
 #act-0 {
   position: relative;
   width: 100%;
-  height: 190vh;
-  height: 190dvh;
+  height: 155vh;
+  height: 155dvh;
   z-index: 2;
   opacity: 1 !important;
   transform: none !important;
@@ -480,8 +480,8 @@ button {
 /* Pull Act 1 up so Section 3 appears right in the center as Section 2 disappears */
 #act-1 {
   position: relative;
-  margin-top: -95vh;
-  margin-top: -95dvh;
+  margin-top: -75vh;
+  margin-top: -75dvh;
   z-index: 10;
   opacity: 0;
   pointer-events: none;
@@ -607,20 +607,18 @@ button {
 
 /* Section 3: Selected Projects Bento Grid — Centered vertically as it appears */
 #section-projects {
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding: clamp(2rem, 5vh, 4rem) 1.5rem 1rem 1.5rem;
+  min-height: auto;
+  padding: clamp(2rem, 4vh, 3.5rem) 1.5rem 0.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   box-sizing: border-box;
 }
 
 #section-stack {
   min-height: auto;
-  padding-top: 1rem;
-  padding-bottom: 2.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 1.5rem;
 }
 
 /* Act 3: Contact & Connect — Centered at the end of the page */
@@ -649,12 +647,13 @@ button {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: clamp(2.5rem, 6vh, 4.5rem) 1.5rem clamp(1.5rem, 3vh, 2.5rem) 1.5rem;
+  padding: clamp(1.5rem, 3vh, 2.5rem) 1.5rem clamp(1.5rem, 3vh, 2rem) 1.5rem;
   box-sizing: border-box;
 }
 
 #section-contact .content-block {
-  min-height: calc(100vh - clamp(4rem, 9vh, 7rem));
+  min-height: calc(100vh - clamp(3rem, 6vh, 5rem));
+  min-height: calc(100dvh - clamp(3rem, 6vh, 5rem));
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1086,6 +1085,8 @@ button {
    10. Scene 3: Skills
    -------------------------------------------------- */
 #section-stack .content-block {
+  width: 100%;
+  max-width: var(--max-width-wide);
   background: rgba(14, 20, 32, 0.52);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
@@ -1096,7 +1097,7 @@ button {
     inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
   transform-origin: center top;
-  will-change: transform, opacity;
+  will-change: max-width, transform;
   transition: background-color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
 }
 
