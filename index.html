@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Timothy Hansen — Full-Stack Software Engineer &amp; LLM Tooling Developer</title>
+  <title>Timothy Hansen</title>
 
   <!-- =========================================================================
        SEO & METADATA
@@ -68,7 +68,7 @@
     rel="stylesheet">
 
   <!-- Main Stylesheet (bump query ?v= to clear browser cache on updates) -->
-  <link rel="stylesheet" href="style.css?v=35">
+  <link rel="stylesheet" href="style.css?v=59">
 </head>
 
 <body>
@@ -89,11 +89,11 @@
 
       <!-- Stage Dots -->
       <div class="hud-dots">
-        <button class="hud-dot active" data-act="0" aria-label="Jump to Overview &amp; Profile"
-          title="Overview &amp; Profile"></button>
-        <button class="hud-dot" data-act="1" aria-label="Jump to Selected Work &amp; Stack"
-          title="Work &amp; Stack"></button>
-        <button class="hud-dot" data-act="2" aria-label="Jump to Contact &amp; Connect" title="Contact"></button>
+        <a href="#act-0" class="hud-dot active" data-act="0" aria-label="Jump to Overview &amp; Profile"
+          title="Overview &amp; Profile"></a>
+        <a href="#section-projects" class="hud-dot" data-act="1" aria-label="Jump to Selected Work &amp; Stack"
+          title="Work &amp; Stack"></a>
+        <a href="#act-2" class="hud-dot" data-act="2" aria-label="Jump to Contact &amp; Connect" title="Contact"></a>
       </div>
 
       <span class="hud-divider">/</span>
@@ -134,7 +134,8 @@
          ACT 0: OVERVIEW & PROFILE 
          ----------------------------------------------------------------------- -->
     <div class="stage-act active" id="act-0" data-act-id="0" data-act-name="Overview &amp; Profile">
-      <div class="act-scroll-container">
+      <div class="act0-viewport-wrapper" id="act0-viewport-wrapper">
+        <div class="act0-staged-flow" id="act0-staged-flow">
 
         <!-- SECTION 1: HERO (Terminal intro, Name, Focus, Action links) -->
         <section class="act-section" id="section-hero">
@@ -174,13 +175,13 @@
 
             <!-- Action Buttons (Jump to Projects, View Resume, Jump to Contact) -->
             <div class="quick-links" id="hero-quick-links">
-              <button class="action-link jump-btn" data-target-act="1">
+              <a href="#section-projects" class="action-link jump-btn" data-target-act="1">
                 <span>Explore Projects</span>
                 <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2">
                   <path d="M7 17L17 7M17 7H7M17 7V17" />
                 </svg>
-              </button>
+              </a>
               <a href="resume.pdf" target="_blank" class="action-link secondary">
                 <span>Resume</span>
                 <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -188,9 +189,9 @@
                   <path d="M7 17L17 7M17 7H7M17 7V17" />
                 </svg>
               </a>
-              <button class="action-link secondary jump-btn" data-target-act="2">
+              <a href="#section-contact" class="action-link secondary jump-btn" data-target-act="2">
                 <span>Get in Touch</span>
-              </button>
+              </a>
             </div>
 
           </div>
@@ -208,10 +209,6 @@
                   I care about engineering software that is <em>resilient under load</em>, <em>predictable in
                     failure</em>, and <em>clean to maintain</em>.
                 </p>
-                <div class="asu-quote-badge font-mono">
-                  <span class="asu-dot"></span>
-                  <span>Ira A. Fulton Schools of Engineering • Class of May 2026</span>
-                </div>
               </div>
 
               <!-- Right Column: Narrative & Key Credentials -->
@@ -247,6 +244,7 @@
           </div>
         </section>
 
+        </div>
       </div>
     </div>
 
@@ -325,8 +323,7 @@
                       congestion surcharges and monthly price adjustments.</span></li>
                 </ul>
                 <div class="bento-actions">
-                  <a href="/starlink-surcharge-map" class="demo-trigger-btn primary-demo-btn"
-                    style="text-decoration:none;">
+                  <a href="/starlink-surcharge-map" class="demo-trigger-btn primary-demo-btn">
                     <span>Live Map ↗</span>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <polygon points="5 3 19 12 5 21 5 3"></polygon>
@@ -340,46 +337,6 @@
                   </button>
                   <a href="https://github.com/TimothyH3/starlink-tracker" target="_blank" rel="noopener noreferrer"
                     class="code-link font-mono">GitHub ↗</a>
-                </div>
-              </article>
-
-              <!-- ===========================================================
-                   PROJECT 3: Placeholder
-                   =========================================================== -->
-              <article class="project-bento-card placeholder-card" data-project-key="placeholder-1">
-                <div class="bento-top">
-                  <span class="project-index font-mono">03 // UPCOMING PROJECT</span>
-                  <span class="project-badge font-mono placeholder-badge">Stack / Tooling</span>
-                </div>
-                <h3 class="bento-title">Project Title</h3>
-                <p class="bento-desc">Project description placeholder detailing key technical objectives, architecture decisions, and system outcomes.</p>
-                <div class="bento-metric font-mono">⚡ Performance Metric / Architecture Outcome</div>
-                <ul class="bento-bullet-list font-mono">
-                  <li><span class="bullet">•</span><span>Core technical capability or algorithm design placeholder.</span></li>
-                  <li><span class="bullet">•</span><span>Data flow, concurrency model, or testing pipeline summary.</span></li>
-                </ul>
-                <div class="bento-actions">
-                  <span class="placeholder-status font-mono">[ Spec in Progress ]</span>
-                </div>
-              </article>
-
-              <!-- ===========================================================
-                   PROJECT 4: Placeholder
-                   =========================================================== -->
-              <article class="project-bento-card placeholder-card" data-project-key="placeholder-2">
-                <div class="bento-top">
-                  <span class="project-index font-mono">04 // UPCOMING PROJECT</span>
-                  <span class="project-badge font-mono placeholder-badge">Stack / Tooling</span>
-                </div>
-                <h3 class="bento-title">Project Title</h3>
-                <p class="bento-desc">Project description placeholder detailing key technical objectives, architecture decisions, and system outcomes.</p>
-                <div class="bento-metric font-mono">⚡ Performance Metric / Architecture Outcome</div>
-                <ul class="bento-bullet-list font-mono">
-                  <li><span class="bullet">•</span><span>Core technical capability or algorithm design placeholder.</span></li>
-                  <li><span class="bullet">•</span><span>Data flow, concurrency model, or testing pipeline summary.</span></li>
-                </ul>
-                <div class="bento-actions">
-                  <span class="placeholder-status font-mono">[ Spec in Progress ]</span>
                 </div>
               </article>
 
@@ -512,7 +469,7 @@
             <!-- Minimal Footer with Dynamic Year & Jump to Top -->
             <footer class="minimal-footer">
               <span class="font-mono"> © <span id="year"></span> Timothy Hansen • tjhansen.net</span>
-              <button class="back-top-link font-mono jump-btn" data-target-act="0">Back to start ↑</button>
+              <a href="#section-hero" class="back-top-link font-mono jump-btn" data-target-act="0">Back to start ↑</a>
             </footer>
 
           </div>
@@ -679,7 +636,7 @@
   </div>
 
   <!-- Main Engine Script -->
-  <script src="script.js?v=35"></script>
+  <script src="script.js?v=59"></script>
 </body>
 
 </html>

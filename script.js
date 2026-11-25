@@ -102,113 +102,72 @@
   }
 
   // ===========================================================================
-  // 3. 3-ACT HYBRID SCROLL & OPTICAL STAGE ENGINE
-  // Direct 1:1, Zero-Damping, Fail-Safe Architecture
+  // 3. NATIVE SCROLL ENGINE & HUD SCROLL-SPY
+  // Standard default webpage scrolling: 100% native browser wheel & touch momentum
   // ===========================================================================
   let globalEngine = null;
 
   function initScrollAndZoomEngine() {
-    // Stage DOM Containers
-    const act0 = document.getElementById('act-0');
-    const act1 = document.getElementById('act-1');
-    const act2 = document.getElementById('act-2');
-    if (!act0 || !act1 || !act2) return;
-
-    const act0Container = act0.querySelector('.act-scroll-container');
-    const act1Container = act1.querySelector('.act-scroll-container');
-    const act2Container = act2.querySelector('.act-scroll-container');
-    const sectionProfile = document.getElementById('section-profile');
-
-    // Hero and Transition Elements (All null-guarded for resilience)
+    const hudDots = Array.from(document.querySelectorAll('.hud-dot'));
     const bgOrange = document.getElementById('bg-orange');
     const bgBlue = document.getElementById('bg-blue');
-    const act1Heading = document.getElementById('act1-heading');
-    const heroQuickLinks = document.getElementById('hero-quick-links');
-    const heroStatement = document.querySelector('#section-hero .hero-statement');
-    const heroSignalRow = document.querySelector('#section-hero .signal-row');
-    const heroTitle = document.getElementById('hero-title');
-    const act0StatementGrid = document.getElementById('act0-statement-grid');
-    const act1Intro = document.getElementById('act1-section-intro');
-    const projectCards = Array.from(document.querySelectorAll('#section-projects .project-bento-card'));
-    const hudDots = Array.from(document.querySelectorAll('.hud-dot'));
 
-    // Dynamic scroll milestone distances
-    let topPauseDist0 = 0;   // Immediate responsive scroll at top of Hero
-    let vDist0 = 540;        // Vertical travel distance: Section 2 slides up to sit under chips
-    let pauseDist0 = 80;     // Resting point at end of Act 0 with gentle end-of-act dampening
-    let tDist01 = 650;       // Staggered cards transition distance Act 0 -> Act 1
-    let profileOffsetNeeded = 600; // Distance needed to position Section 2 offscreen below fold
-    let excessHeight0 = 0;         // Container scroll adjustment for shorter screens
+    const act0 = document.getElementById('act-0');
+    const act0Wrapper = document.getElementById('act0-viewport-wrapper');
+    const act0StagedFlow = document.getElementById('act0-staged-flow');
+    const sectionHero = document.getElementById('section-hero');
+    const sectionProfile = document.getElementById('section-profile');
+    const act1 = document.getElementById('act-1');
+    const act2 = document.getElementById('act-2');
+    const sectionProjects = document.getElementById('section-projects');
 
-    let topPauseDist1 = 0;   // Projects immediately accessible at top of Act 1
-    let vDist1 = 750;        // Vertical travel distance Projects -> Stack
-    let pauseDist1 = 80;     // Resting point at end of Act 1 with gentle end-of-act dampening
-    let zDist12 = 400;       // Optical zoom transition distance Act 1 -> Act 2
+    // Bento Cards Direct Controller
+    const bentoCards = Array.from(document.querySelectorAll('#section-projects .project-bento-card'));
+    let bentoCardsVisible = false;
 
-    let M0_START = 0;
-    let M0_TOP_PAUSE_END = topPauseDist0;
-    let M0_VERT_END = M0_TOP_PAUSE_END + vDist0;
-    let M0_BOTTOM_PAUSE_END = M0_VERT_END + pauseDist0;
-
-    let M1_TRANS_START = M0_BOTTOM_PAUSE_END;
-    let M1_TRANS_END = M1_TRANS_START + tDist01;
-
-    let M1_TOP_PAUSE_END = M1_TRANS_END + topPauseDist1;
-    let M1_VERT_END = M1_TOP_PAUSE_END + vDist1;
-    let M1_BOTTOM_PAUSE_END = M1_VERT_END + pauseDist1;
-
-    let M2_ZOOM_START = M1_BOTTOM_PAUSE_END;
-    let M2_ZOOM_END = M2_ZOOM_START + zDist12;
-    let TOTAL_SCROLL = M2_ZOOM_END;
-
-    function recalculateMilestones() {
-      const vh = window.innerHeight;
-      const sh0 = act0Container ? act0Container.scrollHeight : 1200;
-      const sh1 = act1Container ? act1Container.scrollHeight : 1400;
-
-      // Section 2 (Profile) slide-up metrics
-      const profileOffset = sectionProfile ? sectionProfile.offsetTop : 480;
-      profileOffsetNeeded = Math.max(0, vh - profileOffset + 40);
-
-      // Scroll container adjustment for short viewports
-      excessHeight0 = Math.max(0, sh0 - vh);
-
-      topPauseDist0 = 0;
-      vDist0 = 540;
-      pauseDist0 = 80;
-      tDist01 = 650;
-
-      topPauseDist1 = 0;
-      vDist1 = Math.max(500, sh1 - vh + 80);
-      pauseDist1 = 80;
-      zDist12 = 400;
-
-      M0_START = 0;
-      M0_TOP_PAUSE_END = topPauseDist0;
-      M0_VERT_END = M0_TOP_PAUSE_END + vDist0;
-      M0_BOTTOM_PAUSE_END = M0_VERT_END + pauseDist0;
-
-      M1_TRANS_START = M0_BOTTOM_PAUSE_END;
-      M1_TRANS_END = M1_TRANS_START + tDist01;
-
-      M1_TOP_PAUSE_END = M1_TRANS_END + topPauseDist1;
-      M1_VERT_END = M1_TOP_PAUSE_END + vDist1;
-      M1_BOTTOM_PAUSE_END = M1_VERT_END + pauseDist1;
-
-      M2_ZOOM_START = M1_BOTTOM_PAUSE_END;
-      M2_ZOOM_END = M2_ZOOM_START + zDist12;
-      TOTAL_SCROLL = M2_ZOOM_END;
+    function setBentoCardsVisible(visible) {
+      if (bentoCardsVisible === visible) return;
+      bentoCardsVisible = visible;
+      bentoCards.forEach(card => {
+        if (visible) {
+          card.classList.add('is-visible');
+        } else {
+          card.classList.remove('is-visible');
+        }
+      });
     }
 
-    recalculateMilestones();
-    window.addEventListener('resize', recalculateMilestones);
+    // Act 0 Geometry Precalculation
+    let cachedAct0Geometry = { heroCenterShift: 240, profileSlideDistance: 95, profileCenterShift: 380 };
 
-    // Continuous scroll progress variables
-    let targetScroll = 0;
-    let currentScroll = 0;
+    function measureAct0Geometry() {
+      if (!sectionHero || !sectionProfile) return;
+      const vh = window.innerHeight;
+      const heroContent = sectionHero.querySelector('.content-block');
+      const profileContent = sectionProfile.querySelector('.content-block');
 
-    // HUD update helper
-    let currentActIndex = 0;
+      const heroHeight = heroContent ? heroContent.offsetHeight : (vh * 0.36);
+      const profileHeight = profileContent ? profileContent.offsetHeight : (vh * 0.32);
+
+      const heroInitialTop = Math.max(16, (vh - heroHeight) / 2);
+      const slightGap = Math.min(32, Math.max(22, Math.round(vh * 0.03)));
+      const targetProfileCenterTop = Math.max(16, Math.round((vh - profileHeight) / 2));
+      const profileOffsetTop = sectionProfile.offsetTop || (vh * 0.85);
+      const profileCenterShift = Math.max(0, profileOffsetTop - targetProfileCenterTop);
+      const heroTargetTopAtCenter = targetProfileCenterTop - slightGap - heroHeight;
+      const heroCenterShift = Math.max(0, heroInitialTop - heroTargetTopAtCenter);
+      const profileSlideDistance = Math.max(70, Math.min(120, Math.round(vh * 0.12)));
+
+      cachedAct0Geometry = {
+        heroCenterShift: Math.round(heroCenterShift),
+        profileSlideDistance: profileSlideDistance,
+        profileCenterShift: Math.round(profileCenterShift)
+      };
+    }
+    measureAct0Geometry();
+
+    // HUD Indicator
+    let currentActIndex = -1;
     function updateHUD(actIdx) {
       if (currentActIndex !== actIdx) {
         currentActIndex = actIdx;
@@ -218,602 +177,264 @@
       }
     }
 
-    // Smooth ease-in & ease-out S-curve for internal container travel
-    function smoothTravel(p) {
-      const clamped = Math.max(0, Math.min(1, p));
-      return clamped * clamped * (3 - 2 * clamped);
-    }
+    // Native Scroll Engine
+    function onNativeScroll() {
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? Math.max(0, Math.min(1, scrollY / docHeight)) : 0;
+      const vh = window.innerHeight;
 
-    // =========================================================================
-    // Core Render Function: Maps scroll position (s) to stage transforms
-    // Safe & fail-safe: every DOM property write checks element existence
-    // =========================================================================
-    function render(s) {
-      // -----------------------------------------------------------------------
-      // Dynamic Orange-to-Blue Background Gradient
-      // Starts warm orange at bottom of screen, fades to luminous blue at top as user scrolls
-      // -----------------------------------------------------------------------
-      if (bgOrange || bgBlue) {
-        const progress = Math.max(0, Math.min(1, s / (TOTAL_SCROLL || 1)));
-        if (bgOrange) {
-          // Orange is vibrant on bottom (1.0), gradually softens to 0.18 towards end
-          const orangeOpacity = Math.max(0.18, 1.0 - progress * 0.82).toFixed(3);
-          const orangeShiftY = (progress * 45).toFixed(1);
-          bgOrange.style.opacity = orangeOpacity;
-          bgOrange.style.transform = `translate3d(0, ${orangeShiftY}px, 0)`;
-        }
-        if (bgBlue) {
-          // Blue starts subtle (0.12) at top, rises and expands to 1.0 towards Act 1 and Act 2
-          const blueOpacity = Math.min(1.0, 0.12 + progress * 0.88).toFixed(3);
-          const blueShiftY = ((1 - progress) * -35).toFixed(1);
-          bgBlue.style.opacity = blueOpacity;
-          bgBlue.style.transform = `translate3d(0, ${blueShiftY}px, 0)`;
+      // Ambient Background Atmosphere
+      if (bgOrange) {
+        const orangeOpacity = Math.max(0.18, 1.0 - progress * 0.82).toFixed(3);
+        const orangeShiftY = (progress * 45).toFixed(1);
+        bgOrange.style.opacity = orangeOpacity;
+        bgOrange.style.transform = `translate3d(0, ${orangeShiftY}px, 0)`;
+      }
+      if (bgBlue) {
+        const blueOpacity = Math.min(1.0, 0.12 + progress * 0.88).toFixed(3);
+        const blueShiftY = ((1 - progress) * -35).toFixed(1);
+        bgBlue.style.opacity = blueOpacity;
+        bgBlue.style.transform = `translate3d(0, ${blueShiftY}px, 0)`;
+      }
+
+      // Act 0 Stage Choreography & Handover
+      if (act0 && sectionHero && sectionProfile) {
+        const act0Top = act0.offsetTop;
+        const relativeScroll = Math.max(0, scrollY - act0Top);
+        const act0Scrollable = Math.max(vh * 0.35, act0.offsetHeight - vh);
+
+        // Phase 1: Section 2 slides up to dock under Section 1
+        const travelPhase1 = act0Scrollable * 0.55;
+        const { heroCenterShift, profileSlideDistance, profileCenterShift } = cachedAct0Geometry;
+
+        if (relativeScroll <= travelPhase1) {
+          const p = Math.max(0, Math.min(1, relativeScroll / travelPhase1));
+          const ease = p * p * (3 - 2 * p);
+
+          sectionHero.style.transform = `translate3d(0, ${(-ease * heroCenterShift).toFixed(1)}px, 0)`;
+          sectionHero.style.opacity = '1';
+          sectionHero.style.pointerEvents = 'auto';
+
+          const slideFromBelow = (1 - ease) * profileSlideDistance;
+          const dockOffset = ease * profileCenterShift;
+          const currentProfileY = slideFromBelow - dockOffset;
+          sectionProfile.style.transform = `translate3d(0, ${currentProfileY.toFixed(1)}px, 0)`;
+
+          const profileOpacity = Math.min(1, p * 2.2);
+          sectionProfile.style.opacity = profileOpacity.toFixed(3);
+          sectionProfile.style.pointerEvents = profileOpacity > 0.4 ? 'auto' : 'none';
+
+          if (act0Wrapper) {
+            act0Wrapper.style.transform = 'translate3d(0, 0, 0)';
+            act0Wrapper.style.opacity = '1';
+            act0Wrapper.style.pointerEvents = 'auto';
+          }
+
+          if (act1) {
+            act1.style.opacity = '0';
+            act1.style.transform = 'translate3d(0, 36px, 0)';
+            act1.style.pointerEvents = 'none';
+          }
+          setBentoCardsVisible(false);
+        } else {
+          // Phase 2: Act 0 exit, gap, and Act 1 entrance
+          sectionHero.style.transform = `translate3d(0, -${heroCenterShift.toFixed(1)}px, 0)`;
+          sectionHero.style.opacity = '1';
+          sectionHero.style.pointerEvents = 'auto';
+
+          sectionProfile.style.transform = `translate3d(0, -${profileCenterShift.toFixed(1)}px, 0)`;
+          sectionProfile.style.opacity = '1';
+          sectionProfile.style.pointerEvents = 'auto';
+
+          const exitDistance = Math.max(60, act0Scrollable - travelPhase1);
+          const p2 = Math.min(1, (relativeScroll - travelPhase1) / exitDistance);
+
+          const exitEnd = 0.35;
+          const enterStart = 0.62;
+          const cardsRevealProgress = 0.82;
+
+          if (p2 <= exitEnd) {
+            const exitP = p2 / exitEnd;
+            const exitEase = exitP * exitP * (3 - 2 * exitP);
+
+            if (act0Wrapper) {
+              act0Wrapper.style.transform = `translate3d(0, ${(-exitEase * 0.45 * vh).toFixed(1)}px, 0)`;
+              act0Wrapper.style.opacity = Math.max(0, 1 - exitEase).toFixed(3);
+              act0Wrapper.style.pointerEvents = exitEase > 0.75 ? 'none' : 'auto';
+            }
+
+            if (act1) {
+              act1.style.opacity = '0';
+              act1.style.transform = 'translate3d(0, 36px, 0)';
+              act1.style.pointerEvents = 'none';
+            }
+            setBentoCardsVisible(false);
+          } else if (p2 < enterStart) {
+            if (act0Wrapper) {
+              act0Wrapper.style.transform = `translate3d(0, ${(-0.45 * vh).toFixed(1)}px, 0)`;
+              act0Wrapper.style.opacity = '0';
+              act0Wrapper.style.pointerEvents = 'none';
+            }
+
+            if (act1) {
+              act1.style.opacity = '0';
+              act1.style.transform = 'translate3d(0, 36px, 0)';
+              act1.style.pointerEvents = 'none';
+            }
+            setBentoCardsVisible(false);
+          } else {
+            if (act0Wrapper) {
+              act0Wrapper.style.transform = `translate3d(0, ${(-0.45 * vh).toFixed(1)}px, 0)`;
+              act0Wrapper.style.opacity = '0';
+              act0Wrapper.style.pointerEvents = 'none';
+            }
+
+            if (act1) {
+              const enterP = Math.min(1, (p2 - enterStart) / (1 - enterStart));
+              const enterEase = enterP * enterP * (3 - 2 * enterP);
+
+              act1.style.opacity = enterEase.toFixed(3);
+              act1.style.transform = `translate3d(0, ${((1 - enterEase) * 36).toFixed(1)}px, 0)`;
+              act1.style.pointerEvents = enterEase > 0.5 ? 'auto' : 'none';
+            }
+
+            if (p2 >= cardsRevealProgress) {
+              setBentoCardsVisible(true);
+            } else {
+              setBentoCardsVisible(false);
+            }
+          }
         }
       }
 
-      // -----------------------------------------------------------------------
-      // 1. Act 0: Overview & Profile (Hero + Smooth slide-up Profile docking)
-      // -----------------------------------------------------------------------
-      if (s <= M0_BOTTOM_PAUSE_END) {
-        let p = 0;
-        let e = 0;
-
-        if (s <= M0_TOP_PAUSE_END) {
-          p = 0;
-          e = 0;
-        } else if (s <= M0_VERT_END) {
-          p = (s - M0_TOP_PAUSE_END) / vDist0;
-          e = smoothTravel(p);
+      // Act 1 -> Act 2 Handover
+      if (act1 && act2 && scrollY >= act1.offsetTop) {
+        setBentoCardsVisible(true);
+        const act2Top = act2.offsetTop;
+        const triggerPoint = act2Top - vh * 0.9;
+        if (scrollY > triggerPoint) {
+          const fadeDist = vh * 0.55;
+          const act1Progress = Math.min(1, Math.max(0, (scrollY - triggerPoint) / fadeDist));
+          const act1Ease = act1Progress * act1Progress * (3 - 2 * act1Progress);
+          act1.style.opacity = Math.max(0, 1 - act1Ease * 1.05).toFixed(3);
+          act1.style.transform = `translate3d(0, ${(-act1Ease * 48).toFixed(1)}px, 0)`;
+          act1.style.pointerEvents = act1Progress > 0.65 ? 'none' : 'auto';
         } else {
-          p = 1;
-          e = 1;
+          act1.style.opacity = '1';
+          act1.style.transform = 'translate3d(0, 0, 0)';
+          act1.style.pointerEvents = 'auto';
         }
+      }
 
-        // Section 2 (Profile) slide-up & fade-in
-        if (sectionProfile) {
-          const currentProfileOffset = (1 - e) * profileOffsetNeeded;
-          const profileOpacity = Math.min(1, e * 1.8);
-          sectionProfile.style.transform = `translate3d(0, ${currentProfileOffset.toFixed(1)}px, 0)`;
-          sectionProfile.style.opacity = profileOpacity.toFixed(3);
-          sectionProfile.style.pointerEvents = e > 0.6 ? 'auto' : 'none';
-        }
+      // HUD Scroll-Spy Milestones
 
-        // Container adjustment for shorter screens
-        const containerY = -e * excessHeight0;
-        if (act0Container) act0Container.style.transform = `translate3d(0, ${containerY.toFixed(1)}px, 0)`;
-
-        act0.style.transform = 'translate3d(0, 0, 0) scale(1)';
-        act0.style.filter = 'none';
-        act0.style.opacity = '1';
-        act0.style.pointerEvents = 'auto';
-        act0.style.zIndex = '10';
-
-        // Restore Hero elements to default state
-        if (heroQuickLinks) {
-          heroQuickLinks.style.opacity = '1';
-          heroQuickLinks.style.transform = 'translate3d(0, 0, 0)';
-          heroQuickLinks.style.pointerEvents = 'auto';
-        }
-        if (act0StatementGrid) {
-          act0StatementGrid.style.opacity = '1';
-          act0StatementGrid.style.transform = 'none';
-        }
-        if (heroStatement) {
-          heroStatement.style.opacity = '1';
-          heroStatement.style.transform = 'none';
-        }
-        if (heroSignalRow) {
-          heroSignalRow.style.opacity = '1';
-          heroSignalRow.style.transform = 'none';
-        }
-        if (heroTitle) {
-          heroTitle.style.opacity = '1';
-          heroTitle.style.transform = 'none';
-        }
-
-        // Act 1 pre-staged in background
-        act1.style.transform = 'translate3d(0, 0, 0) scale(1)';
-        act1.style.filter = 'none';
-        act1.style.opacity = '0';
-        act1.style.pointerEvents = 'none';
-        act1.style.zIndex = '5';
-        if (act1Container) act1Container.style.transform = 'translate3d(0, 0, 0)';
-
-        if (act1Heading) {
-          act1Heading.style.opacity = '0';
-          act1Heading.style.transform = 'translate3d(0, 45px, 0)';
-        }
-        if (act1Intro) act1Intro.style.opacity = '0';
-        projectCards.forEach(card => {
-          card.style.opacity = '0';
-          card.style.transform = 'translate3d(0, 55px, 0)';
-          card.style.pointerEvents = 'none';
-        });
-
-        // Act 2 hidden
-        act2.style.opacity = '0';
-        act2.style.pointerEvents = 'none';
-
+      if (scrollY + vh * 0.4 >= act2Top) {
+        updateHUD(2);
+      } else if (scrollY + vh * 0.4 >= act1Top) {
+        updateHUD(1);
+      } else {
         updateHUD(0);
       }
-      // -----------------------------------------------------------------------
-      // 2. Transition: Act 0 -> Act 1 (Fade out Hero, Stagger in Projects)
-      // -----------------------------------------------------------------------
-      else if (s > M1_TRANS_START && s < M1_TRANS_END) {
-        const t = Math.max(0, Math.min(1, (s - M1_TRANS_START) / tDist01));
+    }
 
-        // Both acts remain crisp at scale(1)
-        act0.style.transform = 'translate3d(0, 0, 0) scale(1)';
-        act0.style.filter = 'none';
-        act0.style.opacity = '1';
-        act0.style.zIndex = '10';
-        act0.style.pointerEvents = t < 0.5 ? 'auto' : 'none';
+    window.addEventListener('scroll', onNativeScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      measureAct0Geometry();
+      onNativeScroll();
+    }, { passive: true });
+    onNativeScroll();
 
-        act1.style.transform = 'translate3d(0, 0, 0) scale(1)';
-        act1.style.filter = 'none';
-        act1.style.opacity = '1';
-        act1.style.zIndex = '15';
-        act1.style.pointerEvents = t >= 0.5 ? 'auto' : 'none';
+    // Intersection Observers: Act & Content Transitions
+    if ('IntersectionObserver' in window) {
+      // Act transitions observer
+      const actObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          // Act 0 remains grounded at the top
+          if (entry.target.id === 'act-0') return;
 
-        if (act0Container) act0Container.style.transform = `translate3d(0, -${excessHeight0.toFixed(1)}px, 0)`;
-        if (act1Container) act1Container.style.transform = 'translate3d(0, 0, 0)';
-
-        if (sectionProfile) {
-          sectionProfile.style.transform = 'translate3d(0, 0, 0)';
-          sectionProfile.style.opacity = '1';
-        }
-
-        const eSlide = smoothTravel(Math.min(1, t / 0.65));
-
-        // Quick link chips slide upward out of view
-        if (heroQuickLinks) {
-          const chipsY = -eSlide * 52;
-          const chipsOpacity = Math.max(0, 1 - eSlide * 1.3);
-          heroQuickLinks.style.transform = `translate3d(0, ${chipsY.toFixed(1)}px, 0)`;
-          heroQuickLinks.style.opacity = chipsOpacity.toFixed(3);
-          heroQuickLinks.style.pointerEvents = eSlide > 0.4 ? 'none' : 'auto';
-        }
-
-        // Act 0 body text disappears smoothly
-        const bodyOpacity = Math.max(0, 1 - eSlide * 1.25).toFixed(3);
-        const bodyY = (-eSlide * 28).toFixed(1);
-
-        if (act0StatementGrid) {
-          act0StatementGrid.style.opacity = bodyOpacity;
-          act0StatementGrid.style.transform = `translate3d(0, ${bodyY}px, 0)`;
-        }
-        if (heroStatement) {
-          heroStatement.style.opacity = bodyOpacity;
-          heroStatement.style.transform = `translate3d(0, ${bodyY}px, 0)`;
-        }
-        if (heroSignalRow) {
-          heroSignalRow.style.opacity = bodyOpacity;
-          heroSignalRow.style.transform = `translate3d(0, ${bodyY}px, 0)`;
-        }
-        if (heroTitle) {
-          heroTitle.style.opacity = bodyOpacity;
-          heroTitle.style.transform = `translate3d(0, ${bodyY}px, 0)`;
-        }
-
-        // Act 1 Section Heading scrolls in cleanly with Act 1
-        if (act1Heading) {
-          const pHeading = Math.min(1, Math.max(0, (t - 0.20) / 0.35));
-          const eHeading = smoothTravel(pHeading);
-          act1Heading.style.opacity = eHeading.toFixed(3);
-          act1Heading.style.transform = `translate3d(0, ${((1 - eHeading) * 35).toFixed(1)}px, 0)`;
-        }
-
-        // Act 1 Section intro appears
-        if (act1Intro) {
-          const pIntro = Math.min(1, Math.max(0, (t - 0.30) / 0.30));
-          const eIntro = smoothTravel(pIntro);
-          act1Intro.style.opacity = eIntro.toFixed(3);
-          act1Intro.style.transform = `translate3d(0, ${((1 - eIntro) * 24).toFixed(1)}px, 0)`;
-        }
-
-        // Staggered sequential reveal of project demo boxes (t: 0.45 -> 1.00)
-        projectCards.forEach((card, i) => {
-          const cardStart = 0.45 + i * 0.09;
-          const cardDur = 0.24;
-          const pCard = Math.min(1, Math.max(0, (t - cardStart) / cardDur));
-          const eCard = smoothTravel(pCard);
-          card.style.opacity = eCard.toFixed(3);
-          card.style.transform = `translate3d(0, ${((1 - eCard) * 50).toFixed(1)}px, 0)`;
-          card.style.pointerEvents = eCard > 0.85 ? 'auto' : 'none';
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          } else {
+            // When scrolled back out of view, gently return to resting transition state
+            entry.target.classList.remove('in-view');
+          }
         });
+      }, {
+        threshold: 0.08,
+        rootMargin: '20px 0px -40px 0px'
+      });
 
-        // Act 2 hidden
-        act2.style.opacity = '0';
-        act2.style.pointerEvents = 'none';
+      document.querySelectorAll('.stage-act').forEach(act => {
+        actObserver.observe(act);
+      });
 
-        updateHUD(t >= 0.5 ? 1 : 0);
-      }
-      // -----------------------------------------------------------------------
-      // 3. Act 1: Work & Stack (Projects down to Stack via internal scroll)
-      // -----------------------------------------------------------------------
-      else if (s >= M1_TRANS_END && s <= M1_BOTTOM_PAUSE_END) {
-        act0.style.opacity = '0';
-        act0.style.pointerEvents = 'none';
-
-        if (act1Heading) {
-          act1Heading.style.opacity = '1';
-          act1Heading.style.transform = 'none';
-        }
-        if (act1Intro) {
-          act1Intro.style.opacity = '1';
-          act1Intro.style.transform = 'none';
-        }
-        projectCards.forEach(card => {
-          card.style.opacity = '1';
-          card.style.transform = '';
-          card.style.pointerEvents = 'auto';
+      // Internal items reveal observer for document flow sections (Tech Stack & Contact)
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          } else {
+            // Only un-reveal when safely far outside viewport (120px buffer prevents reverse-scroll edge bouncing)
+            const rect = entry.boundingClientRect;
+            if (rect.top > window.innerHeight + 120 || rect.bottom < -120) {
+              entry.target.classList.remove('is-visible');
+            }
+          }
         });
+      }, {
+        threshold: 0.10,
+        rootMargin: '10px 0px -30px 0px'
+      });
 
-        const maxOffset1 = act1Container ? Math.max(0, act1Container.scrollHeight - window.innerHeight) : 0;
-        let translateY = 0;
-
-        if (s <= M1_TOP_PAUSE_END) {
-          translateY = 0;
-        } else if (s <= M1_VERT_END) {
-          const p = (s - M1_TOP_PAUSE_END) / vDist1;
-          translateY = -smoothTravel(p) * maxOffset1;
-        } else {
-          translateY = -maxOffset1;
-        }
-
-        act1.style.transform = 'translate3d(0, 0, 0) scale(1)';
-        act1.style.filter = 'none';
-        act1.style.opacity = '1';
-        act1.style.pointerEvents = 'auto';
-        act1.style.zIndex = '10';
-        if (act1Container) act1Container.style.transform = `translate3d(0, ${translateY.toFixed(1)}px, 0)`;
-
-        // Act 2 pre-staged in background
-        act2.style.transform = 'translate3d(0, 0, 0) scale(0.55)';
-        act2.style.filter = 'none';
-        act2.style.opacity = '0';
-        act2.style.pointerEvents = 'none';
-        act2.style.zIndex = '5';
-        if (act2Container) act2Container.style.transform = 'translate3d(0, 0, 0)';
-
-        updateHUD(1);
-      }
-      // -----------------------------------------------------------------------
-      // 4. Optical Zoom Transition: Act 1 -> Act 2 (Pure hardware scale & opacity)
-      // -----------------------------------------------------------------------
-      else if (s > M2_ZOOM_START && s < M2_ZOOM_END) {
-        const t = Math.max(0, Math.min(1, (s - M2_ZOOM_START) / zDist12));
-
-        act0.style.opacity = '0';
-        act0.style.pointerEvents = 'none';
-
-        const maxOffset1 = act1Container ? Math.max(0, act1Container.scrollHeight - window.innerHeight) : 0;
-        if (act1Container) act1Container.style.transform = `translate3d(0, -${maxOffset1}px, 0)`;
-
-        const scale1 = 1.0 + t * 1.25;
-        const opacity1 = Math.max(0, 1 - Math.pow(t, 1.25));
-
-        act1.style.transform = `translate3d(0, 0, 0) scale(${scale1.toFixed(3)})`;
-        act1.style.filter = 'none';
-        act1.style.opacity = opacity1.toFixed(3);
-        act1.style.zIndex = '20';
-        act1.style.pointerEvents = t < 0.25 ? 'auto' : 'none';
-
-        if (act2Container) act2Container.style.transform = 'translate3d(0, 0, 0)';
-        const scale2 = 0.55 + t * 0.45;
-        const opacity2 = Math.max(0, Math.pow(t, 1.25));
-
-        act2.style.transform = `translate3d(0, 0, 0) scale(${scale2.toFixed(3)})`;
-        act2.style.filter = 'none';
-        act2.style.opacity = opacity2.toFixed(3);
-        act2.style.zIndex = '10';
-        act2.style.pointerEvents = t > 0.75 ? 'auto' : 'none';
-
-        updateHUD(t >= 0.5 ? 2 : 1);
-      }
-      // -----------------------------------------------------------------------
-      // 5. Act 2: Contact (Fully active connect stage)
-      // -----------------------------------------------------------------------
-      else if (s >= M2_ZOOM_END) {
-        act0.style.opacity = '0';
-        act0.style.pointerEvents = 'none';
-        act1.style.opacity = '0';
-        act1.style.pointerEvents = 'none';
-
-        act2.style.transform = 'translate3d(0, 0, 0) scale(1)';
-        act2.style.filter = 'none';
-        act2.style.opacity = '1';
-        act2.style.pointerEvents = 'auto';
-        act2.style.zIndex = '10';
-        if (act2Container) act2Container.style.transform = 'translate3d(0, 0, 0)';
-
-        updateHUD(2);
-      }
+      document.querySelectorAll('.stack-category, .contact-box').forEach(el => {
+        revealObserver.observe(el);
+      });
+    } else {
+      // Fallback for browsers without IntersectionObserver
+      document.querySelectorAll('.stage-act').forEach(el => el.classList.add('in-view'));
+      document.querySelectorAll('.project-bento-card, .stack-category, .contact-box').forEach(el => el.classList.add('is-visible'));
     }
 
-    // =========================================================================
-    // Direct, Instantaneous 1:1 Scroll Application (Zero artificial damping)
-    // =========================================================================
-    let lastRenderedScroll = -999999;
-    function applyScroll(val) {
-      targetScroll = Math.max(0, Math.min(TOTAL_SCROLL, val));
-      currentScroll = targetScroll;
-      if (Math.abs(currentScroll - lastRenderedScroll) > 0.01) {
-        render(currentScroll);
-        lastRenderedScroll = currentScroll;
-      }
-    }
-
-    // Smooth transition exclusively for button & HUD jumps
-    let jumpAnimId = null;
-    let momentumAnimId = null;
-
-    function cancelMomentum() {
-      if (momentumAnimId) {
-        cancelAnimationFrame(momentumAnimId);
-        momentumAnimId = null;
-      }
-    }
-
-    function animateScrollTo(dest) {
-      if (jumpAnimId) cancelAnimationFrame(jumpAnimId);
-      cancelMomentum();
-      const start = currentScroll;
-      const distance = dest - start;
-      if (Math.abs(distance) < 2) {
-        applyScroll(dest);
-        return;
-      }
-      const startTime = performance.now();
-      const duration = Math.min(450, Math.max(220, Math.abs(distance) * 0.3));
-
-      function step(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(1, elapsed / duration);
-        const ease = 1 - Math.pow(1 - progress, 3);
-        applyScroll(start + distance * ease);
-
-        if (progress < 1) {
-          jumpAnimId = requestAnimationFrame(step);
-        } else {
-          applyScroll(dest);
-          jumpAnimId = null;
-        }
-      }
-      jumpAnimId = requestAnimationFrame(step);
-    }
-
+    // Smooth navigation anchor clicks
     function scrollToAct(actIdx) {
-      cancelMomentum();
-      let dest = 0;
-      if (actIdx === 0) dest = 0;
-      else if (actIdx === 1) dest = M1_TRANS_END;
-      else if (actIdx === 2) dest = M2_ZOOM_END;
-      animateScrollTo(dest);
+      let targetEl = null;
+      if (actIdx === 0) targetEl = act0;
+      else if (actIdx === 1) targetEl = sectionProjects || act1;
+      else if (actIdx === 2) targetEl = act2;
+
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth' });
+      }
     }
 
-    // =========================================================================
-    // End-of-Act Dampening: Soft tactile cushion only at the boundary of each act
-    // =========================================================================
-    function getActEndDamping(s, dy) {
-      // 1. Soft cushion at the end of Act 0 (Profile resting zone before transition into Act 1)
-      if (dy > 0 && s >= (M0_VERT_END - 50) && s <= (M1_TRANS_START + 30)) {
-        return 0.58;
-      }
-      // 2. Soft cushion at the end of Act 1 (Stack resting zone before optical zoom into Act 2)
-      if (dy > 0 && s >= (M1_VERT_END - 60) && s <= (M2_ZOOM_START + 30)) {
-        return 0.58;
-      }
-      // 3. Soft cushion when scrolling back up near the top of the page
-      if (dy < 0 && s <= 50) {
-        return 0.65;
-      }
-      // 4. Default: 100% direct 1:1 scroll everywhere else
-      return 1.0;
-    }
-
-    // Initial render
-    applyScroll(0);
-
-    // =========================================================================
-    // Input Listeners: Direct 1:1 Tracking with End-of-Act Cushion & Touch Momentum
-    // =========================================================================
-
-    // Mouse Wheel / Trackpad
-    window.addEventListener('wheel', function (e) {
-      if (document.body.classList.contains('demo-is-open')) return;
-      const specDrawer = document.getElementById('spec-drawer-backdrop');
-      if (specDrawer && specDrawer.classList.contains('open')) return;
-
-      e.preventDefault();
-
-      let dy = e.deltaY;
-      if (e.deltaMode === 1) dy *= 33;
-      else if (e.deltaMode === 2) dy *= 300;
-
-      if (jumpAnimId) {
-        cancelAnimationFrame(jumpAnimId);
-        jumpAnimId = null;
-      }
-      cancelMomentum();
-      cancelMomentum();
-
-      const damp = getActEndDamping(currentScroll, dy);
-      applyScroll(currentScroll + dy * damp);
-    }, { passive: false });
-
-    // Touch Handling with Smooth Inertial Momentum Physics (Mobile & Tablets)
-    let touchStartY = 0;
-    let touchHistory = []; // stores recent { y, time }
-
-    window.addEventListener('touchstart', function (e) {
-      if (document.body.classList.contains('demo-is-open')) return;
-      const specDrawer = document.getElementById('spec-drawer-backdrop');
-      if (specDrawer && specDrawer.classList.contains('open')) return;
-
-      // Finger tap instantly catches/cancels any gliding momentum or jump
-      cancelMomentum();
-      if (jumpAnimId) {
-        cancelAnimationFrame(jumpAnimId);
-        jumpAnimId = null;
-      }
-      cancelMomentum();
-
-      if (e.touches && e.touches.length > 0) {
-        touchStartY = e.touches[0].clientY;
-        touchHistory = [{ y: touchStartY, time: performance.now() }];
-      }
-    }, { passive: true });
-
-    window.addEventListener('touchmove', function (e) {
-      if (document.body.classList.contains('demo-is-open')) return;
-      const specDrawer = document.getElementById('spec-drawer-backdrop');
-      if (specDrawer && specDrawer.classList.contains('open')) return;
-
-      if (e.touches && e.touches.length > 0) {
-        const currentY = e.touches[0].clientY;
-        const now = performance.now();
-        const dy = touchStartY - currentY;
-        touchStartY = currentY;
-
-        // Keep last 120ms of movement for accurate release velocity
-        touchHistory.push({ y: currentY, time: now });
-        while (touchHistory.length > 1 && (now - touchHistory[0].time) > 120) {
-          touchHistory.shift();
+    // HUD Dot click navigation
+    hudDots.forEach(dot => {
+      dot.addEventListener('click', function (e) {
+        const act = parseInt(dot.getAttribute('data-act'), 10);
+        if (!isNaN(act)) {
+          e.preventDefault();
+          scrollToAct(act);
         }
-
-        if (jumpAnimId) {
-          cancelAnimationFrame(jumpAnimId);
-          jumpAnimId = null;
-        }
-
-        const damp = getActEndDamping(currentScroll, dy);
-        applyScroll(currentScroll + dy * damp);
-      }
-    }, { passive: true });
-
-    function handleTouchEnd() {
-      if (document.body.classList.contains('demo-is-open')) return;
-      const specDrawer = document.getElementById('spec-drawer-backdrop');
-      if (specDrawer && specDrawer.classList.contains('open')) return;
-
-      if (touchHistory.length < 2) {
-        touchHistory = [];
-        return;
-      }
-
-      const now = performance.now();
-      const lastPoint = touchHistory[touchHistory.length - 1];
-      // Only compute velocity if finger was actively moving right up to release (< 100ms)
-      if (now - lastPoint.time > 100) {
-        touchHistory = [];
-        return;
-      }
-
-      const firstPoint = touchHistory[0];
-      const dt = lastPoint.time - firstPoint.time;
-      if (dt < 15) {
-        touchHistory = [];
-        return;
-      }
-
-      // totalDy > 0 means finger dragged up (page scrolls down)
-      const totalDy = firstPoint.y - lastPoint.y;
-      let velocity = totalDy / dt; // px/ms
-
-      // Ignore micro-drags
-      if (Math.abs(velocity) < 0.18) {
-        touchHistory = [];
-        return;
-      }
-
-      // Clamp max velocity
-      const maxVelocity = 3.2; // px/ms
-      velocity = Math.max(-maxVelocity, Math.min(maxVelocity, velocity));
-
-      let lastFrameTime = performance.now();
-      const friction = 0.948; // Natural exponential deceleration per 16ms frame
-
-      function momentumStep(frameTime) {
-        const elapsed = Math.min(48, frameTime - lastFrameTime);
-        lastFrameTime = frameTime;
-
-        velocity *= Math.pow(friction, elapsed / 16);
-
-        if (Math.abs(velocity) < 0.02) {
-          momentumAnimId = null;
-          return;
-        }
-
-        const stepDy = velocity * elapsed;
-        const damp = getActEndDamping(currentScroll, stepDy);
-        applyScroll(currentScroll + stepDy * damp);
-
-        if (currentScroll <= 0 || currentScroll >= TOTAL_SCROLL) {
-          momentumAnimId = null;
-          return;
-        }
-
-        momentumAnimId = requestAnimationFrame(momentumStep);
-      }
-
-      cancelMomentum();
-      momentumAnimId = requestAnimationFrame(momentumStep);
-      touchHistory = [];
-    }
-
-    window.addEventListener('touchend', handleTouchEnd, { passive: true });
-    window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
-
-    // Keyboard Navigation (Arrows, PageUp/Down, Space, Home, End)
-    window.addEventListener('keydown', function (e) {
-      if (document.body.classList.contains('demo-is-open')) return;
-      const specDrawer = document.getElementById('spec-drawer-backdrop');
-      if (specDrawer && specDrawer.classList.contains('open')) return;
-
-      if (jumpAnimId) {
-        cancelAnimationFrame(jumpAnimId);
-        jumpAnimId = null;
-      }
-      cancelMomentum();
-
-      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
-        e.preventDefault();
-        applyScroll(currentScroll + 220);
-      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-        e.preventDefault();
-        applyScroll(currentScroll - 220);
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        applyScroll(0);
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        applyScroll(TOTAL_SCROLL);
-      }
-    });
-
-    // Jump Buttons (.jump-btn with data-target-act="0|1|2")
-    document.querySelectorAll('.jump-btn').forEach(btn => {
-      btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        const act = parseInt(btn.getAttribute('data-target-act'), 10);
-        scrollToAct(act);
       });
     });
 
-    // HUD Dot Indicators Click
-    hudDots.forEach(dot => {
-      dot.addEventListener('click', function () {
-        const act = parseInt(dot.getAttribute('data-act'), 10);
-        scrollToAct(act);
+    // Jump Buttons
+    document.querySelectorAll('.jump-btn').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        const act = parseInt(btn.getAttribute('data-target-act'), 10);
+        if (!isNaN(act)) {
+          e.preventDefault();
+          scrollToAct(act);
+        }
       });
     });
 
     // Expose Global Engine Interface
     globalEngine = {
       scrollToAct: scrollToAct,
-      getTargetScroll: () => targetScroll,
-      setTargetScroll: (v) => { applyScroll(v); }
+      getTargetScroll: () => window.pageYOffset || document.documentElement.scrollTop || 0,
+      setTargetScroll: (v) => { window.scrollTo({ top: v, behavior: 'smooth' }); }
     };
   }
 
