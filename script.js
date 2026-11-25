@@ -120,6 +120,8 @@
     const act1 = document.getElementById('act-1');
     const act2 = document.getElementById('act-2');
     const sectionProjects = document.getElementById('section-projects');
+    const sectionStack = document.getElementById('section-stack');
+    const stackCard = sectionStack ? sectionStack.querySelector('.content-block') : null;
 
     // Bento Cards Direct Controller
     const bentoCards = Array.from(document.querySelectorAll('#section-projects .project-bento-card'));
@@ -147,6 +149,7 @@
       exitDistance: 60,
       act1Top: 0,
       act2Top: 0,
+      stackTop: 0,
       heroCenterShift: 240,
       profileSlideDistance: 95,
       profileCenterShift: 380
@@ -165,6 +168,12 @@
 
       const act1Top = act1 ? act1.offsetTop : 0;
       const act2Top = act2 ? act2.offsetTop : 0;
+
+      // Absolute position of Skills section
+      let stackTop = 0;
+      if (sectionStack) {
+        stackTop = act1Top + sectionStack.offsetTop;
+      }
 
       let heroCenterShift = 240;
       let profileSlideDistance = 95;
@@ -196,6 +205,7 @@
         exitDistance,
         act1Top,
         act2Top,
+        stackTop,
         heroCenterShift: Math.round(heroCenterShift),
         profileSlideDistance,
         profileCenterShift: Math.round(profileCenterShift)
@@ -225,6 +235,7 @@
         exitDistance,
         act1Top,
         act2Top,
+        stackTop,
         heroCenterShift,
         profileSlideDistance,
         profileCenterShift
@@ -295,7 +306,7 @@
 
           const p2 = Math.min(1, (relativeScroll - travelPhase1) / exitDistance);
           const exitEnd = 0.35;
-          const enterStart = 0;
+          const enterStart = 0.35;
           const cardsRevealProgress = 0.82;
 
           if (p2 <= exitEnd) {
@@ -370,6 +381,44 @@
         act1.style.pointerEvents = 'auto';
         if (act0) {
           act0.style.pointerEvents = 'none';
+        }
+      }
+
+      // Skills (Stack) Dynamic Scale-Up, Docking & Slide-Away Upward
+      if (stackCard && stackTop) {
+        // Entrance: As user scrolls down past Bento Cards, Skills scales up (0.92 -> 1.0) and slides up directly beneath
+        const stackInStart = stackTop - vh * 0.95;
+        const stackInDist = vh * 0.65;
+
+        // Exit: As Contact approaches center, Skills slides away upward and gently fades
+        const stackOutStart = act2Top - vh * 0.85;
+        const stackOutDist = vh * 0.60;
+
+        if (scrollY < stackInStart) {
+          stackCard.style.transform = 'scale(0.92) translate3d(0, 48px, 0)';
+          stackCard.style.opacity = '0.35';
+          stackCard.style.pointerEvents = 'none';
+        } else if (scrollY < stackInStart + stackInDist) {
+          const pIn = Math.min(1, Math.max(0, (scrollY - stackInStart) / stackInDist));
+          const easeIn = pIn * pIn * (3 - 2 * pIn);
+          const currentScale = (0.92 + 0.08 * easeIn).toFixed(3);
+          const currentY = ((1 - easeIn) * 48).toFixed(1);
+          const currentOp = (0.35 + 0.65 * easeIn).toFixed(3);
+          stackCard.style.transform = `scale(${currentScale}) translate3d(0, ${currentY}px, 0)`;
+          stackCard.style.opacity = currentOp;
+          stackCard.style.pointerEvents = easeIn > 0.5 ? 'auto' : 'none';
+        } else if (scrollY > stackOutStart) {
+          const pOut = Math.min(1, Math.max(0, (scrollY - stackOutStart) / stackOutDist));
+          const easeOut = pOut * pOut * (3 - 2 * pOut);
+          const currentY = (-easeOut * 80).toFixed(1);
+          const currentOp = Math.max(0, 1 - easeOut * 1.05).toFixed(3);
+          stackCard.style.transform = `scale(1) translate3d(0, ${currentY}px, 0)`;
+          stackCard.style.opacity = currentOp;
+          stackCard.style.pointerEvents = pOut > 0.75 ? 'none' : 'auto';
+        } else {
+          stackCard.style.transform = 'scale(1) translate3d(0, 0, 0)';
+          stackCard.style.opacity = '1';
+          stackCard.style.pointerEvents = 'auto';
         }
       }
 

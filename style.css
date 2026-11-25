@@ -609,7 +609,7 @@ button {
 #section-projects {
   min-height: 100vh;
   min-height: 100dvh;
-  padding: clamp(2rem, 5vh, 4rem) 1.5rem 2rem 1.5rem;
+  padding: clamp(2rem, 5vh, 4rem) 1.5rem 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -619,8 +619,8 @@ button {
 
 #section-stack {
   min-height: auto;
-  padding-top: 3.5rem;
-  padding-bottom: clamp(6rem, 12vh, 9rem);
+  padding-top: 1rem;
+  padding-bottom: 2.5rem;
 }
 
 /* Act 3: Contact & Connect — Centered at the end of the page */
@@ -1083,7 +1083,7 @@ button {
 }
 
 /* --------------------------------------------------
-   10. Scene 3: Technical Arsenal
+   10. Scene 3: Skills
    -------------------------------------------------- */
 #section-stack .content-block {
   background: rgba(14, 20, 32, 0.52);
@@ -1095,6 +1095,8 @@ button {
   box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
+  transform-origin: center top;
+  will-change: transform, opacity;
   transition: background-color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
 }
 
