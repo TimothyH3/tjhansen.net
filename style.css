@@ -618,12 +618,14 @@ button {
 #section-stack {
   min-height: auto;
   padding-top: 0.5rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 0.25rem;
 }
 
 /* Act 3: Contact & Connect — Centered at the end of the page */
 #act-2 {
   position: relative;
+  margin-top: -6vh;
+  margin-top: -6dvh;
   min-height: 100vh;
   min-height: 100dvh;
   z-index: 10;

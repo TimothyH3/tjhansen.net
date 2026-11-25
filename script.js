@@ -400,9 +400,9 @@
         const stackInStart = stackTop - vh * 0.90;
         const stackInDist = vh * 0.55;
 
-        // Accelerated Slide-Off: When user scrolls past Skills towards Contact,
-        // it slides off upward at >2.5x standard scroll speed so it disappears.
-        const stackOutStart = act2Top - vh * 0.95;
+        // Calibrated Slide-Off: When Section 5 (Contact) makes its way onto the screen (top reaches 35% into viewport),
+        // Skills begins gliding upward at a coordinated, moderate pace without vanishing prematurely.
+        const stackOutStart = act2Top - vh * 0.65;
 
         if (scrollY < stackInStart) {
           stackCard.style.maxWidth = '840px';
@@ -418,10 +418,10 @@
           stackCard.style.pointerEvents = easeIn > 0.5 ? 'auto' : 'none';
         } else if (scrollY > stackOutStart) {
           const scrollDelta = scrollY - stackOutStart;
-          const extraUpwardY = scrollDelta * 2.2;
+          const extraUpwardY = scrollDelta * 0.85;
           stackCard.style.maxWidth = '1040px';
           stackCard.style.transform = `translate3d(0, -${extraUpwardY.toFixed(1)}px, 0)`;
-          stackCard.style.pointerEvents = extraUpwardY > (vh * 0.75) ? 'none' : 'auto';
+          stackCard.style.pointerEvents = extraUpwardY > (vh * 0.65) ? 'none' : 'auto';
         } else {
           stackCard.style.maxWidth = '1040px';
           stackCard.style.transform = 'translate3d(0, 0, 0)';
