@@ -393,6 +393,7 @@ button {
   position: relative;
   width: 100%;
   height: 190vh;
+  height: 190dvh;
   z-index: 2;
   opacity: 1 !important;
   transform: none !important;
@@ -404,6 +405,7 @@ button {
   left: 0;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -427,6 +429,7 @@ button {
 #section-hero {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -474,10 +477,12 @@ button {
   pointer-events: auto;
 }
 
-/* Pull Act 1 up by 95vh so Section 3 appears right in the center as Section 2 disappears */
+/* Pull Act 1 up so Section 3 appears right in the center as Section 2 disappears */
 #act-1 {
+  position: relative;
   margin-top: -95vh;
-  z-index: 1;
+  margin-top: -95dvh;
+  z-index: 10;
   opacity: 0;
   pointer-events: none;
   transition: none;
@@ -603,6 +608,7 @@ button {
 /* Section 3: Selected Projects Bento Grid — Centered vertically as it appears */
 #section-projects {
   min-height: 100vh;
+  min-height: 100dvh;
   padding: clamp(2rem, 5vh, 4rem) 1.5rem 2rem 1.5rem;
   display: flex;
   flex-direction: column;
@@ -619,13 +625,17 @@ button {
 
 /* Act 3: Contact & Connect — Centered at the end of the page */
 #act-2 {
+  position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
+  z-index: 10;
   display: flex;
   flex-direction: column;
 }
 
 #act-2 .act-scroll-container {
   min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -633,6 +643,7 @@ button {
 
 #section-contact {
   min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -1010,6 +1021,8 @@ button {
   padding-top: 0.85rem;
   border-top: 1px solid var(--border);
   margin-top: auto;
+  position: relative;
+  z-index: 2;
 }
 
 .demo-trigger-btn {

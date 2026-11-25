@@ -137,34 +137,71 @@
       });
     }
 
-    // Act 0 Geometry Precalculation
-    let cachedAct0Geometry = { heroCenterShift: 240, profileSlideDistance: 95, profileCenterShift: 380 };
+    // Act 0 & Layout Metrics Precalculation (Computed strictly on load and resize to eliminate scroll reflows)
+    let cachedMetrics = {
+      vh: typeof window !== 'undefined' ? window.innerHeight : 800,
+      docHeight: 1,
+      act0Top: 0,
+      act0Scrollable: 0,
+      travelPhase1: 0,
+      exitDistance: 60,
+      act1Top: 0,
+      act2Top: 0,
+      heroCenterShift: 240,
+      profileSlideDistance: 95,
+      profileCenterShift: 380
+    };
 
-    function measureAct0Geometry() {
-      if (!sectionHero || !sectionProfile) return;
+    function measureLayoutGeometry() {
       const vh = window.innerHeight;
-      const heroContent = sectionHero.querySelector('.content-block');
-      const profileContent = sectionProfile.querySelector('.content-block');
+      const scrollHeight = document.documentElement.scrollHeight;
+      const docHeight = Math.max(1, scrollHeight - vh);
 
-      const heroHeight = heroContent ? heroContent.offsetHeight : (vh * 0.36);
-      const profileHeight = profileContent ? profileContent.offsetHeight : (vh * 0.32);
+      const act0Top = act0 ? act0.offsetTop : 0;
+      const act0Height = act0 ? act0.offsetHeight : vh * 1.9;
+      const act0Scrollable = Math.max(vh * 0.35, act0Height - vh);
+      const travelPhase1 = act0Scrollable * 0.55;
+      const exitDistance = Math.max(60, act0Scrollable - travelPhase1);
 
-      const heroInitialTop = Math.max(16, (vh - heroHeight) / 2);
-      const slightGap = Math.min(32, Math.max(22, Math.round(vh * 0.03)));
-      const targetProfileCenterTop = Math.max(16, Math.round((vh - profileHeight) / 2));
-      const profileOffsetTop = sectionProfile.offsetTop || (vh * 0.85);
-      const profileCenterShift = Math.max(0, profileOffsetTop - targetProfileCenterTop);
-      const heroTargetTopAtCenter = targetProfileCenterTop - slightGap - heroHeight;
-      const heroCenterShift = Math.max(0, heroInitialTop - heroTargetTopAtCenter);
-      const profileSlideDistance = Math.max(70, Math.min(120, Math.round(vh * 0.12)));
+      const act1Top = act1 ? act1.offsetTop : 0;
+      const act2Top = act2 ? act2.offsetTop : 0;
 
-      cachedAct0Geometry = {
+      let heroCenterShift = 240;
+      let profileSlideDistance = 95;
+      let profileCenterShift = 380;
+
+      if (sectionHero && sectionProfile) {
+        const heroContent = sectionHero.querySelector('.content-block');
+        const profileContent = sectionProfile.querySelector('.content-block');
+
+        const heroHeight = heroContent ? heroContent.offsetHeight : (vh * 0.36);
+        const profileHeight = profileContent ? profileContent.offsetHeight : (vh * 0.32);
+
+        const heroInitialTop = Math.max(16, (vh - heroHeight) / 2);
+        const slightGap = Math.min(32, Math.max(22, Math.round(vh * 0.03)));
+        const targetProfileCenterTop = Math.max(16, Math.round((vh - profileHeight) / 2));
+        const profileOffsetTop = sectionProfile.offsetTop || (vh * 0.85);
+        profileCenterShift = Math.max(0, profileOffsetTop - targetProfileCenterTop);
+        const heroTargetTopAtCenter = targetProfileCenterTop - slightGap - heroHeight;
+        heroCenterShift = Math.max(0, heroInitialTop - heroTargetTopAtCenter);
+        profileSlideDistance = Math.max(70, Math.min(120, Math.round(vh * 0.12)));
+      }
+
+      cachedMetrics = {
+        vh,
+        docHeight,
+        act0Top,
+        act0Scrollable,
+        travelPhase1,
+        exitDistance,
+        act1Top,
+        act2Top,
         heroCenterShift: Math.round(heroCenterShift),
-        profileSlideDistance: profileSlideDistance,
+        profileSlideDistance,
         profileCenterShift: Math.round(profileCenterShift)
       };
     }
-    measureAct0Geometry();
+    measureLayoutGeometry();
 
     // HUD Indicator
     let currentActIndex = -1;
@@ -177,14 +214,23 @@
       }
     }
 
-    // Native Scroll Engine
-    function onNativeScroll() {
-      const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    // Native Scroll Engine (Pure Calculation Frame, Zero Layout Queries)
+    function onNativeScroll(scrollY) {
+      const {
+        vh,
+        docHeight,
+        act0Top,
+        act0Scrollable,
+        travelPhase1,
+        exitDistance,
+        act1Top,
+        act2Top,
+        heroCenterShift,
+        profileSlideDistance,
+        profileCenterShift
+      } = cachedMetrics;
+
       const progress = docHeight > 0 ? Math.max(0, Math.min(1, scrollY / docHeight)) : 0;
-      const vh = window.innerHeight;
-      const act1Top = act1 ? act1.offsetTop : 0;
-      const act2Top = act2 ? act2.offsetTop : 0;
 
       // Ambient Background Atmosphere
       if (bgOrange) {
@@ -202,13 +248,7 @@
 
       // Act 0 Stage Choreography & Handover
       if (act0 && sectionHero && sectionProfile) {
-        const act0Top = act0.offsetTop;
         const relativeScroll = Math.max(0, scrollY - act0Top);
-        const act0Scrollable = Math.max(vh * 0.35, act0.offsetHeight - vh);
-
-        // Phase 1: Section 2 slides up to dock under Section 1
-        const travelPhase1 = act0Scrollable * 0.55;
-        const { heroCenterShift, profileSlideDistance, profileCenterShift } = cachedAct0Geometry;
 
         if (relativeScroll <= travelPhase1) {
           const p = Math.max(0, Math.min(1, relativeScroll / travelPhase1));
@@ -226,6 +266,10 @@
           const profileOpacity = Math.min(1, p * 2.2);
           sectionProfile.style.opacity = profileOpacity.toFixed(3);
           sectionProfile.style.pointerEvents = profileOpacity > 0.4 ? 'auto' : 'none';
+
+          if (act0) {
+            act0.style.pointerEvents = 'auto';
+          }
 
           if (act0Wrapper) {
             act0Wrapper.style.transform = 'translate3d(0, 0, 0)';
@@ -249,9 +293,7 @@
           sectionProfile.style.opacity = '1';
           sectionProfile.style.pointerEvents = 'auto';
 
-          const exitDistance = Math.max(60, act0Scrollable - travelPhase1);
           const p2 = Math.min(1, (relativeScroll - travelPhase1) / exitDistance);
-
           const exitEnd = 0.35;
           const enterStart = 0;
           const cardsRevealProgress = 0.82;
@@ -259,6 +301,10 @@
           if (p2 <= exitEnd) {
             const exitP = p2 / exitEnd;
             const exitEase = exitP * exitP * (3 - 2 * exitP);
+
+            if (act0) {
+              act0.style.pointerEvents = 'auto';
+            }
 
             if (act0Wrapper) {
               act0Wrapper.style.transform = `translate3d(0, ${(-exitEase * 0.45 * vh).toFixed(1)}px, 0)`;
@@ -273,6 +319,9 @@
             }
             setBentoCardsVisible(false);
           } else if (p2 < enterStart) {
+            if (act0) {
+              act0.style.pointerEvents = 'none';
+            }
             if (act0Wrapper) {
               act0Wrapper.style.transform = `translate3d(0, ${(-0.45 * vh).toFixed(1)}px, 0)`;
               act0Wrapper.style.opacity = '0';
@@ -286,6 +335,9 @@
             }
             setBentoCardsVisible(false);
           } else {
+            if (act0) {
+              act0.style.pointerEvents = 'none';
+            }
             if (act0Wrapper) {
               act0Wrapper.style.transform = `translate3d(0, ${(-0.45 * vh).toFixed(1)}px, 0)`;
               act0Wrapper.style.opacity = '0';
@@ -298,7 +350,7 @@
 
               act1.style.opacity = enterEase.toFixed(3);
               act1.style.transform = `translate3d(0, ${((1 - enterEase) * 36).toFixed(1)}px, 0)`;
-              act1.style.pointerEvents = enterEase > 0.5 ? 'auto' : 'none';
+              act1.style.pointerEvents = enterEase > 0.3 ? 'auto' : 'none';
             }
 
             if (p2 >= cardsRevealProgress) {
@@ -316,6 +368,9 @@
         act1.style.opacity = '1';
         act1.style.transform = 'translate3d(0, 0, 0)';
         act1.style.pointerEvents = 'auto';
+        if (act0) {
+          act0.style.pointerEvents = 'none';
+        }
       }
 
       // HUD Scroll-Spy Milestones
@@ -328,12 +383,29 @@
       }
     }
 
-    window.addEventListener('scroll', onNativeScroll, { passive: true });
+    // rAF Scroll Throttle Guard (Batches Touch Deltas to Hardware Display VSYNC)
+    let isScrollTicking = false;
+    function requestScrollUpdate() {
+      if (!isScrollTicking) {
+        isScrollTicking = true;
+        window.requestAnimationFrame(() => {
+          const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+          onNativeScroll(scrollY);
+          isScrollTicking = false;
+        });
+      }
+    }
+
+    window.addEventListener('scroll', requestScrollUpdate, { passive: true });
     window.addEventListener('resize', () => {
-      measureAct0Geometry();
-      onNativeScroll();
+      measureLayoutGeometry();
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+      onNativeScroll(scrollY);
     }, { passive: true });
-    onNativeScroll();
+
+    // Initial Engine Activation
+    const initialScrollY = typeof window !== 'undefined' ? (window.pageYOffset || document.documentElement.scrollTop || 0) : 0;
+    onNativeScroll(initialScrollY);
 
     // Intersection Observers: Act & Content Transitions
     if ('IntersectionObserver' in window) {
