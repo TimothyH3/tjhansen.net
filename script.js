@@ -183,6 +183,8 @@
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? Math.max(0, Math.min(1, scrollY / docHeight)) : 0;
       const vh = window.innerHeight;
+      const act1Top = act1 ? act1.offsetTop : 0;
+      const act2Top = act2 ? act2.offsetTop : 0;
 
       // Ambient Background Atmosphere
       if (bgOrange) {
@@ -308,30 +310,18 @@
         }
       }
 
-      // Act 1 -> Act 2 Handover
-      if (act1 && act2 && scrollY >= act1.offsetTop) {
+      // Act 1 in document flow: once user scrolls into Act 1, keep it visible and interactive
+      if (act1 && scrollY >= act1Top) {
         setBentoCardsVisible(true);
-        const act2Top = act2.offsetTop;
-        const triggerPoint = act2Top - vh * 0.9;
-        if (scrollY > triggerPoint) {
-          const fadeDist = vh * 0.55;
-          const act1Progress = Math.min(1, Math.max(0, (scrollY - triggerPoint) / fadeDist));
-          const act1Ease = act1Progress * act1Progress * (3 - 2 * act1Progress);
-          act1.style.opacity = Math.max(0, 1 - act1Ease * 1.05).toFixed(3);
-          act1.style.transform = `translate3d(0, ${(-act1Ease * 48).toFixed(1)}px, 0)`;
-          act1.style.pointerEvents = act1Progress > 0.65 ? 'none' : 'auto';
-        } else {
-          act1.style.opacity = '1';
-          act1.style.transform = 'translate3d(0, 0, 0)';
-          act1.style.pointerEvents = 'auto';
-        }
+        act1.style.opacity = '1';
+        act1.style.transform = 'translate3d(0, 0, 0)';
+        act1.style.pointerEvents = 'auto';
       }
 
       // HUD Scroll-Spy Milestones
-
-      if (scrollY + vh * 0.4 >= act2Top) {
+      if (act2Top && scrollY + vh * 0.4 >= act2Top) {
         updateHUD(2);
-      } else if (scrollY + vh * 0.4 >= act1Top) {
+      } else if (act1Top && scrollY + vh * 0.4 >= act1Top) {
         updateHUD(1);
       } else {
         updateHUD(0);
