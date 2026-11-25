@@ -1,10 +1,10 @@
 name: Starlink Adaptive Surcharge Sampler
 
+# Scheduled sampling has been migrated to native Cloudflare Worker Cron Triggers (100% free, runs every 10 min).
+# Manual workflow_dispatch retained below for optional manual trigger.
 on:
-  schedule:
-    # Runs twice an hour (at off-peak minutes 12 and 42) to probe 12 coordinates per batch
-    # Ensures steady, robust sampling progress across CONUS while staying within rate limits
-    - cron: '12,42 * * * *'
+  # schedule:
+  #   - cron: '12,42 * * * *'
   workflow_dispatch:
     inputs:
       batch_size:

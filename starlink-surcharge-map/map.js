@@ -163,12 +163,12 @@
       if (total !== undefined && total !== null) {
         total = Number(total);
         if (base === undefined || base === null) {
-          base = total >= 170 ? 170 : total >= 130 ? 130 : total < 85 ? 55 : 120;
+          base = total >= 170 ? 170 : total >= 130 ? 130 : total <= 55 ? 55 : 120;
         }
         adj = Math.round((total - Number(base)) * 100) / 100;
       } else {
         total = pt.status === 'discounted' ? 55 : pt.status === 'congested' ? 143 : 120;
-        base = total >= 170 ? 170 : total >= 130 ? 130 : total < 85 ? 55 : 120;
+        base = total >= 170 ? 170 : total >= 130 ? 130 : total <= 55 ? 55 : 120;
         adj = Math.round((total - base) * 100) / 100;
       }
     }
@@ -183,13 +183,13 @@
   }
 
   // Monthly service tiers matching total cheapest monthly cost:
-  // Green: $55-85, Blue: $85-130, Orange: $130-170, Red: $170+, Purple: Unavailable
+  // Green: $0-55, Blue: $55-130, Orange: $130-170, Red: $170+, Purple: Unavailable
   function getTierColor(pt) {
     if (pt.status === 'sold_out') return '#c084fc'; // Purple: unavailable
     const pricing = getPointPricing(pt);
     const cost = pricing.total !== null ? pricing.total : 120;
-    if (cost < 85) return '#10b981';  // Green: $55 - $85
-    if (cost < 130) return '#38bdf8'; // Blue: $85 - $130
+    if (cost <= 55) return '#10b981';  // Green: $0 - $55
+    if (cost < 130) return '#38bdf8'; // Blue: $55 - $130
     if (cost < 170) return '#f97316'; // Orange: $130 - $170
     return '#ef4444';                 // Red: $170+
   }
@@ -198,8 +198,8 @@
     if (pt.status === 'sold_out') return 'sold_out'; // Purple: unavailable
     const pricing = getPointPricing(pt);
     const cost = pricing.total !== null ? pricing.total : 120;
-    if (cost < 85) return 'discounted';  // Green: $55 - $85
-    if (cost < 130) return 'standard';   // Blue: $85 - $130
+    if (cost <= 55) return 'discounted';  // Green: $0 - $55
+    if (cost < 130) return 'standard';   // Blue: $55 - $130
     if (cost < 170) return 'congested';  // Orange: $130 - $170
     return 'high_demand';                // Red: $170+
   }
@@ -492,7 +492,7 @@
       if (isSold) {
         soldCount++;
       } else {
-        if (cost < 85) discountCount++;
+        if (cost <= 55) discountCount++;
         else if (cost < 130) standardCount++;
         else if (cost < 170) congestedCount++;
         else surchargeCount++; // Red: $170+
@@ -531,8 +531,8 @@
 
       if (isSold && !tierFilters.tierSoldOut) return false;
       if (!isSold) {
-        if (fee < 85 && !tierFilters.tierDiscount) return false;
-        if (fee >= 85 && fee < 130 && !tierFilters.tierStandard) return false;
+        if (fee <= 55 && !tierFilters.tierDiscount) return false;
+        if (fee > 55 && fee < 130 && !tierFilters.tierStandard) return false;
         if (fee >= 130 && fee < 170 && !tierFilters.tierCongested) return false;
         if (fee >= 170 && !tierFilters.tierSurcharge) return false;
       }
@@ -711,15 +711,15 @@
     let tierClass = isSold ? 'tier-waitlist' :
       cost >= 170 ? 'tier-high' :
         cost >= 130 ? 'tier-congested' :
-          cost >= 85 ? 'tier-standard' :
+          cost > 55 ? 'tier-standard' :
             'tier-discount';
 
     let tierTitle = isSold ? 'UNAVAILABLE (SOLD OUT)' :
       cost >= 170 ? '$170+ HIGH CONGESTION COST' :
         cost >= 130 ? '$130–$170 CONGESTION ADJUSTED' :
-          cost >= 85 ? '$85–$130 STANDARD BASE RATE' :
+          cost > 55 ? '$55–$130 STANDARD BASE RATE' :
             isUnsampled ? 'UNSAMPLED CELL' :
-              '$55–$85 CHEAPEST / DISCOUNTED';
+              '$0–$55 CHEAPEST / DISCOUNTED';
 
     let feeDisplay = isUnsampled ? 'PENDING' : `${formatMoney(totalMonthly)}/mo`;
 
