@@ -23,6 +23,7 @@ import random
 import logging
 import json
 import argparse
+import re
 from datetime import datetime, timezone
 from typing import Dict, List, Optional, Tuple, Any
 
@@ -243,8 +244,59 @@ def calculate_destination_point(lat: float, lng: float, distance_km: float, bear
 
 
 # ---------------------------------------------------------------------------
-# CONTINENTAL UNITED STATES (CONUS) BOUNDARY VERIFICATION
+# CONTINENTAL UNITED STATES (CONUS) & WATER BODY BOUNDARY VERIFICATION
 # ---------------------------------------------------------------------------
+US_CONUS_STATES = {
+    "AL", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "ID", "IL", "IN", "IA",
+    "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV",
+    "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD",
+    "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC"
+}
+
+# Polygons covering exclusively water surfaces of the Great Lakes
+GREAT_LAKES_POLYGONS = {
+    "Lake Superior": [
+        (46.7, -92.2), (47.0, -91.7), (47.4, -91.0), (47.9, -90.0), (48.0, -89.4),
+        (48.3, -89.2), (48.8, -88.5), (49.0, -88.0), (48.8, -87.0), (48.8, -86.2),
+        (48.0, -85.2), (47.5, -84.8), (46.8, -84.4), (46.4, -84.6), (46.5, -85.5),
+        (46.7, -86.5), (46.5, -87.4), (46.9, -87.9), (47.4, -88.0), (47.4, -88.5),
+        (47.0, -88.6), (46.8, -89.4), (46.7, -90.8), (46.7, -92.2)
+    ],
+    "Lake Michigan": [
+        (41.62, -87.20), (41.75, -87.50), (41.88, -87.60), (42.05, -87.66), (42.50, -87.80),
+        (43.00, -87.88), (43.50, -87.75), (44.00, -87.60), (44.50, -87.45), (45.30, -87.00),
+        (45.85, -87.00), (46.00, -86.50), (46.10, -85.70), (45.80, -84.75), (45.50, -84.95),
+        (45.00, -85.40), (44.20, -86.35), (43.20, -86.35), (42.20, -86.45), (41.75, -86.85),
+        (41.62, -87.20)
+    ],
+    "Lake Huron": [
+        (43.0, -82.4), (43.5, -82.5), (44.0, -83.0), (44.5, -83.4), (45.4, -83.5),
+        (45.9, -84.3), (46.1, -84.1), (46.4, -83.7), (46.1, -82.5), (46.0, -81.0),
+        (45.4, -80.4), (44.7, -79.8), (44.4, -80.5), (44.0, -81.7), (43.2, -82.0),
+        (43.0, -82.4)
+    ],
+    "Lake Erie": [
+        (41.4, -82.8), (41.6, -83.4), (41.9, -83.2), (42.0, -82.6), (42.3, -81.8),
+        (42.7, -80.8), (42.9, -79.0), (42.8, -78.9), (42.5, -79.5), (42.1, -80.2),
+        (41.7, -81.4), (41.4, -82.4), (41.4, -82.8)
+    ],
+    "Lake Ontario": [
+        (43.3, -79.8), (43.6, -79.5), (43.8, -78.8), (44.0, -77.8), (44.2, -76.5),
+        (44.0, -76.3), (43.6, -76.3), (43.3, -77.0), (43.2, -77.8), (43.2, -79.2),
+        (43.3, -79.8)
+    ]
+}
+
+# Open coastal water polygons strictly excluded from sampling
+COASTAL_WATER_POLYGONS = {
+    "Gulf of Mexico Offshore": [
+        (24.0, -97.5), (26.0, -97.1), (27.8, -97.0), (28.5, -96.0), (29.0, -94.8),
+        (29.4, -93.8), (29.2, -91.0), (28.8, -89.4), (30.0, -88.5), (30.0, -86.0),
+        (29.6, -84.0), (28.0, -83.0), (26.5, -82.2), (25.0, -81.8), (24.3, -82.5),
+        (24.0, -97.5)
+    ]
+}
+
 CONUS_POLYGON = [
     (49.0, -124.8), (49.0, -95.15), (49.38, -95.15), (48.0, -89.5), (47.5, -88.0),
     (46.5, -84.3), (45.4, -83.4), (43.0, -82.4), (41.7, -82.8), (42.9, -78.9),
@@ -261,13 +313,13 @@ CONUS_POLYGON = [
     (42.0, -124.5), (46.2, -124.1), (48.5, -124.8)
 ]
 
-def is_point_in_conus(lat: float, lng: float) -> bool:
-    """Ray-casting algorithm to strictly verify coordinates fall within CONUS landmass."""
-    n = len(CONUS_POLYGON)
+def point_in_polygon(lat: float, lng: float, polygon: List[Tuple[float, float]]) -> bool:
+    """Ray-casting algorithm to test point inclusion in an arbitrary polygon."""
+    n = len(polygon)
     inside = False
-    p1_lat, p1_lng = CONUS_POLYGON[0]
+    p1_lat, p1_lng = polygon[0]
     for i in range(1, n + 1):
-        p2_lat, p2_lng = CONUS_POLYGON[i % n]
+        p2_lat, p2_lng = polygon[i % n]
         if min(p1_lat, p2_lat) < lat <= max(p1_lat, p2_lat):
             if lng <= max(p1_lng, p2_lng):
                 if p1_lat != p2_lat:
@@ -276,6 +328,44 @@ def is_point_in_conus(lat: float, lng: float) -> bool:
                     inside = not inside
         p1_lat, p1_lng = p2_lat, p2_lng
     return inside
+
+
+def is_point_in_water(lat: float, lng: float) -> bool:
+    """Detects whether coordinates fall into the Great Lakes or open ocean waters."""
+    # 1. Great Lakes Polygons
+    for lake_poly in GREAT_LAKES_POLYGONS.values():
+        if point_in_polygon(lat, lng, lake_poly):
+            return True
+
+    # 2. Coastal & Gulf Polygons
+    for water_poly in COASTAL_WATER_POLYGONS.values():
+        if point_in_polygon(lat, lng, water_poly):
+            return True
+
+    # 3. Atlantic Ocean offshore boundary checks
+    if lat < 30.0 and lng > -80.0:
+        return True
+    if 30.0 <= lat < 35.0 and lng > -75.4:
+        return True
+    if 35.0 <= lat < 41.0 and lng > -74.0:
+        return True
+    if 41.0 <= lat < 45.0 and lng > -69.5:
+        return True
+
+    # 4. Pacific Ocean offshore boundary checks
+    if lng < -124.6:
+        return True
+    if 32.5 <= lat < 34.5 and lng < -120.6:
+        return True
+
+    return False
+
+
+def is_point_in_conus(lat: float, lng: float) -> bool:
+    """Ray-casting algorithm to strictly verify coordinates fall within CONUS landmass (excluding water)."""
+    if is_point_in_water(lat, lng):
+        return False
+    return point_in_polygon(lat, lng, CONUS_POLYGON)
 
 
 def generate_radial_scatter_points(center_lat: float, center_lng: float) -> List[Dict[str, Any]]:
@@ -404,6 +494,30 @@ def probe_starlink_availability(lat: float, lng: float) -> Optional[Dict[str, An
             state_long = comps.get("administrative_area_level_1", ("", ""))[1]
             city = comps.get("locality", ("", ""))[1]
             zip_code = comps.get("postal_code", ("", ""))[0]
+
+            # Gatekeeper: Strictly enforce genuine CONUS land addresses (no open water or foreign territory)
+            if country != "US":
+                logger.info(f"Skipping non-US coordinate ({lat}, {lng}): country={country}")
+                return None
+
+            if state_short not in US_CONUS_STATES:
+                logger.info(f"Skipping non-CONUS state ({lat}, {lng}): state={state_short}")
+                return None
+
+            first_match_types = first_match.get("types", [])
+            formatted_addr = (first_match.get("formatted_address") or "").strip()
+
+            is_water_or_invalid = (
+                "," not in formatted_addr or
+                first_match_types == ["natural_feature"] or
+                any(wb in formatted_addr.lower() for wb in [
+                    "lake superior", "lake michigan", "lake huron", "lake erie", "lake ontario",
+                    "gulf of mexico", "atlantic ocean", "pacific ocean"
+                ])
+            )
+            if is_water_or_invalid:
+                logger.info(f"Skipping water body / raw unplaced plus code ({lat}, {lng}): {formatted_addr}")
+                return None
 
             # 2. Create Lead Session
             lead_payload = {
@@ -714,7 +828,7 @@ def save_sampling_state(state: Dict[str, Any]):
 # ---------------------------------------------------------------------------
 # ADAPTIVE BATCH RUNNER
 # ---------------------------------------------------------------------------
-def run_sampling_batch(batch_size: int = 6, hotspots_only: bool = False, dry_run: bool = False):
+def run_sampling_batch(batch_size: int = 12, hotspots_only: bool = False, dry_run: bool = False):
     """
     Executes a single micro-batch:
     - 1-2 known hotspots checked first.
@@ -926,7 +1040,7 @@ def run_sampling_batch(batch_size: int = 6, hotspots_only: bool = False, dry_run
 # ---------------------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser(description="Starlink Adaptive Sparse Congestion Sampler")
-    parser.add_argument("--batch-size", type=int, default=6, help="Number of coordinates to probe in this run")
+    parser.add_argument("--batch-size", type=int, default=12, help="Number of coordinates to probe in this run")
     parser.add_argument("--hotspots-only", action="store_true", help="Only probe known hotspots; skip blanket grid")
     parser.add_argument("--dry-run", action="store_true", help="Probe endpoints without writing to Supabase")
     parser.add_argument("--reset-state", action="store_true", help="Reset cursor to 0 and reinitialize state file")

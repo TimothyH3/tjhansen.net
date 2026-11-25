@@ -2,15 +2,15 @@ name: Starlink Adaptive Surcharge Sampler
 
 on:
   schedule:
-    # Runs every 20 minutes (at off-peak minutes 7, 27, 47) to probe 2 coordinates per run (= 6/hr, ~1,000/week)
-    # Frequent micro-batches avoid GitHub Actions queue starvation and prevent Starlink rate limits
-    - cron: '7,27,47 * * * *'
+    # Runs twice an hour (at off-peak minutes 12 and 42) to probe 12 coordinates per batch
+    # Ensures steady, robust sampling progress across CONUS while staying within rate limits
+    - cron: '12,42 * * * *'
   workflow_dispatch:
     inputs:
       batch_size:
         description: 'Number of coordinates to probe per batch'
         required: false
-        default: '2'
+        default: '12'
       hotspots_only:
         description: 'Only probe known hotspots list (true/false)'
         required: false
@@ -59,7 +59,7 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             FLAGS="$FLAGS --dry-run"
           fi
-          BATCH_SIZE="${{ github.event.inputs.batch_size || '2' }}"
+          BATCH_SIZE="${{ github.event.inputs.batch_size || '12' }}"
           python scripts/sample_demand.py --batch-size "$BATCH_SIZE" $FLAGS
 
       - name: Persist Sampling State

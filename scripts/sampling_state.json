@@ -1,6 +1,6 @@
 {
   "current_week_index": 48,
-  "blanket_cursor": 30,
+  "blanket_cursor": 38,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -132,21 +132,25 @@
       "last_surcharge": 0,
       "consecutive_zeros": 1,
       "last_monthly_fee": 55.0,
-      "last_checked": "2026-11-25T11:11:14.051162+00:00"
+      "last_checked": "2026-11-25T17:56:42.493236+00:00"
     },
     {
       "name": "Seattle Puget Sound, WA",
       "lat": 47.6062,
       "lng": -122.3321,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 0,
+      "last_monthly_fee": 156.0,
+      "last_checked": "2026-11-25T17:56:48.570804+00:00"
     },
     {
       "name": "Spokane Inland Empire, WA",
       "lat": 47.6588,
       "lng": -117.426,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 66.0,
+      "last_checked": "2026-11-25T17:56:54.669583+00:00"
     },
     {
       "name": "Eugene Willamette Valley, OR",
@@ -377,15 +381,6 @@
       "last_checked": "2026-11-24T13:54:14.349733+00:00"
     },
     {
-      "name": "J57G+X8 Ejido Pachuca, B.C., Mexico",
-      "lat": 32.6149,
-      "lng": -114.8242,
-      "last_surcharge": 0,
-      "last_monthly_fee": 633.62,
-      "consecutive_zeros": 0,
-      "last_checked": "2026-11-24T13:54:56.066779+00:00"
-    },
-    {
       "name": "381 Hells Hollow Rd, Blue Ridge, GA 30513, USA",
       "lat": 34.9459,
       "lng": -84.4729,
@@ -395,20 +390,20 @@
       "last_checked": "2026-11-24T13:55:41.186615+00:00"
     },
     {
-      "name": "86VG9HHC+9P",
-      "lat": 47.3784,
-      "lng": -89.4282,
+      "name": "259 Cecil Cannon Rd, Rabun Gap, GA 30568, USA",
+      "lat": 34.9459,
+      "lng": -83.3783,
       "last_surcharge": 0,
-      "last_monthly_fee": 130.0,
+      "last_monthly_fee": 156.0,
       "consecutive_zeros": 0,
-      "last_checked": "2026-11-24T16:49:20.956943+00:00"
+      "last_checked": "2026-11-25T17:57:06.195203+00:00"
     }
   ],
-  "hotspot_cursor": 15,
+  "hotspot_cursor": 17,
   "stats": {
-    "total_probes_run": 1200,
-    "high_demand_hits_found": 9,
+    "total_probes_run": 1214,
+    "high_demand_hits_found": 10,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-25T11:11:23.841747+00:00"
+  "last_run_timestamp": "2026-11-25T17:58:22.202044+00:00"
 }
