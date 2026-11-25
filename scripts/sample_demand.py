@@ -44,8 +44,18 @@ if not HAS_HTTPX and not HAS_REQUESTS:
     import urllib.parse
 
 
+DEFAULT_BROWSER_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "Accept": "application/json, text/plain, */*"
+}
+
+
 def http_get_json(url: str, params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None, timeout: float = 12.0) -> Tuple[int, Optional[Dict[str, Any]]]:
     """Unified HTTP GET helper supporting httpx, requests, or urllib."""
+    req_headers = dict(DEFAULT_BROWSER_HEADERS)
+    if headers:
+        req_headers.update(headers)
+
     if params:
         query_string = urllib.parse.urlencode(params) if not HAS_HTTPX and not HAS_REQUESTS else ""
         if not HAS_HTTPX and not HAS_REQUESTS:
@@ -54,7 +64,7 @@ def http_get_json(url: str, params: Optional[Dict[str, Any]] = None, headers: Op
     if HAS_HTTPX:
         try:
             with httpx.Client(timeout=timeout) as client:
-                resp = client.get(url, params=params, headers=headers)
+                resp = client.get(url, params=params, headers=req_headers)
                 try:
                     return resp.status_code, resp.json()
                 except Exception:
@@ -64,7 +74,7 @@ def http_get_json(url: str, params: Optional[Dict[str, Any]] = None, headers: Op
 
     if HAS_REQUESTS:
         try:
-            resp = requests.get(url, params=params, headers=headers, timeout=timeout)
+            resp = requests.get(url, params=params, headers=req_headers, timeout=timeout)
             try:
                 return resp.status_code, resp.json()
             except Exception:
@@ -74,7 +84,7 @@ def http_get_json(url: str, params: Optional[Dict[str, Any]] = None, headers: Op
 
     # Fallback to standard library urllib
     try:
-        req = urllib.request.Request(url, headers=headers or {})
+        req = urllib.request.Request(url, headers=req_headers)
         with urllib.request.urlopen(req, timeout=timeout) as response:
             status_code = response.getcode()
             body = response.read().decode("utf-8")
@@ -90,17 +100,22 @@ def http_get_json(url: str, params: Optional[Dict[str, Any]] = None, headers: Op
 
 def http_post_json(url: str, payload: Dict[str, Any], headers: Optional[Dict[str, str]] = None, timeout: float = 15.0) -> Tuple[int, str]:
     """Unified HTTP POST helper supporting httpx, requests, or urllib."""
+    req_headers = dict(DEFAULT_BROWSER_HEADERS)
+    req_headers["Content-Type"] = "application/json"
+    if headers:
+        req_headers.update(headers)
+
     if HAS_HTTPX:
         try:
             with httpx.Client(timeout=timeout) as client:
-                resp = client.post(url, json=payload, headers=headers)
+                resp = client.post(url, json=payload, headers=req_headers)
                 return resp.status_code, resp.text
         except Exception as e:
             return 500, str(e)
 
     if HAS_REQUESTS:
         try:
-            resp = requests.post(url, json=payload, headers=headers, timeout=timeout)
+            resp = requests.post(url, json=payload, headers=req_headers, timeout=timeout)
             return resp.status_code, resp.text
         except Exception as e:
             return 500, str(e)
@@ -108,7 +123,7 @@ def http_post_json(url: str, payload: Dict[str, Any], headers: Optional[Dict[str
     # Standard library urllib
     try:
         data_bytes = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(url, data=data_bytes, headers=headers or {}, method="POST")
+        req = urllib.request.Request(url, data=data_bytes, headers=req_headers, method="POST")
         with urllib.request.urlopen(req, timeout=timeout) as response:
             return response.getcode(), response.read().decode("utf-8")
     except urllib.error.HTTPError as he:
@@ -128,6 +143,8 @@ logger = logging.getLogger("starlink_adaptive_sampler")
 # Environment Variables
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+WORKER_INGEST_URL = os.getenv("WORKER_INGEST_URL", "https://starlink-surcharge-worker.starlink-surcharge-map.workers.dev/api/ingest")
+WORKER_API_URL = os.getenv("WORKER_API_URL", "https://starlink-surcharge-worker.starlink-surcharge-map.workers.dev/api/check-fee")
 STATE_FILE_PATH = os.path.join(os.path.dirname(__file__), "sampling_state.json")
 
 USER_AGENTS = [
@@ -506,13 +523,65 @@ def probe_starlink_availability(lat: float, lng: float) -> Optional[Dict[str, An
 
 
 # ---------------------------------------------------------------------------
+# CLOUDFLARE EDGE WORKER BRIDGE INGESTION
+# ---------------------------------------------------------------------------
+def upsert_via_worker_bridge(records: List[Dict[str, Any]]) -> int:
+    """Fallback ingestion bridge: routes sampled records through the Cloudflare Edge Worker API."""
+    if not records:
+        return 0
+
+    logger.info(f"Routing {len(records)} records through Cloudflare Worker Edge bridge...")
+
+    # Strategy 1: Batch POST to Worker /api/ingest
+    if WORKER_INGEST_URL:
+        try:
+            status_code, resp_text = http_post_json(
+                WORKER_INGEST_URL,
+                payload={"records": records},
+                headers={"Content-Type": "application/json"}
+            )
+            if status_code in (200, 201):
+                try:
+                    data = json.loads(resp_text)
+                    count = data.get("count", len(records))
+                    logger.info(f"Worker batch ingest succeeded: {count}/{len(records)} saved to Supabase.")
+                    return count
+                except Exception:
+                    logger.info("Worker batch ingest succeeded.")
+                    return len(records)
+            else:
+                logger.warning(f"Worker batch ingest returned status {status_code}: {resp_text}. Falling back to check-fee edge probes.")
+        except Exception as e:
+            logger.warning(f"Worker batch ingest error: {e}. Falling back to check-fee edge probes.")
+
+    # Strategy 2: Individual GET to Worker /api/check-fee?lat={lat}&lng={lng}&force=true
+    successful = 0
+    if WORKER_API_URL:
+        for rec in records:
+            lat = rec["lat"]
+            lng = rec["lng"]
+            try:
+                probe_url = f"{WORKER_API_URL}?lat={lat}&lng={lng}&force=true"
+                code, resp_json = http_get_json(probe_url)
+                if code in (200, 201) and resp_json:
+                    successful += 1
+                else:
+                    logger.warning(f"Edge probe failed for ({lat}, {lng}) with status {code}")
+            except Exception as e:
+                logger.warning(f"Worker edge probe exception for ({lat}, {lng}): {e}")
+
+    logger.info(f"Worker edge bridge completed: {successful}/{len(records)} points ingested.")
+    return successful
+
+
+# ---------------------------------------------------------------------------
 # SUPABASE POSTGRESQL + POSTGIS INGESTION
 # ---------------------------------------------------------------------------
 def upsert_batch_to_supabase(records: List[Dict[str, Any]]) -> int:
     """Batches and upserts verified sampled records into Supabase PostgreSQL."""
     if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
-        logger.warning("SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY missing. Skipping database upsert.")
-        return 0
+        logger.info("Direct SUPABASE_SERVICE_ROLE_KEY not configured. Routing through Worker Edge bridge...")
+        return upsert_via_worker_bridge(records)
 
     headers = {
         "apikey": SUPABASE_SERVICE_ROLE_KEY,
