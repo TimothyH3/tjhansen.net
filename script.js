@@ -808,38 +808,38 @@
   function initProjectDrawer() {
     const projectDatabase = {
       'compass': {
-        title: 'Come Together Compass — Community Aid Platform',
-        fileTag: 'COMPASS_ARCHITECTURE.spec',
+        title: 'Come Together Compass',
+        fileTag: 'Project Overview',
         image: 'assets/images/project-1.svg',
         repoUrl: 'https://github.com/TimothyH3/come-together-compass',
-        desc: 'Full-stack community aid locator and anonymous triage platform with zero-fee federal geocoding.',
-        benchmark: 'Sub-120ms geocoding lookup • Zero persistent user session retention',
+        desc: 'A community aid locator and anonymous intake platform built to connect people with local support without tracking or API fees.',
+        benchmark: 'Fast geocoding · Zero persistent session storage',
         architecture: [
-          'U.S. Census Bureau REST Integration: Bypasses commercial mapping provider rate-limits and subscription fees through federal endpoint caching.',
-          'Volatile RAM State: All user filter preferences and coordinate inputs reside exclusively in Pinia memory; no local storage or tracking telemetry.',
-          'Emergency Escalation Protocol: Immediate one-click bridge to the 988 Suicide & Crisis Lifeline with instant memory wipe.'
+          'Census Bureau Geocoding: Uses public federal geocoding endpoints and Leaflet tiles to completely bypass expensive commercial mapping tiers.',
+          'Memory-Only Session State: Search filters and coordinate lookups stay in memory with Pinia, ensuring search history is never saved to disk or telemetry.',
+          'Direct Crisis Support: One-tap access to the 988 Crisis Lifeline with an immediate local data clear.'
         ],
         decisions: [
-          'Replaced Google Maps API with Leaflet and OpenStreetMap raster tiles to reduce running costs to $0.',
-          'Structured modular API contracts between Express endpoints and the Vue 3 Composition API frontend.'
+          'Used Leaflet and OpenStreetMap to keep ongoing hosting and map operations completely free.',
+          'Organized clean, typed API routes connecting an Express backend to a Vue 3 Composition API interface.'
         ],
         stack: ['Vue 3', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'Leaflet', 'Pinia', 'Vitest']
       },
       'starlink-tracker': {
-        title: 'Starlink Residential Service Cost Map',
-        fileTag: 'STARLINK_GEOSPATIAL_OVERLAY.spec',
+        title: 'Starlink Residential Cost Map',
+        fileTag: 'Project Overview',
         image: 'assets/images/project-3.svg',
         repoUrl: 'https://github.com/TimothyH3/Starlink-Price-Map',
-        desc: 'Nationwide geospatial intelligence tool built out of personal necessity as a full-time traveler to forecast Starlink monthly residential rates ($27.50–$170+/mo), regional discounts, and congestion surcharges.',
-        benchmark: '25km PostGIS geodetic proximity caching with respectful 10-minute edge micro-sampling (6–12 reqs/hr)',
+        desc: 'A nationwide map created out of personal need as a full-time traveler to forecast monthly Starlink service costs ($27.50 to $170+/mo) and regional congestion surcharges before moving locations.',
+        benchmark: '25km PostGIS caching · Gentle 10-minute edge polling',
         architecture: [
-          'Uber H3 Hexagonal Tessellation: Renders mathematically invariant resolution 5 hexagonal cells (~12.5 km circumradius) matching physical Starlink spot beams.',
-          'PostGIS Spatial Proximity Caching: Uses ST_DWithin geodetic queries to serve pricing within 25 km instantaneously, eliminating redundant upstream requests to Starlink.',
-          'Ethical Edge Rate Engineering: Employs a Cloudflare Worker Cron Trigger running only once every 10 minutes with ray-casting water body exclusion (Great Lakes & oceans) to strictly protect Starlink infrastructure.'
+          'Uber H3 Hexagonal Cells: Maps resolution 5 hexagons to match Starlink\'s service cell boundaries across North America.',
+          'PostGIS Proximity Caching: Reuses existing price data within 25 km so user searches are served immediately without hitting Starlink repeatedly.',
+          'Respectful Edge Polling: A scheduled Cloudflare Worker runs once every 10 minutes and filters out water bodies to keep traffic very low.'
         ],
         decisions: [
-          'Architected 100% free-tier serverless topology ($0/mo cost) uniting Cloudflare Worker edge isolates with Supabase PostGIS.',
-          'Integrated OpenStreetMap Nominatim with debounced autocomplete and animated fly-to camera controls.'
+          'Built on a free-tier serverless stack combining Cloudflare Workers with Supabase PostGIS.',
+          'Added OpenStreetMap search with autocomplete and smooth map navigation.'
         ],
         stack: ['Cloudflare Workers', 'TypeScript', 'Supabase PostGIS', 'Leaflet', 'Uber H3', 'Vue 3']
       }
@@ -858,24 +858,24 @@
 
       drawerContent.innerHTML = `
         <img src="${data.image}" alt="${data.title}" class="drawer-media-img">
-        <h3 class="drawer-h3 font-mono" id="drawer-title">${data.title}</h3>
+        <h3 class="drawer-h3" id="drawer-title">${data.title}</h3>
         <p class="drawer-desc">${data.desc}</p>
-        <div class="drawer-benchmark font-mono">⚡ ${data.benchmark}</div>
-        <div class="drawer-section-title font-mono">Architecture &amp; Concurrency</div>
+        <div class="drawer-benchmark">${data.benchmark}</div>
+        <div class="drawer-section-title">Architecture &amp; System Design</div>
         <ul class="drawer-list">
           ${data.architecture.map(item => `<li><span class="bullet font-mono">•</span><span>${item}</span></li>`).join('')}
         </ul>
-        <div class="drawer-section-title font-mono">Key Engineering Decisions</div>
+        <div class="drawer-section-title">Key Decisions</div>
         <ul class="drawer-list">
           ${data.decisions.map(item => `<li><span class="bullet font-mono">•</span><span>${item}</span></li>`).join('')}
         </ul>
-        <div class="drawer-section-title font-mono">Technologies &amp; Protocols</div>
-        <div class="drawer-stack-row font-mono">
+        <div class="drawer-section-title">Technologies Used</div>
+        <div class="drawer-stack-row">
           ${data.stack.map(tag => `<span class="drawer-tag">${tag}</span>`).join('')}
         </div>
         <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
-          <a href="${data.repoUrl || 'https://github.com/TimothyH3'}" target="_blank" rel="noopener noreferrer" class="minimal-btn primary-btn font-mono">View Repository ↗</a>
-          <button class="minimal-btn copy-btn font-mono" id="inner-drawer-close">Close Spec</button>
+          <a href="${data.repoUrl || 'https://github.com/TimothyH3'}" target="_blank" rel="noopener noreferrer" class="minimal-btn primary-btn">View Repository ↗</a>
+          <button class="minimal-btn copy-btn" id="inner-drawer-close">Close Spec</button>
         </div>
       `;
 
