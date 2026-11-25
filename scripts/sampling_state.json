@@ -1,6 +1,6 @@
 {
   "current_week_index": 48,
-  "blanket_cursor": 38,
+  "blanket_cursor": 68,
   "known_hotspots": [
     {
       "name": "Asheville Blue Ridge, NC",
@@ -157,70 +157,90 @@
       "lat": 44.0521,
       "lng": -123.0868,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 38.5,
+      "last_checked": "2026-11-25T18:51:35.249913+00:00"
     },
     {
       "name": "Boise Treasure Valley, ID",
       "lat": 43.615,
       "lng": -116.2023,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 38.5,
+      "last_checked": "2026-11-25T18:51:42.937245+00:00"
     },
     {
       "name": "Coeur d'Alene Hinterland, ID",
       "lat": 47.6777,
       "lng": -116.7804,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 66.0,
+      "last_checked": "2026-11-25T18:51:50.765569+00:00"
     },
     {
       "name": "Bozeman Gallatin Valley, MT",
       "lat": 45.677,
       "lng": -111.0429,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 38.5,
+      "last_checked": "2026-11-25T18:52:00.801463+00:00"
     },
     {
       "name": "Missoula Clark Fork, MT",
       "lat": 46.8721,
       "lng": -114.0076,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 38.5,
+      "last_checked": "2026-11-25T18:52:09.166186+00:00"
     },
     {
       "name": "Jackson Hole Teton, WY",
       "lat": 43.4799,
       "lng": -110.7624,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 38.5,
+      "last_checked": "2026-11-25T18:52:16.891005+00:00"
     },
     {
       "name": "Wasatch Front Salt Lake, UT",
       "lat": 40.7608,
       "lng": -111.891,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 27.5,
+      "last_checked": "2026-11-25T18:52:24.659966+00:00"
     },
     {
       "name": "St. George Red Rock, UT",
       "lat": 37.1041,
       "lng": -113.5684,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 27.5,
+      "last_checked": "2026-11-25T18:52:32.397473+00:00"
     },
     {
       "name": "Durango San Juan, CO",
       "lat": 37.2753,
       "lng": -107.8801,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 38.5,
+      "last_checked": "2026-11-25T18:52:38.090492+00:00"
     },
     {
       "name": "Denver Front Range, CO",
       "lat": 39.7392,
       "lng": -104.9903,
       "last_surcharge": 0,
-      "consecutive_zeros": 0
+      "consecutive_zeros": 1,
+      "last_monthly_fee": 38.5,
+      "last_checked": "2026-11-25T18:52:46.360958+00:00"
     },
     {
       "name": "Sedona Oak Creek, AZ",
@@ -397,13 +417,31 @@
       "last_monthly_fee": 156.0,
       "consecutive_zeros": 0,
       "last_checked": "2026-11-25T17:57:06.195203+00:00"
+    },
+    {
+      "name": "RWQ9+45 Georgetown, MS, USA",
+      "lat": 31.8378,
+      "lng": -90.0821,
+      "last_surcharge": 0,
+      "last_monthly_fee": 156.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-25T18:53:12.780003+00:00"
+    },
+    {
+      "name": "77G5+R2 Hartshorn, MO, USA",
+      "lat": 37.277,
+      "lng": -91.7424,
+      "last_surcharge": 0,
+      "last_monthly_fee": 143.0,
+      "consecutive_zeros": 0,
+      "last_checked": "2026-11-25T18:55:28.981159+00:00"
     }
   ],
-  "hotspot_cursor": 17,
+  "hotspot_cursor": 27,
   "stats": {
-    "total_probes_run": 1214,
-    "high_demand_hits_found": 10,
+    "total_probes_run": 1253,
+    "high_demand_hits_found": 12,
     "cycles_completed": 0
   },
-  "last_run_timestamp": "2026-11-25T17:58:22.202044+00:00"
+  "last_run_timestamp": "2026-11-25T18:57:06.662231+00:00"
 }
