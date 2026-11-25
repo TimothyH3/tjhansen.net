@@ -822,7 +822,7 @@
         title: 'Starlink Residential Service Cost Map',
         fileTag: 'STARLINK_GEOSPATIAL_OVERLAY.spec',
         image: 'assets/images/project-3.svg',
-        repoUrl: 'https://github.com/TimothyH3/starlink-tracker',
+        repoUrl: 'https://github.com/TimothyH3/Starlink-Price-Map',
         desc: 'Nationwide geospatial intelligence tool built out of personal necessity as a full-time traveler to forecast Starlink monthly residential rates ($27.50–$170+/mo), regional discounts, and congestion surcharges.',
         benchmark: '25km PostGIS geodetic proximity caching with respectful 10-minute edge micro-sampling (6–12 reqs/hr)',
         architecture: [
