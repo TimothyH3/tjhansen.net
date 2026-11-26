@@ -790,6 +790,7 @@ npm run dev</code></pre>
       if (drawerBackdrop) {
         drawerBackdrop.classList.add('open');
         drawerBackdrop.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
       }
 
       const innerClose = drawerContent.querySelector('#inner-drawer-close');
@@ -800,6 +801,7 @@ npm run dev</code></pre>
       if (!drawerBackdrop) return;
       drawerBackdrop.classList.remove('open');
       drawerBackdrop.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
     }
 
     document.querySelectorAll('.inspect-btn').forEach(btn => {
