@@ -552,15 +552,27 @@
       document.querySelectorAll('.project-bento-card, .stack-category, .contact-box').forEach(el => el.classList.add('is-visible'));
     }
 
-    // Smooth navigation anchor clicks
+    // Smooth navigation anchor clicks with precise offset calculation
     function scrollToAct(actIdx) {
-      let targetEl = null;
-      if (actIdx === 0) targetEl = act0;
-      else if (actIdx === 1) targetEl = sectionProjects || act1;
-      else if (actIdx === 2) targetEl = act2;
-
-      if (targetEl) {
-        targetEl.scrollIntoView({ behavior: 'smooth' });
+      if (actIdx === 0) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (actIdx === 1) {
+        // On desktop, Act 1 is pulled up via negative margin during scroll choreography.
+        // Scrolling precisely to act1Top places Section 3 directly in view without cutting off the heading.
+        if (window.innerWidth > 768 && cachedMetrics.act1Top) {
+          window.scrollTo({ top: cachedMetrics.act1Top, behavior: 'smooth' });
+        } else {
+          const targetEl = document.getElementById('act1-heading') || sectionProjects || act1;
+          if (targetEl) {
+            const rect = targetEl.getBoundingClientRect();
+            const topPos = window.pageYOffset + rect.top - 36;
+            window.scrollTo({ top: topPos, behavior: 'smooth' });
+          }
+        }
+      } else if (actIdx === 2) {
+        if (act2) {
+          act2.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     }
 

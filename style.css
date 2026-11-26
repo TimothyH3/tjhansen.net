@@ -2742,19 +2742,35 @@ body.intro-revealed #section-hero .quick-links {
 }
 
 
+
 /* ==========================================================================
-   MONOCHROME SOFTWARE TOOL LOGO STRIP (Across Bottom Under Left & Right Bio)
+   MONOCHROME SOFTWARE TOOL LOGO STRIP (Infinite Marquee on Mobile, Static on Desktop)
    ========================================================================== */
 .tools-logo-strip {
   grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 1.25rem 2.25rem;
+  width: 100%;
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+}
+
+.tools-marquee-track {
+  display: flex;
+  width: 100%;
+}
+
+.tools-marquee-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.25rem 2.25rem;
+  flex-shrink: 0;
+}
+
+.tools-marquee-content[aria-hidden="true"] {
+  display: none;
 }
 
 .tool-item {
@@ -2764,6 +2780,7 @@ body.intro-revealed #section-hero .quick-links {
   color: var(--text-muted);
   transition: color 200ms ease, transform 200ms ease;
   user-select: none;
+  white-space: nowrap;
 }
 
 .tool-item svg {
@@ -2814,14 +2831,74 @@ body.intro-revealed #section-hero .quick-links {
   color: #0F172A;
 }
 
-@media (max-width: 640px) {
+/* Code Links & Contact Links with SVGs */
+.code-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.code-link svg {
+  opacity: 0.8;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.code-link:hover svg {
+  opacity: 1;
+}
+
+.link-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.link-item svg {
+  opacity: 0.8;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.link-item:hover svg {
+  opacity: 1;
+}
+
+/* On small screens: Seamless infinite marquee loop to keep everything clean on one line */
+@media (max-width: 768px) {
   .tools-logo-strip {
-    gap: 1rem 1.5rem;
     margin-top: 1.5rem;
     padding-top: 1.25rem;
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+
+  .tools-marquee-track {
+    width: max-content;
+    animation: tools-marquee 22s linear infinite;
+  }
+
+  .tools-logo-strip:hover .tools-marquee-track {
+    animation-play-state: paused;
+  }
+
+  .tools-marquee-content {
+    gap: 2rem;
+    padding-right: 2rem;
+  }
+
+  .tools-marquee-content[aria-hidden="true"] {
+    display: flex;
   }
 
   .tool-name {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
+  }
+}
+
+@keyframes tools-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
   }
 }
