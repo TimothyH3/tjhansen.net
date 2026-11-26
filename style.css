@@ -2230,3 +2230,220 @@ body.intro-revealed #section-hero .quick-links {
     min-height: auto !important;
   }
 }
+
+
+/* ==========================================================================
+   PROJECT MEDIA CARD EXTENSION & SCREENSHOT LINKS
+   ========================================================================== */
+.project-media-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  margin-bottom: 1.15rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.project-media-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px var(--accent-glow);
+}
+
+.project-media-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #0B0E17;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme="light"] .project-media-wrapper {
+  background: #F1F5F9;
+}
+
+.project-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 320ms ease;
+}
+
+.project-media-link:hover .project-card-image {
+  transform: scale(1.03);
+}
+
+/* ==========================================================================
+   README DRAWER STYLES
+   ========================================================================== */
+.readme-doc-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.readme-doc-banner {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #0B0E17;
+  aspect-ratio: 16 / 9;
+}
+
+.readme-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.readme-header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.25rem;
+}
+
+.readme-h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.35rem;
+  color: var(--text-primary);
+}
+
+.readme-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.85rem;
+}
+
+.readme-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.readme-badge {
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  background: var(--bg-card-hover);
+  color: var(--accent);
+  border: 1px solid var(--border);
+}
+
+.readme-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.readme-h2 {
+  font-size: 1.18rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.readme-section p {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.readme-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-left: 0.25rem;
+}
+
+.readme-list li {
+  position: relative;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.readme-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.readme-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.readme-table th,
+.readme-table td {
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.readme-table th {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.readme-table td {
+  color: var(--text-secondary);
+}
+
+.readme-table tr:last-child td {
+  border-bottom: none;
+}
+
+.readme-code {
+  background: #05070B;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #E2E8F0;
+  overflow-x: auto;
+}
+
+[data-theme="light"] .readme-code {
+  background: #1E293B;
+}
+
+.readme-link {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.readme-footer-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}

@@ -595,291 +595,157 @@
   }
 
   // ===========================================================================
-  // 4. PROJECT DEMO MODALS CONTROLLER (Zoom-In On Click, Zoom-Out On Scroll)
-  // ===========================================================================
-  function initProjectDemos() {
-    const demoOverlay = document.getElementById('project-demo-overlay');
-    const opticalStage = document.getElementById('optical-stage');
-    const demoBackBtn = document.getElementById('demo-back-btn');
-    const demoCloseBtn = document.getElementById('demo-close-btn');
-    const demoBottomClose = document.getElementById('demo-bottom-close');
-    const demoViews = Array.from(document.querySelectorAll('.demo-view'));
-
-    let isDemoOpen = false;
-    let demoScrollAccumulator = 0;
-
-    function openDemo(demoKey) {
-      if (!demoOverlay) return;
-
-      // Select active matching view
-      demoViews.forEach(view => {
-        const id = view.id.replace('demo-', '');
-        if (id === demoKey) {
-          view.classList.add('active-demo');
-        } else {
-          view.classList.remove('active-demo');
-        }
-      });
-
-      // Activate zoom-in transition
-      demoOverlay.classList.add('open');
-      demoOverlay.setAttribute('aria-hidden', 'false');
-      if (opticalStage) opticalStage.classList.add('demo-active');
-      document.body.classList.add('demo-is-open');
-
-      isDemoOpen = true;
-      demoScrollAccumulator = 0;
-    }
-
-    function closeDemo() {
-      if (!isDemoOpen || !demoOverlay) return;
-
-      // Zoom-out transition
-      demoOverlay.classList.remove('open');
-      demoOverlay.setAttribute('aria-hidden', 'true');
-      if (opticalStage) opticalStage.classList.remove('demo-active');
-      document.body.classList.remove('demo-is-open');
-
-      isDemoOpen = false;
-      demoScrollAccumulator = 0;
-    }
-
-    // Open demo on "Live Demo" button click
-    document.querySelectorAll('.demo-trigger-btn').forEach(btn => {
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        const demoKey = btn.getAttribute('data-demo');
-        if (demoKey) openDemo(demoKey);
-      });
-    });
-
-    // Open on clicking project bento card itself (excluding direct links and specs buttons)
-    document.querySelectorAll('.project-bento-card').forEach(card => {
-      card.addEventListener('click', function (e) {
-        if (e.target.closest('a') || e.target.closest('.inspect-btn')) return;
-        const key = card.getAttribute('data-project-key');
-        if (key) openDemo(key);
-      });
-    });
-
-    // Close actions: Return button, Close button, Bottom close, Backdrop click
-    if (demoBackBtn) demoBackBtn.addEventListener('click', closeDemo);
-    if (demoCloseBtn) demoCloseBtn.addEventListener('click', closeDemo);
-    if (demoBottomClose) demoBottomClose.addEventListener('click', closeDemo);
-
-    if (demoOverlay) {
-      demoOverlay.addEventListener('click', function (e) {
-        if (e.target === demoOverlay) {
-          closeDemo();
-        }
-      });
-    }
-
-    // Exit demo when user deliberately scrolls (> 50px)
-    window.addEventListener('wheel', function (e) {
-      if (!isDemoOpen) return;
-      demoScrollAccumulator += Math.abs(e.deltaY);
-      if (demoScrollAccumulator > 50) {
-        closeDemo();
-      }
-    }, { passive: true });
-
-    let demoTouchStartY = 0;
-    window.addEventListener('touchstart', function (e) {
-      if (!isDemoOpen) return;
-      if (e.touches && e.touches.length > 0) {
-        demoTouchStartY = e.touches[0].clientY;
-      }
-    }, { passive: true });
-
-    window.addEventListener('touchmove', function (e) {
-      if (!isDemoOpen) return;
-      if (e.touches && e.touches.length > 0) {
-        const dy = Math.abs(demoTouchStartY - e.touches[0].clientY);
-        if (dy > 45) {
-          closeDemo();
-        }
-      }
-    }, { passive: true });
-
-    window.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && isDemoOpen) {
-        closeDemo();
-      }
-    });
-
-    // =========================================================================
-    // 5. INTERACTIVE SIMULATION TOYS WITHIN DEMOS
-    // =========================================================================
-
-    // Simulation 1: Come Together Compass
-    const compassGeocodeBtn = document.getElementById('compass-geocode-btn');
-    const compassWipeBtn = document.getElementById('compass-wipe-btn');
-    const compassLatency = document.getElementById('compass-latency-val');
-    const compassRetention = document.getElementById('compass-retention-val');
-    const compassEmergency = document.getElementById('compass-emergency-val');
-    const compassLog = document.getElementById('compass-log');
-
-    const sampleAddresses = [
-      '100 W Washington St, Phoenix, AZ 85003',
-      '400 E Van Buren St, Phoenix, AZ 85004',
-      '1100 S Priest Dr, Tempe, AZ 85281',
-      '300 E University Dr, Tempe, AZ 85281'
-    ];
-    let addressIdx = 0;
-
-    if (compassGeocodeBtn) {
-      compassGeocodeBtn.addEventListener('click', function () {
-        const addr = sampleAddresses[addressIdx % sampleAddresses.length];
-        addressIdx++;
-        const lat = (33.4255 + (Math.random() * 0.04 - 0.02)).toFixed(4);
-        const lon = (-111.9400 + (Math.random() * 0.04 - 0.02)).toFixed(4);
-        const randLat = Math.floor(95 + Math.random() * 40);
-
-        if (compassLatency) compassLatency.textContent = `${randLat} ms`;
-        if (compassRetention) compassRetention.textContent = '0 Bytes (Volatile Pinia)';
-
-        if (compassLog) {
-          const now = new Date().toISOString().substring(11, 23);
-          const line1 = document.createElement('div');
-          line1.className = 'term-line text-green';
-          line1.textContent = `[${now}] [CENSUS-API] Resolved: "${addr}" -> (${lat}° N, ${lon}° W) in ${randLat}ms. $0 API cost.`;
-          const line2 = document.createElement('div');
-          line2.className = 'term-line';
-          line2.textContent = `[${now}] [LEAFLET] Filtered 6 nearest shelter & food aid hubs within 5.0 km radius.`;
-          compassLog.appendChild(line1);
-          compassLog.appendChild(line2);
-          compassLog.scrollTop = compassLog.scrollHeight;
-        }
-      });
-    }
-
-    if (compassWipeBtn) {
-      compassWipeBtn.addEventListener('click', function () {
-        if (compassRetention) compassRetention.textContent = 'PURGED (0 Bytes)';
-        if (compassEmergency) compassEmergency.textContent = '988 Escalated • Safe Mode';
-
-        if (compassLog) {
-          const now = new Date().toISOString().substring(11, 23);
-          const line1 = document.createElement('div');
-          line1.className = 'term-line text-accent';
-          line1.textContent = `[${now}] [EMERGENCY-988] Rapid crisis escalation triggered. Routing client to 988 Lifeline bridge.`;
-          const line2 = document.createElement('div');
-          line2.className = 'term-line text-green';
-          line2.textContent = `[${now}] [PINIA-PURGE] Complete volatile memory purge executed. Session storage: 0 bytes. Zero data footprint.`;
-          compassLog.appendChild(line1);
-          compassLog.appendChild(line2);
-          compassLog.scrollTop = compassLog.scrollHeight;
-        }
-
-        setTimeout(() => {
-          if (compassEmergency) compassEmergency.textContent = '988 Lifeline Armed';
-          if (compassRetention) compassRetention.textContent = '0 Bytes (RAM-Only)';
-        }, 3000);
-      });
-    }
-
-    // Simulation 2: Starlink Tracker
-    const starlinkQueryBtn = document.getElementById('starlink-query-btn');
-    const starlinkToggleBtn = document.getElementById('starlink-toggle-btn');
-    const starlinkLatency = document.getElementById('starlink-latency-val');
-    const starlinkCells = document.getElementById('starlink-cells-val');
-    const starlinkStatus = document.getElementById('starlink-status-val');
-    const starlinkLog = document.getElementById('starlink-log');
-
-    const sampleQueries = [
-      { loc: 'Flagstaff, AZ (35.1983° N, 111.6513° W)', cost: '$120/MO', tier: 'STANDARD' },
-      { loc: 'Sedona, AZ (34.8697° N, 111.7610° W)', cost: '$130/MO', tier: 'CONGESTION SURCHARGE (+ $100 Upfront)' },
-      { loc: 'Tucson, AZ (32.2226° N, 110.9747° W)', cost: '$120/MO', tier: 'STANDARD' },
-      { loc: 'Rural Navajo County, AZ (35.3995° N, 110.1542° W)', cost: '$55/MO', tier: 'REGIONAL DISCOUNT ($55/MO)' }
-    ];
-    let queryIdx = 0;
-    let overlayActive = true;
-
-    if (starlinkQueryBtn) {
-      starlinkQueryBtn.addEventListener('click', function () {
-        const q = sampleQueries[queryIdx % sampleQueries.length];
-        queryIdx++;
-        const randLat = (1.4 + Math.random() * 0.9).toFixed(1);
-
-        if (starlinkLatency) starlinkLatency.textContent = `${randLat} ms`;
-        if (starlinkStatus) {
-          starlinkStatus.textContent = q.tier;
-          starlinkStatus.className = q.tier.includes('SURCHARGE') ? 'demo-stat-val text-accent' : (q.tier.includes('DISCOUNT') ? 'demo-stat-val text-accent' : 'demo-stat-val text-green');
-        }
-
-        if (starlinkLog) {
-          const now = new Date().toISOString().substring(11, 23);
-          const line1 = document.createElement('div');
-          line1.className = 'term-line text-green';
-          line1.textContent = `[${now}] [RAY-CAST] Queried ${q.loc} against 2,418 polygons in ${randLat}ms.`;
-          const line2 = document.createElement('div');
-          line2.className = q.tier.includes('SURCHARGE') ? 'term-line text-accent' : 'term-line';
-          line2.textContent = `[${now}] [CLASSIFICATION] Result: ${q.tier} • Base fee: ${q.cost}.`;
-          starlinkLog.appendChild(line1);
-          starlinkLog.appendChild(line2);
-          starlinkLog.scrollTop = starlinkLog.scrollHeight;
-        }
-      });
-    }
-
-    if (starlinkToggleBtn) {
-      starlinkToggleBtn.addEventListener('click', function () {
-        overlayActive = !overlayActive;
-        if (starlinkCells) starlinkCells.textContent = overlayActive ? '2,418 Polygons' : '0 (Hidden)';
-
-        if (starlinkLog) {
-          const now = new Date().toISOString().substring(11, 23);
-          const line = document.createElement('div');
-          line.className = 'term-line text-dim';
-          line.textContent = `[${now}] [LAYER-TOGGLE] High-demand surcharge overlay: ${overlayActive ? 'ACTIVE (Layer visible)' : 'DISABLED (Layer hidden)'}.`;
-          starlinkLog.appendChild(line);
-          starlinkLog.scrollTop = starlinkLog.scrollHeight;
-        }
-      });
-    }
-  }
-
-  // ===========================================================================
   // 5. ARCHITECTURAL SPECIFICATION DRAWER CONTROLLER
   // ===========================================================================
   function initProjectDrawer() {
-    const projectDatabase = {
+    const readmeDatabase = {
       'compass': {
         title: 'Come Together Compass',
-        fileTag: 'Project Overview',
-        image: 'assets/images/project-1.svg',
+        subtitle: 'Community Aid Platform (ASU Capstone #38)',
+        fileTag: 'README.md',
+        image: 'assets/images/compass-placeholder.svg',
         repoUrl: 'https://github.com/TimothyH3/come-together-compass',
-        desc: 'A community aid locator and anonymous intake platform built to connect people with local support without tracking or API fees.',
-        benchmark: 'Fast geocoding · Zero persistent session storage',
-        architecture: [
-          'Census Bureau Geocoding: Uses public federal geocoding endpoints and Leaflet tiles to completely bypass expensive commercial mapping tiers.',
-          'Memory-Only Session State: Search filters and coordinate lookups stay in memory with Pinia, ensuring search history is never saved to disk or telemetry.',
-          'Direct Crisis Support: One-tap access to the 988 Crisis Lifeline with an immediate local data clear.'
-        ],
-        decisions: [
-          'Used Leaflet and OpenStreetMap to keep ongoing hosting and map operations completely free.',
-          'Organized clean, typed API routes connecting an Express backend to a Vue 3 Composition API interface.'
-        ],
-        stack: ['Vue 3', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'Leaflet', 'Pinia', 'Vitest']
+        contentHtml: `
+          <div class="readme-header">
+            <h1 class="readme-h1">Come Together Compass</h1>
+            <p class="readme-subtitle">Community Pay It Forward – ASU Capstone #38</p>
+            <div class="readme-badges">
+              <span class="readme-badge">Vue 3</span>
+              <span class="readme-badge">TypeScript</span>
+              <span class="readme-badge">Pinia</span>
+              <span class="readme-badge">Express.js</span>
+              <span class="readme-badge">PostgreSQL</span>
+              <span class="readme-badge">Leaflet</span>
+            </div>
+          </div>
+
+          <div class="readme-section">
+            <h2 class="readme-h2">Overview</h2>
+            <p>A Vue 3 + Vite web platform that connects families and individuals with verified community resources through an interactive map, conversational guidance, and administrative verification.</p>
+            <p><strong>Mission:</strong> Turn everyday support into accessible community lifelines by helping people quickly discover local assistance programs without commercial API fees or tracking.</p>
+          </div>
+
+          <div class="readme-section">
+            <h2 class="readme-h2">Key Features</h2>
+            <ul class="readme-list">
+              <li><strong>Interactive Resource Map:</strong> Search and filter community resources by category and proximity with Leaflet and OpenStreetMap raster tiles.</li>
+              <li><strong>Zero-Fee Federal Geocoding:</strong> Bypasses commercial mapping charges by querying public U.S. Census Bureau REST geocoding services directly.</li>
+              <li><strong>Memory-Only Privacy (Pinia):</strong> Volatile session state holds user coordinates and intake responses strictly in RAM—ensuring zero persistent tracking or disk storage.</li>
+              <li><strong>Instant Crisis Escalation:</strong> Rapid one-click bridge to the 988 Suicide & Crisis Lifeline with automatic in-memory session purge.</li>
+              <li><strong>Admin Verification Portal:</strong> Role-based access control allowing verified partners to update, approve, and curate food pantry, shelter, and medical listings.</li>
+            </ul>
+          </div>
+
+          <div class="readme-section">
+            <h2 class="readme-h2">Architecture &amp; Tech Stack</h2>
+            <table class="readme-table">
+              <thead>
+                <tr>
+                  <th>Layer</th>
+                  <th>Technology</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Front-end</td><td>Vue 3 (Composition API, SFCs), Vite</td></tr>
+                <tr><td>State &amp; Store</td><td>Pinia (Volatile memory session)</td></tr>
+                <tr><td>Maps &amp; Spatial</td><td>Leaflet, OpenStreetMap, U.S. Census Bureau API</td></tr>
+                <tr><td>Backend API</td><td>Node.js, Express.js (RESTful routes)</td></tr>
+                <tr><td>Database &amp; ORM</td><td>PostgreSQL, Prisma ORM</td></tr>
+                <tr><td>Testing &amp; CI</td><td>Vitest, GitHub Actions CI/CD</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="readme-section">
+            <h2 class="readme-h2">Getting Started</h2>
+            <p>Prerequisites: Node.js 20+ and PostgreSQL 14+.</p>
+            <pre class="readme-code"><code># Clone repository
+git clone https://github.com/TimothyH3/come-together-compass.git
+cd come-together-compass
+
+# Install dependencies
+npm install
+
+# Configure environment variables
+cp .env.template .env
+
+# Run database migrations
+npx prisma migrate dev
+
+# Start development server
+npm run dev</code></pre>
+          </div>
+        `
       },
       'starlink-tracker': {
         title: 'Starlink Residential Cost Map',
-        fileTag: 'Project Overview',
-        image: 'assets/images/project-3.svg',
+        subtitle: 'Nationwide Geospatial Price & Surcharge Tracker',
+        fileTag: 'README.md',
+        image: 'assets/images/starlink-map-preview.jpg',
         repoUrl: 'https://github.com/TimothyH3/Starlink-Price-Map',
-        desc: 'A nationwide map created out of personal need as a full-time traveler to forecast monthly Starlink service costs ($27.50 to $170+/mo) and regional congestion surcharges before moving locations.',
-        benchmark: '25km PostGIS caching · Gentle 10-minute edge polling',
-        architecture: [
-          'Uber H3 Hexagonal Cells: Maps resolution 5 hexagons to match Starlink\'s service cell boundaries across North America.',
-          'PostGIS Proximity Caching: Reuses existing price data within 25 km so user searches are served immediately without hitting Starlink repeatedly.',
-          'Respectful Edge Polling: A scheduled Cloudflare Worker runs once every 10 minutes and filters out water bodies to keep traffic very low.'
-        ],
-        decisions: [
-          'Built on a free-tier serverless stack combining Cloudflare Workers with Supabase PostGIS.',
-          'Added OpenStreetMap search with autocomplete and smooth map navigation.'
-        ],
-        stack: ['Cloudflare Workers', 'TypeScript', 'Supabase PostGIS', 'Leaflet', 'Uber H3', 'Vue 3']
+        contentHtml: `
+          <div class="readme-header">
+            <h1 class="readme-h1">Starlink Price Map</h1>
+            <p class="readme-subtitle">Geospatial map tracking Starlink Residential monthly service costs, regional pricing tiers, and demand surcharges across the United States.</p>
+            <div class="readme-badges">
+              <span class="readme-badge">Cloudflare Workers</span>
+              <span class="readme-badge">TypeScript</span>
+              <span class="readme-badge">Supabase PostGIS</span>
+              <span class="readme-badge">Uber H3</span>
+              <span class="readme-badge">Leaflet</span>
+            </div>
+          </div>
+
+          <div class="readme-section">
+            <h2 class="readme-h2">About The Project</h2>
+            <p>This application maps Starlink Residential service pricing across the continental United States. It identifies regional price adjustments, base rates, upfront hardware surcharges, and cell capacity statuses.</p>
+          </div>
+
+          <div class="readme-section">
+            <h2 class="readme-h2">Why I Built This</h2>
+            <p>I travel full-time and frequently change my Starlink Residential service address to stay connected. Starlink monthly rates vary depending on location:</p>
+            <ul class="readme-list">
+              <li><strong>Discounted regions:</strong> Cost between $27.50 and $55.00/month.</li>
+              <li><strong>Standard regions:</strong> Cost $120.00/month.</li>
+              <li><strong>Congested / High-Demand regions:</strong> Incur a monthly surcharge reaching $130–$170+/month plus upfront hardware adjustment fees.</li>
+            </ul>
+            <p>Because Starlink does not provide a public pricing map, finding low-cost service areas previously required repeatedly entering dummy addresses into their signup form. I engineered this tool to visualize and forecast internet expenses along my route.</p>
+          </div>
+
+          <div class="readme-section">
+            <h2 class="readme-h2">Respectful Server Traffic Methods</h2>
+            <p>To respect Starlink's servers and prevent unnecessary load, the system implements polite data collection and aggressive spatial caching:</p>
+            <ul class="readme-list">
+              <li><strong>Conservative Edge Cron:</strong> A scheduled Cloudflare Worker runs once every 10 minutes (6 queries per hour, occasionally up to 12).</li>
+              <li><strong>PostGIS Spatial Proximity Caching:</strong> When an address or cell is queried, the database first searches within a 25km radius. Existing data is reused without querying upstream servers.</li>
+              <li><strong>Water Body &amp; Boundary Exclusion:</strong> Ray-casting filters skip cell coordinates over oceans and large bodies of water (such as the Great Lakes).</li>
+            </ul>
+          </div>
+
+          <div class="readme-section">
+            <h2 class="readme-h2">Built With</h2>
+            <table class="readme-table">
+              <thead>
+                <tr>
+                  <th>Component</th>
+                  <th>Technology</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Hexagonal Indexing</td><td>Uber H3 (Resolution 5 cells, ~12.5 km circumradius)</td></tr>
+                <tr><td>Spatial Database</td><td>Supabase PostgreSQL with PostGIS extension</td></tr>
+                <tr><td>Edge Micro-Sampling</td><td>Cloudflare Workers (TypeScript)</td></tr>
+                <tr><td>Interactive Map</td><td>Leaflet, OpenStreetMap raster tiles</td></tr>
+                <tr><td>Search &amp; Geocoding</td><td>OpenStreetMap Nominatim with debounced autocomplete</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="readme-section">
+            <h2 class="readme-h2">Explore Live</h2>
+            <p>View the live full-screen interactive map: <a href="/starlink-surcharge-map" class="readme-link">tjhansen.net/starlink-surcharge-map ↗</a></p>
+          </div>
+        `
       }
     };
 
@@ -889,31 +755,23 @@
     const drawerFileTag = document.getElementById('drawer-file-tag');
 
     function openDrawer(key) {
-      const data = projectDatabase[key];
+      const data = readmeDatabase[key];
       if (!data || !drawerContent) return;
 
-      if (drawerFileTag) drawerFileTag.textContent = data.fileTag;
+      if (drawerFileTag) drawerFileTag.textContent = data.fileTag || 'README.md';
 
       drawerContent.innerHTML = `
-        <img src="${data.image}" alt="${data.title}" class="drawer-media-img">
-        <h3 class="drawer-h3" id="drawer-title">${data.title}</h3>
-        <p class="drawer-desc">${data.desc}</p>
-        <div class="drawer-benchmark">${data.benchmark}</div>
-        <div class="drawer-section-title">Architecture &amp; System Design</div>
-        <ul class="drawer-list">
-          ${data.architecture.map(item => `<li><span class="bullet font-mono">•</span><span>${item}</span></li>`).join('')}
-        </ul>
-        <div class="drawer-section-title">Key Decisions</div>
-        <ul class="drawer-list">
-          ${data.decisions.map(item => `<li><span class="bullet font-mono">•</span><span>${item}</span></li>`).join('')}
-        </ul>
-        <div class="drawer-section-title">Technologies Used</div>
-        <div class="drawer-stack-row">
-          ${data.stack.map(tag => `<span class="drawer-tag">${tag}</span>`).join('')}
-        </div>
-        <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
-          <a href="${data.repoUrl || 'https://github.com/TimothyH3'}" target="_blank" rel="noopener noreferrer" class="minimal-btn primary-btn">View Repository ↗</a>
-          <button class="minimal-btn copy-btn" id="inner-drawer-close">Close Spec</button>
+        <div class="readme-doc-container">
+          <div class="readme-doc-banner">
+            <img src="${data.image}" alt="${data.title}" class="readme-banner-img">
+          </div>
+          ${data.contentHtml}
+          <div class="readme-footer-actions">
+            <a href="${data.repoUrl || 'https://github.com/TimothyH3'}" target="_blank" rel="noopener noreferrer" class="minimal-btn primary-btn">
+              <span>View Repository on GitHub ↗</span>
+            </a>
+            <button class="minimal-btn copy-btn" id="inner-drawer-close">Close README</button>
+          </div>
         </div>
       `;
 
@@ -1102,8 +960,7 @@
     initTheme();
     initIntroAnimation();
     initScrollAndZoomEngine();
-    initProjectDemos();
-    initProjectDrawer();
+        initProjectDrawer();
     initCopyEmail();
   }
 

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#818cf8" stop-opacity="0.1" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)" />
+  <rect width="800" height="450" fill="url(#grid)" />
+  <rect x="80" y="45" width="640" height="360" rx="12" fill="url(#glow)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+
+  <!-- Compass / Pin Icon -->
+  <g transform="translate(400, 195)" stroke="#38bdf8" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="0" cy="0" r="42" stroke="rgba(56, 189, 248, 0.4)" stroke-width="2" />
+    <circle cx="0" cy="0" r="28" stroke="#38bdf8" stroke-width="1.5" />
+    <polygon points="0,-22 7,0 0,22 -7,0" fill="#38bdf8" stroke="none" opacity="0.85" />
+    <circle cx="0" cy="0" r="3" fill="#ffffff" stroke="none" />
+  </g>
+
+  <!-- Labels -->
+  <text x="400" y="275" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#f1f5f9" letter-spacing="0.02em">
+    Come Together Compass
+  </text>
+  <text x="400" y="305" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="#94a3b8">
+    Community Aid &amp; Resource Locator Platform
+  </text>
+  <text x="400" y="340" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="12" font-weight="500" fill="#38bdf8">
+    Click to view on GitHub ↗
+  </text>
+</svg>

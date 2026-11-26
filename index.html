@@ -78,7 +78,7 @@
     rel="stylesheet">
 
   <!-- Main Stylesheet (bump query ?v= to clear browser cache on updates) -->
-  <link rel="stylesheet" href="style.css?v=66">
+  <link rel="stylesheet" href="style.css?v=67">
 </head>
 
 <body>
@@ -279,26 +279,20 @@
                    PROJECT 1: Come Together Compass
                    =========================================================== -->
               <article class="project-bento-card" data-project-key="compass">
-                <div class="bento-top">
-                  <span class="project-index">Geospatial Aid</span>
-                  <span class="project-badge">Vue 3 • Node • Leaflet • Pinia</span>
-                </div>
+                <a href="https://github.com/TimothyH3/come-together-compass" target="_blank" rel="noopener noreferrer" class="project-media-link" aria-label="View Come Together Compass on GitHub">
+                  <div class="project-media-wrapper">
+                    <img src="assets/images/compass-placeholder.svg" alt="Come Together Compass Platform Preview" class="project-card-image" loading="lazy">
+                  </div>
+                </a>
                 <h3 class="bento-title">Come Together Compass</h3>
                 <p class="bento-desc">A community resource locator and private intake tool built to help people quickly find local assistance without commercial map fees or tracking.</p>
-                <div class="bento-metric">Fast geocoding · Zero session tracking</div>
                 <ul class="bento-bullet-list">
                   <li><span class="bullet">•</span><span>Connects with the U.S. Census Bureau geocoding service and Leaflet/OpenStreetMap to avoid expensive third-party API fees.</span></li>
                   <li><span class="bullet">•</span><span>Keeps state in memory with Pinia so user searches stay private, with a quick link to the 988 Crisis Lifeline.</span></li>
                 </ul>
                 <div class="bento-actions">
-                  <button class="demo-trigger-btn primary-demo-btn" data-demo="compass">
-                    <span>Live Demo</span>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                  </button>
                   <button class="inspect-btn" data-project="compass">
-                    <span>Specs</span>
+                    <span>README</span>
                   </button>
                   <a href="https://github.com/TimothyH3/come-together-compass" target="_blank" rel="noopener noreferrer"
                     class="code-link">GitHub ↗</a>
@@ -309,29 +303,20 @@
                    PROJECT 2: Starlink Service Cost Map
                    =========================================================== -->
               <article class="project-bento-card" data-project-key="starlink-tracker">
-                <div class="bento-top">
-                  <span class="project-index">Travel &amp; Satellite Tech</span>
-                  <span class="project-badge">Cloudflare Edge • PostGIS • Leaflet • Uber H3</span>
-                </div>
+                <a href="/starlink-surcharge-map" class="project-media-link" aria-label="Open Starlink Residential Cost Map">
+                  <div class="project-media-wrapper">
+                    <img src="assets/images/starlink-map-preview.jpg" alt="Starlink Residential Cost Map Preview" class="project-card-image" loading="lazy">
+                  </div>
+                </a>
                 <h3 class="bento-title">Starlink Residential Cost Map</h3>
                 <p class="bento-desc">I travel full-time and move my Starlink address often. Because monthly rates vary between regions ($27.50 to $170+/mo) without an official price map, I made this tool to plan internet costs ahead of time.</p>
-                <div class="bento-metric">25km spatial caching · Respectful edge polling</div>
                 <ul class="bento-bullet-list">
                   <li><span class="bullet">•</span><span><strong>Visual cell map:</strong> Renders hexagonal cells and pricing zones ($27.50–$55 discount, $120 standard, and congested rates) so travelers know what to expect before moving.</span></li>
                   <li><span class="bullet">•</span><span><strong>Lightweight design:</strong> Uses PostGIS caching within 25km and a quiet 10-minute edge job so queries stay fast without burdening Starlink's servers.</span></li>
                 </ul>
                 <div class="bento-actions">
-                  <a href="/starlink-surcharge-map" class="demo-trigger-btn primary-demo-btn">
-                    <span>Live Map ↗</span>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                  </a>
-                  <button class="demo-trigger-btn" data-demo="starlink-tracker">
-                    <span>Sim Demo</span>
-                  </button>
                   <button class="inspect-btn" data-project="starlink-tracker">
-                    <span>Specs</span>
+                    <span>README</span>
                   </button>
                   <a href="https://github.com/TimothyH3/Starlink-Price-Map" target="_blank" rel="noopener noreferrer"
                     class="code-link">GitHub ↗</a>
@@ -476,139 +461,13 @@
   </main>
 
   <!-- =========================================================================
-       FULL-SCREEN PROJECT DEMO OVERLAY (Zoom-In On Click, Zoom-Out On Scroll/Click)
-       ========================================================================= -->
-  <aside class="project-demo-overlay" id="project-demo-overlay" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="demo-modal" id="demo-modal">
-
-      <!-- Top Bar: Back Action & Scroll Cue -->
-      <div class="demo-top-bar">
-        <button class="demo-back-btn" id="demo-back-btn" aria-label="Return to projects">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-          <span>Return to Projects</span>
-        </button>
-
-        <div class="demo-scroll-pill">
-          <span class="demo-indicator-dot"></span>
-          <span>Scroll wheel or touch to exit</span>
-        </div>
-
-        <button class="demo-close-btn" id="demo-close-btn" aria-label="Close demo">✕</button>
-      </div>
-
-      <!-- DEMO VIEW 1: Come Together Compass -->
-      <div class="demo-view" id="demo-compass">
-        <div class="demo-header">
-          <div class="demo-tag">Community Aid Platform</div>
-          <h2 class="demo-title">Come Together Compass Demo</h2>
-          <p class="demo-intro">An interactive look at how the community aid locator resolves addresses with the Census Bureau geocoder and manages user privacy in memory.</p>
-        </div>
-
-        <div class="demo-stats-grid">
-          <div class="demo-stat-box">
-            <span class="demo-stat-lbl">GEOCODER</span>
-            <span class="demo-stat-val text-green" id="compass-geocoder-val">Census Gov ($0 Fee)</span>
-          </div>
-          <div class="demo-stat-box">
-            <span class="demo-stat-lbl">LOOKUP TIME</span>
-            <span class="demo-stat-val" id="compass-latency-val">118 ms</span>
-          </div>
-          <div class="demo-stat-box">
-            <span class="demo-stat-lbl">PINIA RETENTION</span>
-            <span class="demo-stat-val text-accent" id="compass-retention-val">0 Bytes (RAM-Only)</span>
-          </div>
-          <div class="demo-stat-box">
-            <span class="demo-stat-lbl">EMERGENCY PROTOCOL</span>
-            <span class="demo-stat-val text-green" id="compass-emergency-val">988 Lifeline Armed</span>
-          </div>
-        </div>
-
-        <div class="demo-interactive-stage">
-          <div class="demo-controls-bar">
-            <button class="minimal-btn primary-btn" id="compass-geocode-btn">Test Address Lookup</button>
-            <button class="minimal-btn" id="compass-wipe-btn">Test 988 Escalation &amp; Data Clear</button>
-          </div>
-
-          <div class="demo-terminal" id="compass-log">
-            <div class="term-line text-dim">[16:04:02.100] [COMPASS-CORE] Vue 3 Pinia RAM-only session initialized.
-              LocalStorage persistence: DISABLED.</div>
-            <div class="term-line">[16:04:02.320] [GEOCODER] Client connected to geocoding.geo.census.gov REST endpoint
-              (CORS bypass active).</div>
-            <div class="term-line text-green">[16:04:02.450] [LEAFLET] OpenStreetMap raster tiles loaded. 18 mutual aid
-              hubs rendered within Phoenix bounding box.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- DEMO VIEW 2: Starlink Service Cost Tracker -->
-      <div class="demo-view" id="demo-starlink-tracker">
-        <div class="demo-header">
-          <div class="demo-tag">Travel &amp; Satellite Tech</div>
-          <h2 class="demo-title">Starlink Residential Price Map Demo</h2>
-          <p class="demo-intro">A simulation showing how coordinates are queried against spatial cell boundaries to determine local subscription costs and regional pricing tiers.
-          </p>
-        </div>
-
-        <div class="demo-stats-grid">
-          <div class="demo-stat-box">
-            <span class="demo-stat-lbl">POLYGON ENGINE</span>
-            <span class="demo-stat-val text-green">GeoJSON + Leaflet</span>
-          </div>
-          <div class="demo-stat-box">
-            <span class="demo-stat-lbl">LOOKUP TIME</span>
-            <span class="demo-stat-val" id="starlink-latency-val">1.8 ms</span>
-          </div>
-          <div class="demo-stat-box">
-            <span class="demo-stat-lbl">CELLS LOADED</span>
-            <span class="demo-stat-val" id="starlink-cells-val">2,418 Polygons</span>
-          </div>
-          <div class="demo-stat-box">
-            <span class="demo-stat-lbl">MONTHLY SERVICE</span>
-            <span class="demo-stat-val text-green" id="starlink-status-val">STANDARD ($120/MO)</span>
-          </div>
-        </div>
-
-        <div class="demo-interactive-stage">
-          <div class="demo-controls-bar">
-            <button class="minimal-btn primary-btn" id="starlink-query-btn">Test Location Query</button>
-            <button class="minimal-btn" id="starlink-toggle-btn">Toggle Surcharge Overlay</button>
-            <a href="/starlink-surcharge-map" class="minimal-btn primary-btn"
-              style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-              Open Full Map ↗
-            </a>
-          </div>
-
-          <div class="demo-terminal" id="starlink-log">
-            <div class="term-line text-dim">[11:20:00.080] [GEOJSON] Ingested 2,418 Starlink cell polygon coordinates
-              into client memory.</div>
-            <div class="term-line">[11:20:00.220] [SPATIAL-INDEX] R-Tree bounding-box index built in 8.4ms for
-              sub-millisecond point lookups.</div>
-            <div class="term-line text-green">[11:20:00.350] [LEAFLET] Real-time polygon overlay rendered. Ready for GPS
-              and coordinate queries.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Demo Modal Footer Details -->
-      <div class="demo-footer-strip">
-        <a href="https://github.com/TimothyH3" target="_blank" rel="noopener noreferrer"
-          class="minimal-btn primary-btn">View Code on GitHub ↗</a>
-        <button class="minimal-btn copy-btn" id="demo-bottom-close">Return to Portfolio</button>
-      </div>
-
-    </div>
-  </aside>
-
-  <!-- =========================================================================
        ARCHITECTURAL SPECIFICATION DRAWER
        ========================================================================= -->
   <aside class="spec-drawer-backdrop" id="spec-drawer-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="spec-drawer" id="spec-drawer">
       <div class="drawer-header">
-        <span class="drawer-tag" id="drawer-file-tag">Project Overview</span>
-        <button class="drawer-close" id="drawer-close-btn" aria-label="Close specifications">✕</button>
+        <span class="drawer-tag" id="drawer-file-tag">README.md</span>
+        <button class="drawer-close" id="drawer-close-btn" aria-label="Close README">✕</button>
       </div>
       <div class="drawer-content" id="drawer-content">
         <!-- Injected dynamically via script.js -->
@@ -624,7 +483,7 @@
   </div>
 
   <!-- Main Engine Script -->
-  <script src="script.js?v=66"></script>
+  <script src="script.js?v=67"></script>
 </body>
 
 </html>
