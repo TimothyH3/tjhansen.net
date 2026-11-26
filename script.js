@@ -235,6 +235,44 @@
 
     // Native Scroll Engine (Pure Calculation Frame, Zero Layout Queries)
     function onNativeScroll(scrollY) {
+      const isMobile = window.innerWidth <= 768;
+
+      // On mobile devices, skip complex scroll transforms altogether for silky-smooth 60/120fps native touch scrolling.
+      if (isMobile) {
+        setBentoCardsVisible(true);
+        if (act0) act0.style.pointerEvents = 'auto';
+        if (act1) {
+          act1.style.opacity = '1';
+          act1.style.transform = 'none';
+          act1.style.pointerEvents = 'auto';
+        }
+        if (sectionHero) {
+          sectionHero.style.transform = 'none';
+          sectionHero.style.opacity = '1';
+        }
+        if (sectionProfile) {
+          sectionProfile.style.transform = 'none';
+          sectionProfile.style.opacity = '1';
+          sectionProfile.style.pointerEvents = 'auto';
+        }
+        if (stackCard) {
+          stackCard.style.maxWidth = '100%';
+          stackCard.style.transform = 'none';
+          stackCard.style.pointerEvents = 'auto';
+        }
+
+        // Keep HUD indicator accurate on mobile
+        const { vh, act1Top, act2Top } = cachedMetrics;
+        if (act2Top && scrollY + vh * 0.4 >= act2Top) {
+          updateHUD(2);
+        } else if (act1Top && scrollY + vh * 0.4 >= act1Top) {
+          updateHUD(1);
+        } else {
+          updateHUD(0);
+        }
+        return;
+      }
+
       const {
         vh,
         docHeight,

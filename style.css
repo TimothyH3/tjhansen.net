@@ -2128,3 +2128,105 @@ body.intro-revealed #section-hero .quick-links {
     pointer-events: auto !important;
   }
 }
+
+/* ==========================================================================
+   MOBILE NATIVE DOCUMENT FLOW (Zero Scroll Lag, Pure 60/120fps Native Flow)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Act 0 & Staged Flow: Normal document flow, no sticky pin or height multiplier */
+  #act-0 {
+    height: auto !important;
+    min-height: auto !important;
+    position: relative !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .act0-viewport-wrapper {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .act0-staged-flow {
+    position: relative !important;
+    transform: none !important;
+    width: 100% !important;
+  }
+
+  #section-hero {
+    min-height: auto !important;
+    padding: 5rem 1.25rem 2.5rem 1.25rem !important;
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  #section-profile {
+    margin-top: 0 !important;
+    padding: 2.5rem 1.25rem 3.5rem 1.25rem !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  /* Act 1 & Bento Cards: Normal vertical position, no negative pull-up */
+  #act-1 {
+    margin-top: 0 !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  #section-projects {
+    padding: 2.5rem 1.25rem 1.5rem 1.25rem !important;
+  }
+
+  .project-bento-card {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  /* Section 4: Skills - clean full width, no transform or manual expansion */
+  #section-stack {
+    padding-top: 1.5rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  #section-stack .content-block {
+    max-width: 100% !important;
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Act 2: Contact Section - natural flow beneath skills */
+  #act-2 {
+    margin-top: 0 !important;
+    min-height: auto !important;
+    padding: 2rem 0 3rem 0 !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  #act-2 .act-scroll-container,
+  #section-contact {
+    min-height: auto !important;
+  }
+
+  #section-contact {
+    padding: 2.5rem 1.25rem !important;
+  }
+
+  #section-contact .content-block {
+    min-height: auto !important;
+  }
+}
