@@ -39,7 +39,7 @@
   --accent-secondary: #818CF8;
 
   --orange-glow: rgba(249, 116, 22, 0.365);
-  --blue-glow: var(--accent-glow-strong);
+  --blue-glow: rgba(56, 191, 248, 0.579);
 
   --asu-gold: #FFC627;
   --asu-maroon: #8C1D40;
@@ -73,7 +73,7 @@
   --accent-secondary: #4F46E5;
 
   --orange-glow: rgba(251, 146, 60, 0.387);
-  --blue-glow: var(--accent-glow-strong);
+  --blue-glow: rgba(2, 133, 199, 0.374);
 
   --asu-gold: #D97706;
   --asu-maroon: #881337;
