@@ -954,14 +954,230 @@ npm run dev</code></pre>
   }
 
   // ===========================================================================
+  // 7B. INTERACTIVE STARLINK TELEMETRY MINI DEMO (Portfolio Bento Card)
+  // ===========================================================================
+  function initStarlinkMiniDemo() {
+    const container = document.getElementById('starlink-mini-demo');
+    if (!container) return;
+
+    const stage = document.getElementById('demo-stage');
+    const svg = document.getElementById('demo-svg');
+    const badge = document.getElementById('demo-floating-badge');
+    const badgePrice = document.getElementById('badge-price');
+    const badgeName = document.getElementById('badge-name');
+    const expandBtn = document.getElementById('demo-expand-toggle');
+    const viewport = document.getElementById('demo-viewport');
+
+    const DEMO_CELLS = [
+      { cx: 311.2, cy: 470.6, polygon: "326.8,479.6 311.2,488.6 295.6,479.6 295.6,461.6 311.2,452.6 326.8,461.6", fee: 60.5, tier: "standard", color: "#38bdf8", price: "$60.50/mo", name: "Huntsville, AL" },
+      { cx: 915.6, cy: 179.3, polygon: "931.2,188.3 915.6,197.3 900,188.3 900,170.3 915.6,161.3 931.2,170.3", fee: 55, tier: "discounted", color: "#10b981", price: "$55/mo", name: "Roanoke, VA" },
+      { cx: 596.3, cy: 181.9, polygon: "611.9,190.9 596.3,199.9 580.7,190.9 580.7,172.9 596.3,161.9 611.9,172.9", fee: 143, tier: "congested", color: "#f97316", price: "$143/mo", name: "Confluence, KY" },
+      { cx: 539.6, cy: 487.8, polygon: "555.2,496.8 539.6,505.8 524,496.8 524,478.8 539.6,469.8 555.2,478.8", fee: 143, tier: "congested", color: "#f97316", price: "$143/mo", name: "Dahlonega, GA" },
+      { cx: 510.8, cy: 322.4, polygon: "526.4,331.4 510.8,340.4 495.2,331.4 495.2,312.4 510.8,302.4 526.4,312.4", fee: 60.5, tier: "standard", color: "#38bdf8", price: "$60.50/mo", name: "Oliver Springs, TN" },
+      { cx: 426.9, cy: 430.3, polygon: "442.5,439.3 426.9,448.3 411.3,439.3 411.3,421.3 426.9,412.3 442.5,421.3", fee: 60.5, tier: "standard", color: "#38bdf8", price: "$60.50/mo", name: "Chattanooga, TN" },
+      { cx: 590.7, cy: 355.6, polygon: "606.3,364.6 590.7,373.6 575.1,364.6 575.1,346.6 590.7,337.6 606.3,346.6", fee: 156, tier: "congested", color: "#f97316", price: "$156/mo", name: "Gatlinburg, TN" },
+      { cx: 757.7, cy: 299.1, polygon: "773.3,308.1 757.7,317.1 742.1,308.1 742.1,290.1 757.7,281.1 773.3,290.1", fee: 60.5, tier: "standard", color: "#38bdf8", price: "$60.50/mo", name: "Boone, NC" },
+      { cx: 678.0, cy: 369.0, polygon: "693.6,378 678,387 662.4,378 662.4,360 678,351 693.6,360", fee: 143, tier: "congested", color: "#f97316", price: "$143/mo", name: "Asheville, NC" },
+      { cx: 144.2, cy: 612.3, polygon: "159.8,621.3 144.2,630.3 128.6,621.3 128.6,603.3 144.2,594.3 159.8,603.3", fee: 55, tier: "discounted", color: "#10b981", price: "$55/mo", name: "Columbus, MS" },
+      { cx: 292.9, cy: 305.2, polygon: "308.5,314.2 292.9,323.2 277.3,314.2 277.3,296.2 292.9,287.2 308.5,296.2", fee: 55, tier: "discounted", color: "#10b981", price: "$55/mo", name: "Nashville Metro, TN" },
+      { cx: 577.8, cy: 441.4, polygon: "593.4,450.4 577.8,459.4 562.2,450.4 562.2,432.4 577.8,423.4 593.4,432.4", fee: 156, tier: "congested", color: "#f97316", price: "$156/mo", name: "Blue Ridge, GA" },
+      { cx: 602.7, cy: 466.3, polygon: "618.3,475.3 602.7,484.3 587.1,475.3 587.1,457.3 602.7,448.3 618.3,457.3", fee: 156, tier: "congested", color: "#f97316", price: "$156/mo", name: "Tallulah Falls, GA" },
+      { cx: 627.7, cy: 441.4, polygon: "643.3,450.4 627.7,459.4 612.1,450.4 612.1,432.4 627.7,423.4 643.3,432.4", fee: 143, tier: "congested", color: "#f97316", price: "$143/mo", name: "Oconee Foothills, SC" },
+      { cx: 666.3, cy: 329.5, polygon: "681.9,338.5 666.3,347.5 650.7,338.5 650.7,320.5 666.3,311.5 681.9,320.5", fee: 143, tier: "congested", color: "#f97316", price: "$143/mo", name: "Madison County, NC" },
+      { cx: 707.7, cy: 456.8, polygon: "723.3,465.8 707.7,474.8 692.1,465.8 692.1,447.8 707.7,438.8 723.3,447.8", fee: 60.5, tier: "standard", color: "#38bdf8", price: "$60.50/mo", name: "Greenville, SC" },
+      { cx: 510.8, cy: 573.3, polygon: "526.4,582.3 510.8,591.3 495.2,582.3 495.2,564.3 510.8,555.3 526.4,564.3", fee: 170, tier: "high_demand", color: "#ef4444", price: "$170/mo", name: "Atlanta Metro, GA" },
+      { cx: 810.9, cy: 710.2, polygon: "826.5,719.2 810.9,728.2 795.3,719.2 795.3,701.2 810.9,692.2 826.5,701.2", fee: 0, tier: "sold_out", color: "#c084fc", price: "Sold Out", name: "Savannah Coastal, GA" },
+      { cx: 860.5, cy: 410.2, polygon: "876.1,419.2 860.5,428.2 844.9,419.2 844.9,401.2 860.5,392.2 876.1,401.2", fee: 60.5, tier: "standard", color: "#38bdf8", price: "$60.50/mo", name: "Charlotte, NC" },
+      { cx: 761.6, cy: 55.1, polygon: "778.9,65.1 761.6,75.1 744.3,65.1 744.3,45.1 761.6,35.1 778.9,45.1", fee: 143, tier: "congested", color: "#f97316", price: "$143/mo", name: "Charleston, WV" }
+    ];
+
+    if (!stage || !svg || !badge) return;
+
+    // Pre-draw authentic SVG hexagons
+    svg.innerHTML = DEMO_CELLS.map((c, i) => `
+      <polygon points="${c.polygon}" fill="${c.color}" class="demo-hex" data-idx="${i}" />
+    `).join('');
+
+    const hexElements = svg.querySelectorAll('.demo-hex');
+
+    // Pan Position State
+    let currentX = -310;
+    let currentY = -240;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let initialDragPanX = 0;
+    let initialDragPanY = 0;
+
+    let isUserInteracting = false;
+    let idleTimer = null;
+    let panAngle = 0;
+    let autopilotIdx = 0;
+    let lastAutopilotTime = 0;
+    const AUTOPILOT_CYCLE = [8, 6, 1, 7, 16, 17, 5, 3]; // Key tour cells: Asheville, Gatlinburg, Roanoke, Boone, Atlanta, Savannah, Chattanooga, Dahlonega
+
+    function showBadge(cell) {
+      if (!badge || !badgePrice || !badgeName) return;
+      badgePrice.textContent = cell.price;
+      badgeName.textContent = cell.name;
+      badge.style.left = `${cell.cx}px`;
+      badge.style.top = `${cell.cy}px`;
+      badge.classList.add('is-visible');
+    }
+
+    function hideBadge() {
+      if (badge) badge.classList.remove('is-visible');
+    }
+
+    function highlightHex(idx) {
+      hexElements.forEach((el, i) => {
+        if (i === idx) {
+          el.classList.add('is-autopilot');
+        } else {
+          el.classList.remove('is-autopilot');
+        }
+      });
+      if (idx !== null && idx >= 0 && idx < DEMO_CELLS.length) {
+        showBadge(DEMO_CELLS[idx]);
+      } else {
+        hideBadge();
+      }
+    }
+
+    function setTransform(x, y) {
+      const minX = container.clientWidth - 1024;
+      const minY = container.clientHeight - 768;
+      currentX = Math.max(minX, Math.min(0, x));
+      currentY = Math.max(minY, Math.min(0, y));
+      stage.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+    }
+
+    // Initial positioning centered on Appalachian corridor
+    setTransform(-310, -240);
+
+    // Animation Loop: Smooth Autopanning & Autopilot Tour
+    function tick(timestamp) {
+      if (!isUserInteracting && !isDragging) {
+        // Slow cinematic orbit
+        panAngle += 0.0035;
+        const targetPanX = -310 + Math.sin(panAngle) * 65;
+        const targetPanY = -240 + Math.cos(panAngle * 0.7) * 35;
+        currentX += (targetPanX - currentX) * 0.04;
+        currentY += (targetPanY - currentY) * 0.04;
+        setTransform(currentX, currentY);
+
+        // Advance autopilot highlight every 2.7 seconds
+        if (!lastAutopilotTime || (timestamp - lastAutopilotTime) > 2700) {
+          const targetIdx = AUTOPILOT_CYCLE[autopilotIdx % AUTOPILOT_CYCLE.length];
+          highlightHex(targetIdx);
+          autopilotIdx++;
+          lastAutopilotTime = timestamp;
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // User Takeover Handlers
+    function pauseAutopilot() {
+      isUserInteracting = true;
+      if (idleTimer) clearTimeout(idleTimer);
+    }
+
+    function resumeAutopilotLater() {
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        isUserInteracting = false;
+        highlightHex(null);
+        lastAutopilotTime = performance.now() - 2000;
+      }, 2600);
+    }
+
+    container.addEventListener('mouseenter', pauseAutopilot);
+    container.addEventListener('mouseleave', () => {
+      highlightHex(null);
+      resumeAutopilotLater();
+    });
+
+    // Hex hover displays floating price badge; clicking a hex triggers nothing
+    hexElements.forEach(hex => {
+      hex.addEventListener('mouseenter', () => {
+        pauseAutopilot();
+        const idx = Number(hex.dataset.idx);
+        highlightHex(idx);
+      });
+
+      hex.addEventListener('mouseleave', () => {
+        highlightHex(null);
+        resumeAutopilotLater();
+      });
+
+      hex.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      });
+    });
+
+    // Drag to Pan across region
+    if (viewport) {
+      viewport.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('.demo-expand-toggle') || e.target.closest('.demo-tray-link')) return;
+        pauseAutopilot();
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        initialDragPanX = currentX;
+        initialDragPanY = currentY;
+        viewport.classList.add('is-dragging');
+        try { viewport.setPointerCapture(e.pointerId); } catch (_) {}
+      });
+
+      viewport.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        pauseAutopilot();
+        const dx = e.clientX - dragStartX;
+        const dy = e.clientY - dragStartY;
+        setTransform(initialDragPanX + dx, initialDragPanY + dy);
+      });
+
+      function stopDrag(e) {
+        if (isDragging) {
+          isDragging = false;
+          viewport.classList.remove('is-dragging');
+          try { viewport.releasePointerCapture(e.pointerId); } catch (_) {}
+          resumeAutopilotLater();
+        }
+      }
+      viewport.addEventListener('pointerup', stopDrag);
+      viewport.addEventListener('pointercancel', stopDrag);
+    }
+
+    // Expandable on Click
+    if (expandBtn) {
+      expandBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isExpanded = container.classList.toggle('is-expanded');
+        const btnText = expandBtn.querySelector('.expand-btn-text');
+        if (btnText) btnText.textContent = isExpanded ? 'Collapse' : 'Expand';
+        expandBtn.setAttribute('aria-label', isExpanded ? 'Collapse demo view' : 'Expand demo view');
+        setTimeout(() => {
+          setTransform(currentX, currentY);
+        }, 330);
+      });
+    }
+  }
+
+  // ===========================================================================
   // 8. SUBSYSTEM BOOTSTRAP
   // ===========================================================================
   function boot() {
     initTheme();
     initIntroAnimation();
     initScrollAndZoomEngine();
-        initProjectDrawer();
+    initProjectDrawer();
     initCopyEmail();
+    initStarlinkMiniDemo();
   }
 
   if (document.readyState === 'loading') {

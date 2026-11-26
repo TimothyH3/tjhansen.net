@@ -78,7 +78,7 @@
     rel="stylesheet">
 
   <!-- Main Stylesheet (bump query ?v= to clear browser cache on updates) -->
-  <link rel="stylesheet" href="style.css?v=67">
+  <link rel="stylesheet" href="style.css?v=68">
 </head>
 
 <body>
@@ -303,11 +303,53 @@
                    PROJECT 2: Starlink Service Cost Map
                    =========================================================== -->
               <article class="project-bento-card" data-project-key="starlink-tracker">
-                <a href="/starlink-surcharge-map" class="project-media-link" aria-label="Open Starlink Residential Cost Map">
-                  <div class="project-media-wrapper">
-                    <img src="assets/images/starlink-map-preview.jpg" alt="Starlink Residential Cost Map Preview" class="project-card-image" loading="lazy">
+                <!-- Interactive Lightweight Telemetry Demo (No external map API) -->
+                <div class="starlink-mini-demo" id="starlink-mini-demo">
+                  <div class="demo-viewport" id="demo-viewport">
+                    <div class="demo-stage" id="demo-stage">
+                      <img src="assets/images/starlink-demo-map.jpg" alt="Regional Starlink price map" class="demo-basemap" draggable="false">
+                      <svg class="demo-svg" id="demo-svg" viewBox="0 0 1024 768" preserveAspectRatio="none"></svg>
+                      <div class="demo-floating-badge" id="demo-floating-badge" aria-hidden="true">
+                        <div class="badge-pill">
+                          <span class="badge-price" id="badge-price">$143/mo</span>
+                        </div>
+                        <div class="badge-label" id="badge-name">Asheville, NC</div>
+                        <div class="badge-pointer"></div>
+                      </div>
+                    </div>
                   </div>
-                </a>
+
+                  <!-- Top HUD: Live Indicator & Expand Toggle -->
+                  <div class="demo-top-hud">
+                    <div class="demo-status-pill font-mono">
+                      <span class="status-radar-dot"></span>
+                      <span class="status-text">Interactive Demo</span>
+                    </div>
+                    <button class="demo-expand-toggle font-mono" id="demo-expand-toggle" type="button" aria-label="Expand demo view">
+                      <svg class="icon-expand" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                      <svg class="icon-collapse" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                      <span class="expand-btn-text">Expand</span>
+                    </button>
+                  </div>
+
+                  <!-- Corner Legend -->
+                  <div class="demo-corner-legend font-mono" aria-label="Color pricing tiers">
+                    <div class="legend-chip"><i class="dot" style="background:#10b981"></i><span>&le;$55</span></div>
+                    <div class="legend-chip"><i class="dot" style="background:#38bdf8"></i><span>$55–$130</span></div>
+                    <div class="legend-chip"><i class="dot" style="background:#f97316"></i><span>$130–$170</span></div>
+                    <div class="legend-chip"><i class="dot" style="background:#ef4444"></i><span>$170+</span></div>
+                    <div class="legend-chip"><i class="dot" style="background:#c084fc"></i><span>Sold Out</span></div>
+                  </div>
+
+                  <!-- Expanded Guidance & Launch Bar -->
+                  <div class="demo-expanded-tray">
+                    <p class="demo-tray-instruction font-sans">Hover over regional cells to preview monthly fees, or drag to pan across price corridors.</p>
+                    <a href="/starlink-surcharge-map" class="demo-tray-link font-mono">
+                      <span>Open Full Interactive Map</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    </a>
+                  </div>
+                </div>
                 <h3 class="bento-title">Starlink Residential Cost Map</h3>
                 <p class="bento-desc">I travel full-time and move my Starlink address often. Because monthly rates vary between regions ($27.50 to $170+/mo) without an official price map, I made this tool to plan internet costs ahead of time.</p>
                 <ul class="bento-bullet-list">
@@ -483,7 +525,7 @@
   </div>
 
   <!-- Main Engine Script -->
-  <script src="script.js?v=67"></script>
+  <script src="script.js?v=68"></script>
 </body>
 
 </html>
