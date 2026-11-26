@@ -462,72 +462,11 @@ textarea,
   filter: none !important;
 }
 
-.starlink-hex-aura {
-  pointer-events: none;
-  opacity: 1.0;
-}
-
-.starlink-aura-congested {
-  fill: url(#hex-aura-congested) !important;
-  stroke: none !important;
-}
-
-.starlink-aura-high_demand {
-  fill: url(#hex-aura-high_demand) !important;
-  stroke: none !important;
-}
-
-.starlink-aura-standard {
-  fill: url(#hex-aura-standard) !important;
-  stroke: none !important;
-}
-
-.starlink-aura-discounted {
-  fill: url(#hex-aura-discounted) !important;
-  stroke: none !important;
-}
-
-.starlink-aura-sold_out {
-  fill: url(#hex-aura-sold_out) !important;
-  stroke: none !important;
-}
-
-/* Precalculated Uber H3 Macro Hexagons (Overview mode, zoom <= 5) */
+/* Precalculated Uber H3 Macro & Mega Hexagons (Overview mode, zoom <= 5) */
 .starlink-macro-hex {
   pointer-events: none !important;
   cursor: default !important;
   transition: opacity 180ms ease;
-}
-
-/* Macro Mesh Blended Gradient Layer (Zoomed-out Overview Mode) */
-.starlink-mesh-aura {
-  pointer-events: none;
-  opacity: 1.0;
-}
-
-.starlink-mesh-congested {
-  fill: url(#mesh-aura-congested) !important;
-  stroke: none !important;
-}
-
-.starlink-mesh-high_demand {
-  fill: url(#mesh-aura-high_demand) !important;
-  stroke: none !important;
-}
-
-.starlink-mesh-standard {
-  fill: url(#mesh-aura-standard) !important;
-  stroke: none !important;
-}
-
-.starlink-mesh-discounted {
-  fill: url(#mesh-aura-discounted) !important;
-  stroke: none !important;
-}
-
-.starlink-mesh-sold_out {
-  fill: url(#mesh-aura-sold_out) !important;
-  stroke: none !important;
 }
 
 .starlink-hex-tooltip {

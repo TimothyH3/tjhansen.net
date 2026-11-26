@@ -397,8 +397,7 @@
     ensureSvgGradients();
 
     function getZoomMode(z) {
-      if (z <= 3) return 'continental';
-      if (z === 4) return 'national';
+      if (z <= 4) return 'outermost';
       if (z === 5) return 'regional';
       return 'cells';
     }
@@ -410,7 +409,6 @@
         lastZoomMode = currentMode;
         renderMarkers();
       }
-      ensureSvgGradients();
     });
 
     map.on('click', function (e) {
@@ -421,11 +419,75 @@
     bindDomEvents();
   }
 
+  // Client-side H3 aggregation fallback to guarantee all 3 zoom resolutions exist
+  function computeClientMacroHexes(points, targetRes) {
+    if (!window.h3 || !points || points.length === 0) return [];
+    const groups = new Map();
+    for (const pt of points) {
+      const lat = Number(pt.lat);
+      const lng = Number(pt.lng);
+      if (isNaN(lat) || isNaN(lng)) continue;
+      const cost = pt.total_monthly_fee ?? pt.monthly_service_fee ?? (pt.status === 'discounted' ? 55 : pt.status === 'congested' ? 143 : 120);
+      const isSold = pt.status === 'sold_out';
+      let parentCell = null;
+      try {
+        const latLngToCell = h3.latLngToCell || h3.geoToH3;
+        const cellToParent = h3.cellToParent || h3.h3ToParent;
+        if (typeof latLngToCell === 'function' && typeof cellToParent === 'function') {
+          const r5 = latLngToCell(lat, lng, 5);
+          parentCell = cellToParent(r5, targetRes);
+        }
+      } catch {
+        parentCell = null;
+      }
+      if (!parentCell) continue;
+      if (!groups.has(parentCell)) groups.set(parentCell, { sum: 0, count: 0, soldCount: 0, latSum: 0, lngSum: 0 });
+      const g = groups.get(parentCell);
+      g.sum += Number(cost);
+      g.count++;
+      g.latSum += lat;
+      g.lngSum += lng;
+      if (isSold) g.soldCount++;
+    }
+    const result = [];
+    for (const [cell, g] of groups.entries()) {
+      const avgPrice = Math.round((g.sum / g.count) * 100) / 100;
+      let tier = 'standard';
+      let color = '#38bdf8';
+      if (g.soldCount === g.count) { tier = 'sold_out'; color = '#c084fc'; }
+      else if (avgPrice >= 170) { tier = 'high_demand'; color = '#ef4444'; }
+      else if (avgPrice >= 130) { tier = 'congested'; color = '#f97316'; }
+      else if (avgPrice > 55) { tier = 'standard'; color = '#38bdf8'; }
+      else { tier = 'discounted'; color = '#10b981'; }
+
+      let boundary = [];
+      try {
+        const cellToBoundary = h3.cellToBoundary || h3.h3ToGeoBoundary;
+        if (typeof cellToBoundary === 'function') boundary = cellToBoundary(cell);
+      } catch (e) {}
+
+      if (boundary && boundary.length >= 3) {
+        result.push({
+          h3Index: cell,
+          resolution: targetRes,
+          centerLat: g.latSum / g.count,
+          centerLng: g.lngSum / g.count,
+          avgPrice,
+          count: g.count,
+          tier,
+          color,
+          boundary
+        });
+      }
+    }
+    return result;
+  }
+
   // Load Data from Worker edge cache (or Supabase PostGIS)
   async function loadData() {
     // 1. Primary: Load verified points and precalculated macro hexes via Cloudflare Worker edge cache
-    const pointsUrl = CONFIG.WORKER_API_URL.replace(/\/api\/check-fee.*$/, '/api/points').replace(/\/check-fee.*$/, '/api/points');
-    const macroUrl = pointsUrl.replace(/\/api\/points.*$/, '/api/macro-hexes');
+    const pointsUrl = CONFIG.WORKER_API_URL.replace(/\/api\/check-fee.*$/, '/api/points').replace(/\/check-fee.*$/, '/api/points') + '?v=2.2.0';
+    const macroUrl = pointsUrl.replace(/\/api\/points.*$/, '/api/macro-hexes?v=2.2.0');
     try {
       const [pResp, mResp] = await Promise.all([
         fetch(pointsUrl).catch(err => { console.warn('Worker points fetch failed:', err); return null; }),
@@ -434,14 +496,12 @@
 
       if (mResp && mResp.ok) {
         const mData = await mResp.json();
-        if (Array.isArray(mData)) {
-          surchargeMacroHexes = mData;
-          surchargeMegaHexes = mData;
-          surchargeGigaHexes = mData;
-        } else if (mData && typeof mData === 'object') {
+        if (mData && typeof mData === 'object' && !Array.isArray(mData)) {
           surchargeMacroHexes = mData.res4 || [];
           surchargeMegaHexes = mData.res3 || [];
           surchargeGigaHexes = mData.res2 || [];
+        } else if (Array.isArray(mData)) {
+          surchargeMacroHexes = mData;
         }
       }
 
@@ -449,6 +509,12 @@
         const data = await pResp.json();
         if (Array.isArray(data) && data.length > 0) {
           surchargePoints = data;
+          if (surchargeGigaHexes.length === 0) {
+            surchargeGigaHexes = computeClientMacroHexes(data, 2);
+          }
+          if (surchargeMacroHexes.length === 0) {
+            surchargeMacroHexes = computeClientMacroHexes(data, 4);
+          }
           updateStats();
           renderMarkers();
           return;
@@ -602,39 +668,20 @@
       }
     }
 
-    // Outermost layer: when zoomed out to view the entire US (zoom <= 3: continental Res 2; zoom 4: national Res 3)
-    if (zoom <= 3) {
-      renderMacroHexList(surchargeGigaHexes.length > 0 ? surchargeGigaHexes : (surchargeMegaHexes.length > 0 ? surchargeMegaHexes : surchargeMacroHexes));
+    // Outermost layer: when zoomed out to view the entire US (zoom <= 4: large Resolution 2 mega hexes)
+    if (zoom <= 4) {
+      const list = surchargeGigaHexes.length > 0 ? surchargeGigaHexes : (surchargeMegaHexes.length > 0 ? surchargeMegaHexes : surchargeMacroHexes);
+      renderMacroHexList(list);
       return;
     }
 
-    if (zoom === 4) {
-      renderMacroHexList(surchargeMegaHexes.length > 0 ? surchargeMegaHexes : surchargeMacroHexes);
-      return;
-    }
-
+    // Intermediate regional layer (zoom 5: medium Resolution 4 hexes)
     if (zoom === 5) {
-      // Intermediate regional layer (zoom 5: Res 4)
       renderMacroHexList(surchargeMacroHexes);
       return;
     }
 
-    // Zoomed in (zoom >= 6): Detailed granular cell lattice
-    // Pass 1: Render outer fading gradient auras (125 km radius, starting at cell transparency and fading out)
-    for (const cell of uniqueCells) {
-      const tierKey = getTierKey(cell);
-      const aura = L.circle([cell.centerLat, cell.centerLng], {
-        radius: 125000, // 125 km real-world geographic ground radius
-        stroke: false,
-        interactive: false,
-        className: `starlink-hex-aura starlink-aura-${tierKey}`
-      });
-      markersLayer.addLayer(aura);
-    }
-
-    ensureSvgGradients();
-
-    // Pass 2: Render translucent central Starlink cell hexagons (revealing map features underneath)
+    // Zoomed in (zoom >= 6): Detailed granular cell lattice (Zero glowing gradients)
     for (const cell of uniqueCells) {
       visible++;
       const pricing = getPointPricing(cell);
