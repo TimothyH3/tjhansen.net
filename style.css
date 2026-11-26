@@ -2736,3 +2736,88 @@ body.intro-revealed #section-hero .quick-links {
   padding-top: 1.25rem;
   border-top: 1px solid var(--border);
 }
+
+
+/* ==========================================================================
+   MONOCHROME SOFTWARE TOOL LOGO STRIP (Across Bottom Under Left & Right Bio)
+   ========================================================================== */
+.tools-logo-strip {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.25rem 2.25rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.tool-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--text-muted);
+  transition: color 200ms ease, transform 200ms ease;
+  user-select: none;
+}
+
+.tool-item svg {
+  display: block;
+  flex-shrink: 0;
+  opacity: 0.72;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.tool-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+  transition: color 200ms ease;
+}
+
+.tool-item:hover {
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.tool-item:hover svg {
+  opacity: 1;
+  color: var(--text-primary);
+}
+
+.tool-item:hover .tool-name {
+  color: var(--text-primary);
+}
+
+/* Light / Dark Mode Consistency */
+[data-theme="dark"] .tool-item svg {
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .tool-item:hover svg,
+[data-theme="dark"] .tool-item:hover .tool-name {
+  color: #FFFFFF;
+}
+
+[data-theme="light"] .tool-item svg {
+  color: #64748B;
+}
+
+[data-theme="light"] .tool-item:hover svg,
+[data-theme="light"] .tool-item:hover .tool-name {
+  color: #0F172A;
+}
+
+@media (max-width: 640px) {
+  .tools-logo-strip {
+    gap: 1rem 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+  }
+
+  .tool-name {
+    font-size: 0.78rem;
+  }
+}

@@ -73,12 +73,10 @@
        ========================================================================= -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Main Stylesheet (bump query ?v= to clear browser cache on updates) -->
-  <link rel="stylesheet" href="style.css?v=68">
+  <link rel="stylesheet" href="style.css?v=69">
 </head>
 
 <body>
@@ -147,108 +145,137 @@
       <div class="act0-viewport-wrapper" id="act0-viewport-wrapper">
         <div class="act0-staged-flow" id="act0-staged-flow">
 
-        <!-- SECTION 1: HERO (Terminal intro, Name, Focus, Action links) -->
-        <section class="act-section" id="section-hero">
-          <div class="content-block">
+          <!-- SECTION 1: HERO (Terminal intro, Name, Focus, Action links) -->
+          <section class="act-section" id="section-hero">
+            <div class="content-block">
 
-            <!-- Hero Name (Includes terminal typing animation elements) -->
-            <h1 class="hero-name" id="hero-title" aria-label="Timothy Hansen">
-              <span class="intro-terminal-line" id="intro-terminal-line" aria-hidden="true">
-                <span class="intro-prompt" id="intro-prompt">&gt;</span>
-                <span class="intro-text" id="intro-text"></span>
-                <span class="intro-cursor" id="intro-cursor"></span>
-              </span>
-              <span class="hero-real-name" id="hero-real-name">Timothy Hansen</span>
-            </h1>
+              <!-- Hero Name (Includes terminal typing animation elements) -->
+              <h1 class="hero-name" id="hero-title" aria-label="Timothy Hansen">
+                <span class="intro-terminal-line" id="intro-terminal-line" aria-hidden="true">
+                  <span class="intro-prompt" id="intro-prompt">&gt;</span>
+                  <span class="intro-text" id="intro-text"></span>
+                  <span class="intro-cursor" id="intro-cursor"></span>
+                </span>
+                <span class="hero-real-name" id="hero-real-name">Timothy Hansen</span>
+              </h1>
 
-            <!-- Subtitle / Elevator Pitch -->
-            <p class="hero-statement">
-              Software engineer graduating from <strong>Arizona State University</strong> in December 2026. Focused on distributed systems, reliable backends, and practical web applications.
-            </p>
+              <!-- Subtitle / Elevator Pitch -->
+              <p class="hero-statement">
+                Software engineer graduating from <strong>Arizona State University</strong> in December 2026. Focused on full-stack web development, UI/UX architecture, and practical software tools.
+              </p>
 
-            <!-- Quick Signal Badges -->
-            <div class="signal-row">
-              <div class="signal-tag">
-                <span class="signal-label">Focus</span>
-                <span class="signal-value">Distributed Systems &amp; Web</span>
+              <!-- Quick Signal Badges -->
+              <div class="signal-row">
+                <div class="signal-tag">
+                  <span class="signal-label">Focus</span>
+                  <span class="signal-value">Full-Stack Web &amp; UI/UX</span>
+                </div>
+                <div class="signal-tag">
+                  <span class="signal-label">Location</span>
+                  <span class="signal-value">Remote / U.S.</span>
+                </div>
+                <div class="signal-tag">
+                  <span class="signal-label">Status</span>
+                  <span class="signal-value text-accent">U.S. Citizen</span>
+                </div>
               </div>
-              <div class="signal-tag">
-                <span class="signal-label">Education</span>
-                <span class="signal-value">B.S. Software Engineering, ASU</span>
+
+              <!-- Action Buttons (Jump to Projects, View Resume, Jump to Contact) -->
+              <div class="quick-links" id="hero-quick-links">
+                <a href="#section-projects" class="action-link jump-btn" data-target-act="1">
+                  <span>Explore Projects</span>
+                  <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                  </svg>
+                </a>
+                <a href="resume.pdf" target="_blank" class="action-link secondary">
+                  <span>Resume</span>
+                  <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                  </svg>
+                </a>
+                <a href="#section-contact" class="action-link secondary jump-btn" data-target-act="2">
+                  <span>Get in Touch</span>
+                </a>
               </div>
-              <div class="signal-tag">
-                <span class="signal-label">Timeline</span>
-                <span class="signal-value text-accent">Graduating December 2026</span>
-              </div>
+
             </div>
+          </section>
 
-            <!-- Action Buttons (Jump to Projects, View Resume, Jump to Contact) -->
-            <div class="quick-links" id="hero-quick-links">
-              <a href="#section-projects" class="action-link jump-btn" data-target-act="1">
-                <span>Explore Projects</span>
-                <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2">
-                  <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
-              </a>
-              <a href="resume.pdf" target="_blank" class="action-link secondary">
-                <span>Resume</span>
-                <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2">
-                  <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
-              </a>
-              <a href="#section-contact" class="action-link secondary jump-btn" data-target-act="2">
-                <span>Get in Touch</span>
-              </a>
-            </div>
+          <!-- SECTION 2: PROFILE & PHILOSOPHY (Background & Academic Details) -->
+          <section class="act-section" id="section-profile">
+            <div class="content-block">
 
-          </div>
-        </section>
+              <div class="statement-grid" id="act0-statement-grid">
 
-        <!-- SECTION 2: PROFILE & PHILOSOPHY (Background & Academic Details) -->
-        <section class="act-section" id="section-profile">
-          <div class="content-block">
+                <!-- Left Column: Core Engineering Mindset -->
+                <div class="main-statement">
+                  <p class="large-text">
+                    Making something simple to use is the hardest part of engineering, and the part worth doing right.
+                  </p>
+                </div>
 
-            <div class="statement-grid" id="act0-statement-grid">
+                <!-- Right Column: Narrative & Philosophy -->
+                <div class="narrative-body">
+                  <p>
+                    I'm a full-stack web developer who cares about design details. I enjoy the creative side of building
+                    software, focusing on intuitive visual layout, organized and intentional backend structure, and
+                    strategic use-case flow to deliver usable software.
+                  </p>
+                </div>
 
-              <!-- Left Column: Core Engineering Mindset -->
-              <div class="main-statement">
-                <p class="large-text">
-                  I enjoy building software that stays reliable when things get busy, fails gracefully when something goes wrong, and is straightforward to maintain.
-                </p>
-              </div>
-
-              <!-- Right Column: Narrative & Key Credentials -->
-              <div class="narrative-body">
-                <p>
-                  Studying software engineering at Arizona State University gave me a strong foundation in system design, data structures, and how services interact.
-                </p>
-                <p>
-                  Much of my work revolves around building practical tools: cutting down unnecessary network round trips, keeping memory usage lean, and designing APIs that are intuitive to work with.
-                </p>
-
-                <!-- Key Metrics Strip -->
-                <div class="stats-strip">
-                  <div class="stat-col">
-                    <span class="stat-val">December 2026</span>
-                    <span class="stat-desc">Graduation Date</span>
+                <!-- Monochrome Software Tool Logos Strip (Across Bottom Underneath Left & Right) -->
+                <div class="tools-logo-strip" aria-label="Core technologies and software tools">
+                  <div class="tool-item" title="Python">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" role="img" aria-label="Python">
+                      <path d="M11.914 0C5.834 0 6.2 2.617 6.2 2.617l.006 2.712h5.814v.825H3.904s-3.904.444-3.904 6.136c0 5.69 3.41 5.485 3.41 5.485h2.036v-2.86s-.11-3.41 3.355-3.41h5.787v-.853s.47-5.69-5.674-5.69zm-1.84 1.73a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1zM12.086 24c6.08 0 5.714-2.617 5.714-2.617l-.006-2.712h-5.814v-.825h8.116s3.904-.444 3.904-6.136c0-5.69-3.41-5.485-3.41-5.485h-2.036v2.86s.11 3.41-3.355 3.41h-5.787v.853s-.47 5.69 5.674 5.69zm1.84-1.73a1.05 1.05 0 1 1 0-2.1 1.05 1.05 0 0 1 0 2.1z"/>
+                    </svg>
+                    <span class="tool-name">Python</span>
                   </div>
-                  <div class="stat-col">
-                    <span class="stat-val">ASU</span>
-                    <span class="stat-desc">B.S. Software Eng.</span>
+                  <div class="tool-item" title="TypeScript">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" role="img" aria-label="TypeScript">
+                      <path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0H1.125zm11.83 15.347h-2.85v-7.14H6.848V5.88h6.107v9.467zm8.442-2.317c-.38.835-1.026 1.48-1.938 1.936-.913.456-2.023.684-3.332.684-1.22 0-2.29-.205-3.21-.615-.92-.41-1.61-1.01-2.07-1.8-.46-.79-.69-1.74-.69-2.85h2.88c.02.73.23 1.3.63 1.71.4.41.97.615 1.71.615.65 0 1.18-.14 1.59-.42.41-.28.615-.69.615-1.23 0-.41-.125-.74-.375-.99-.25-.25-.665-.47-1.245-.66l-1.62-.51c-1.3-.41-2.24-.96-2.82-1.65-.58-.69-.87-1.57-.87-2.64 0-1.1.34-2.03 1.02-2.79.68-.76 1.63-1.14 2.85-1.14 1.25 0 2.27.35 3.06 1.05.79.7 1.23 1.65 1.32 2.85h-2.88c-.05-.59-.25-1.03-.6-1.32-.35-.29-.85-.435-1.5-.435-.59 0-1.06.13-1.41.39-.35.26-.525.62-.525 1.08 0 .37.135.68.405.93.27.25.745.475 1.425.675l1.53.45c1.45.43 2.47 1.02 3.06 1.77.59.75.885 1.68.885 2.79 0 1.12-.345 2.07-1.035 2.85z"/>
+                    </svg>
+                    <span class="tool-name">TypeScript</span>
                   </div>
-                  <div class="stat-col">
-                    <span class="stat-val">U.S.</span>
-                    <span class="stat-desc">U.S. Citizen (No Sponsorship Needed)</span>
+                  <div class="tool-item" title="Vue.js">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" role="img" aria-label="Vue.js">
+                      <path d="M12 15.228 17.657 5.4H24L12 24 0 5.4h6.343L12 15.228zM12 9.772 7.828 2.5h8.344L12 9.772z"/>
+                    </svg>
+                    <span class="tool-name">Vue.js</span>
+                  </div>
+                  <div class="tool-item" title="Node.js">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" role="img" aria-label="Node.js">
+                      <path d="M12 0l10.392 6v12L12 24 1.608 18V6L12 0zm0 2.309L3.608 7.155v9.69L12 21.691l8.392-4.846v-9.69L12 2.309zM12 6a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/>
+                    </svg>
+                    <span class="tool-name">Node.js</span>
+                  </div>
+                  <div class="tool-item" title="PostgreSQL">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" role="img" aria-label="PostgreSQL">
+                      <path d="M12.002 0c-4.482 0-8.118 3.518-8.118 7.859 0 3.092 1.848 5.766 4.545 7.025v2.858h2.094v-2.02c.48.064.975.097 1.479.097.502 0 .997-.033 1.477-.097v2.02h2.095v-2.858c2.697-1.259 4.546-3.933 4.546-7.025 0-4.341-3.636-7.859-8.118-7.859zm0 2.213c3.279 0 5.94 2.531 5.94 5.646 0 3.115-2.661 5.646-5.94 5.646s-5.94-2.531-5.94-5.646c0-3.115 2.661-5.646 5.94-5.646z"/>
+                    </svg>
+                    <span class="tool-name">PostgreSQL</span>
+                  </div>
+                  <div class="tool-item" title="Git">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" role="img" aria-label="Git">
+                      <path d="M23.546 10.93L13.067.452a1.5 1.5 0 0 0-2.124 0L8.83 2.565l3.208 3.209a1.776 1.776 0 0 1 2.25 2.25l3.088 3.09a1.777 1.777 0 1 1-1.077 1.05l-2.88-2.882a1.777 1.777 0 0 1-1.928-.396l-3.292 3.293a1.777 1.777 0 1 1-1.06-.022V6.444l-2.28 2.28a1.5 1.5 0 0 0 0 2.124l10.478 10.479a1.5 1.5 0 0 0 2.124 0l8.363-8.364a1.5 1.5 0 0 0 0-2.124z"/>
+                    </svg>
+                    <span class="tool-name">Git</span>
+                  </div>
+                  <div class="tool-item" title="Linux">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" role="img" aria-label="Linux">
+                      <path d="M12 0C9.8 0 8 1.8 8 4c0 .7.2 1.4.5 2C7.3 6.6 6 8.2 6 10.2c0 2.5 1.6 4.6 3.8 5.4-.5 1.3-1.6 2.3-3 2.7-.5.1-.8.6-.8 1.1 0 .6.4 1.1 1 1.1 3.5 0 6.4-2.5 7-5.8.6 3.3 3.5 5.8 7 5.8.6 0 1-.5 1-1.1 0-.5-.3-1-.8-1.1-1.4-.4-2.5-1.4-3-2.7 2.2-.8 3.8-2.9 3.8-5.4 0-2-1.3-3.6-2.5-4.2.3-.6.5-1.3.5-2 0-2.2-1.8-4-4-4zm-1.5 3.5c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm3 0c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1z"/>
+                    </svg>
+                    <span class="tool-name">Linux</span>
                   </div>
                 </div>
 
               </div>
-            </div>
 
-          </div>
-        </section>
+            </div>
+          </section>
 
         </div>
       </div>
@@ -269,7 +296,8 @@
 
             <!-- Section Intro Paragraph -->
             <p class="section-intro" id="act1-section-intro">
-              A few projects I have built recently, ranging from geospatial tools and community platforms to map visualizers. Feel free to explore the interactive demos or look through the project details.
+              A few projects I have built recently, ranging from geospatial tools and community platforms to map
+              visualizers. Feel free to explore the interactive demos or look through the project details.
             </p>
 
             <!-- Projects Bento Grid (2x2 on desktop, single column on mobile) -->
@@ -279,16 +307,21 @@
                    PROJECT 1: Come Together Compass
                    =========================================================== -->
               <article class="project-bento-card" data-project-key="compass">
-                <a href="https://github.com/TimothyH3/come-together-compass" target="_blank" rel="noopener noreferrer" class="project-media-link" aria-label="View Come Together Compass on GitHub">
+                <a href="https://github.com/TimothyH3/come-together-compass" target="_blank" rel="noopener noreferrer"
+                  class="project-media-link" aria-label="View Come Together Compass on GitHub">
                   <div class="project-media-wrapper">
-                    <img src="assets/images/compass-placeholder.svg" alt="Come Together Compass Platform Preview" class="project-card-image" loading="lazy">
+                    <img src="assets/images/compass-placeholder.svg" alt="Come Together Compass Platform Preview"
+                      class="project-card-image" loading="lazy">
                   </div>
                 </a>
                 <h3 class="bento-title">Come Together Compass</h3>
-                <p class="bento-desc">A community resource locator and private intake tool built to help people quickly find local assistance without commercial map fees or tracking.</p>
+                <p class="bento-desc">A community resource locator and private intake tool built to help people quickly
+                  find local assistance without commercial map fees or tracking.</p>
                 <ul class="bento-bullet-list">
-                  <li><span class="bullet">•</span><span>Connects with the U.S. Census Bureau geocoding service and Leaflet/OpenStreetMap to avoid expensive third-party API fees.</span></li>
-                  <li><span class="bullet">•</span><span>Keeps state in memory with Pinia so user searches stay private, with a quick link to the 988 Crisis Lifeline.</span></li>
+                  <li><span class="bullet">•</span><span>Connects with the U.S. Census Bureau geocoding service and
+                      Leaflet/OpenStreetMap to avoid expensive third-party API fees.</span></li>
+                  <li><span class="bullet">•</span><span>Keeps state in memory with Pinia so user searches stay private,
+                      with a quick link to the 988 Crisis Lifeline.</span></li>
                 </ul>
                 <div class="bento-actions">
                   <button class="inspect-btn" data-project="compass">
@@ -307,7 +340,8 @@
                 <div class="starlink-mini-demo" id="starlink-mini-demo" title="Click to expand interactive preview">
                   <div class="demo-viewport" id="demo-viewport">
                     <div class="demo-stage" id="demo-stage">
-                      <img src="assets/images/starlink-demo-map.jpg" alt="Regional Starlink price map" class="demo-basemap" draggable="false">
+                      <img src="assets/images/starlink-demo-map.jpg" alt="Regional Starlink price map"
+                        class="demo-basemap" draggable="false">
                       <svg class="demo-svg" id="demo-svg" viewBox="0 0 1024 768" preserveAspectRatio="none"></svg>
                       <div class="demo-floating-badge" id="demo-floating-badge" aria-hidden="true">
                         <div class="badge-pill">
@@ -320,10 +354,16 @@
                   </div>
                 </div>
                 <h3 class="bento-title">Starlink Residential Cost Map</h3>
-                <p class="bento-desc">I travel full-time and move my Starlink address often. Because monthly rates vary between regions ($27.50 to $170+/mo) without an official price map, I made this tool to plan internet costs ahead of time.</p>
+                <p class="bento-desc">I travel full-time and move my Starlink address often. Because monthly rates vary
+                  between regions ($27.50 to $170+/mo) without an official price map, I made this tool to plan internet
+                  costs ahead of time.</p>
                 <ul class="bento-bullet-list">
-                  <li><span class="bullet">•</span><span><strong>Visual cell map:</strong> Renders hexagonal cells and pricing zones ($27.50–$55 discount, $120 standard, and congested rates) so travelers know what to expect before moving.</span></li>
-                  <li><span class="bullet">•</span><span><strong>Lightweight design:</strong> Uses PostGIS caching within 25km and a quiet 10-minute edge job so queries stay fast without burdening Starlink's servers.</span></li>
+                  <li><span class="bullet">•</span><span><strong>Visual cell map:</strong> Renders hexagonal cells and
+                      pricing zones ($27.50–$55 discount, $120 standard, and congested rates) so travelers know what to
+                      expect before moving.</span></li>
+                  <li><span class="bullet">•</span><span><strong>Lightweight design:</strong> Uses PostGIS caching
+                      within 25km and a quiet 10-minute edge job so queries stay fast without burdening Starlink's
+                      servers.</span></li>
                 </ul>
                 <div class="bento-actions">
                   <button class="inspect-btn" data-project="starlink-tracker">
@@ -344,7 +384,7 @@
           <div class="content-block wide" id="stack-content-block">
 
             <div class="chapter-header">
-              
+
               <span class="chapter-label">Skills</span>
             </div>
 
@@ -426,7 +466,9 @@
                 I'd love to hear from you.
               </h2>
               <p class="contact-sub">
-                I am currently interviewing for software engineering roles starting upon graduation in December 2026. Open to both remote opportunities and on-site roles nationwide. If you have an opening or would like to connect, feel free to reach out.
+                I am currently interviewing for software engineering roles starting upon graduation in December 2026.
+                Open to both remote opportunities and on-site roles nationwide. If you have an opening or would like to
+                connect, feel free to reach out.
               </p>
 
               <!-- Interactive Email Box & Direct Mail Button -->
@@ -445,8 +487,7 @@
 
               <!-- Direct Outbound Social Links -->
               <div class="contact-links-row">
-                <a href="https://github.com/TimothyH3" target="_blank" rel="noopener noreferrer"
-                  class="link-item">
+                <a href="https://github.com/TimothyH3" target="_blank" rel="noopener noreferrer" class="link-item">
                   GitHub ↗
                 </a>
                 <span class="link-separator">•</span>
@@ -499,10 +540,15 @@
         <!-- Enlarged interactive map viewport mounts here when opened -->
       </div>
       <div class="demo-modal-footer">
-        <p class="demo-modal-instruction font-sans">Hover over regional cells to preview monthly fees, or drag to pan across price corridors.</p>
+        <p class="demo-modal-instruction font-sans">Hover over regional cells to preview monthly fees, or drag to pan
+          across price corridors.</p>
         <a href="/starlink-surcharge-map" class="demo-modal-link font-mono">
           <span>Open Full Interactive Map</span>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
         </a>
       </div>
     </div>
