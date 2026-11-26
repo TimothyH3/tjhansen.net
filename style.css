@@ -254,9 +254,14 @@ button {
 }
 
 .hud-dot.active {
-  background-color: var(--accent);
+  background-color: #ffffff;
   transform: scale(1.35);
-  box-shadow: 0 0 8px var(--accent);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="light"] .hud-dot.active {
+  background-color: #000000;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
 }
 
 /* Theme Switch Toggle */
@@ -298,7 +303,7 @@ button {
 }
 
 .theme-switch:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--text-primary);
   outline-offset: 2px;
 }
 
@@ -353,7 +358,7 @@ button {
 
 /* Light mode icon states */
 [data-theme="light"] .theme-switch-icon.icon-sun {
-  color: #d97706;
+  color: #000000;
   opacity: 1;
   transform: scale(1.08);
 }
@@ -365,7 +370,7 @@ button {
 }
 
 [data-theme="light"] .theme-switch:hover .theme-switch-icon.icon-moon {
-  color: var(--accent);
+  color: #000000;
   opacity: 1;
   transform: scale(1.08);
 }
@@ -378,13 +383,13 @@ button {
 }
 
 [data-theme="dark"] .theme-switch-icon.icon-moon {
-  color: var(--accent);
+  color: #ffffff;
   opacity: 1;
   transform: scale(1.08);
 }
 
 [data-theme="dark"] .theme-switch:hover .theme-switch-icon.icon-sun {
-  color: #ea580c;
+  color: #ffffff;
   opacity: 1;
   transform: scale(1.08);
 }
@@ -1040,28 +1045,6 @@ button {
   z-index: 2;
 }
 
-.demo-trigger-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--accent);
-  background: var(--accent-glow);
-  border: 1px solid var(--border-accent);
-  padding: 0.38rem 0.8rem;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 180ms ease;
-}
-
-.demo-trigger-btn:hover {
-  background: var(--accent);
-  color: #fff;
-  transform: translateY(-1px);
-}
-
 .inspect-btn {
   display: inline-flex;
   align-items: center;
@@ -1080,9 +1063,7 @@ button {
 }
 
 .inspect-btn:hover {
-  background: var(--accent-glow);
-  border-color: var(--accent);
-  color: var(--accent);
+  transform: translateY(-2px);
 }
 
 .code-link {
@@ -2261,8 +2242,6 @@ body.intro-revealed #section-hero .quick-links {
 
 .project-media-link:hover {
   transform: translateY(-2px);
-  border-color: var(--accent);
-  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 .project-media-wrapper {
@@ -2308,12 +2287,11 @@ body.intro-revealed #section-hero .quick-links {
   user-select: none;
   -webkit-user-select: none;
   cursor: pointer;
-  transition: border-color 220ms ease, box-shadow 220ms ease;
+  transition: transform 220ms ease;
 }
 
 .starlink-mini-demo:hover {
-  border-color: var(--border-accent-strong);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px var(--accent-glow-subtle);
+  transform: scale(1.03);
 }
 
 .demo-viewport {
@@ -2909,6 +2887,7 @@ body.intro-revealed #section-hero .quick-links {
   0% {
     transform: translate3d(0, 0, 0);
   }
+
   100% {
     transform: translate3d(-50%, 0, 0);
   }
