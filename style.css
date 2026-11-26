@@ -6,6 +6,23 @@
 /* --------------------------------------------------
    1. Design Tokens & Theme Palettes
    -------------------------------------------------- */
+:root {
+  /* =========================================================================
+     MASTER BRAND COLOR CONTROLLER
+     Edit this single line to change the unified accent color across the entire site.
+     Default: #D4AF37 (Metallic Gold). 
+     ========================================================================= */
+  --accent-base: #D4AF37;
+
+  /* Dynamically calculated accent derivatives */
+  --accent: var(--accent-base);
+  --accent-glow: color-mix(in srgb, var(--accent-base) 22%, transparent);
+  --accent-glow-subtle: color-mix(in srgb, var(--accent-base) 15%, transparent);
+  --accent-glow-strong: color-mix(in srgb, var(--accent-base) 45%, transparent);
+  --border-accent: color-mix(in srgb, var(--accent-base) 35%, transparent);
+  --border-accent-strong: color-mix(in srgb, var(--accent-base) 45%, transparent);
+}
+
 :root,
 [data-theme="dark"] {
   --bg: #07090E;
@@ -19,19 +36,16 @@
   --text-secondary: #94A3B8;
   --text-muted: #64748B;
 
-  --accent: #38BDF8;
-  --accent-glow: rgba(56, 189, 248, 0.22);
   --accent-secondary: #818CF8;
 
   --orange-glow: rgba(249, 116, 22, 0.365);
-  --blue-glow: rgba(56, 191, 248, 0.579);
+  --blue-glow: var(--accent-glow-strong);
 
   --asu-gold: #FFC627;
   --asu-maroon: #8C1D40;
 
   --border: rgba(255, 255, 255, 0.09);
   --border-focus: rgba(255, 255, 255, 0.22);
-  --border-accent: rgba(56, 189, 248, 0.35);
 
   --shadow-hud: 0 16px 36px rgba(0, 0, 0, 0.6);
   --shadow-drawer: -24px 0 60px rgba(0, 0, 0, 0.7);
@@ -56,19 +70,16 @@
   --text-secondary: #475569;
   --text-muted: #64748B;
 
-  --accent: #0284C7;
-  --accent-glow: rgba(2, 132, 199, 0.14);
   --accent-secondary: #4F46E5;
 
   --orange-glow: rgba(251, 146, 60, 0.387);
-  --blue-glow: rgba(2, 133, 199, 0.374);
+  --blue-glow: var(--accent-glow-strong);
 
   --asu-gold: #D97706;
   --asu-maroon: #881337;
 
   --border: rgba(15, 23, 42, 0.1);
   --border-focus: rgba(15, 23, 42, 0.25);
-  --border-accent: rgba(2, 132, 199, 0.35);
 
   --shadow-hud: 0 12px 32px rgba(15, 23, 42, 0.1);
   --shadow-drawer: -20px 0 50px rgba(15, 23, 42, 0.15);
@@ -106,23 +117,23 @@ body {
 }
 
 ::selection {
-  background: rgba(2, 132, 199, 0.22);
+  background: var(--accent-glow);
   color: var(--accent);
 }
 
 ::-moz-selection {
-  background: rgba(2, 132, 199, 0.22);
+  background: var(--accent-glow);
   color: var(--accent);
 }
 
 [data-theme="dark"] ::selection {
-  background: rgba(56, 189, 248, 0.28);
-  color: #38bdf8;
+  background: var(--accent-glow);
+  color: var(--accent);
 }
 
 [data-theme="dark"] ::-moz-selection {
-  background: rgba(56, 189, 248, 0.28);
-  color: #38bdf8;
+  background: var(--accent-glow);
+  color: var(--accent);
 }
 
 a {
@@ -354,7 +365,7 @@ button {
 }
 
 [data-theme="light"] .theme-switch:hover .theme-switch-icon.icon-moon {
-  color: #38bdf8;
+  color: var(--accent);
   opacity: 1;
   transform: scale(1.08);
 }
@@ -367,7 +378,7 @@ button {
 }
 
 [data-theme="dark"] .theme-switch-icon.icon-moon {
-  color: #38bdf8;
+  color: var(--accent);
   opacity: 1;
   transform: scale(1.08);
 }
@@ -2301,8 +2312,8 @@ body.intro-revealed #section-hero .quick-links {
 }
 
 .starlink-mini-demo:hover {
-  border-color: rgba(56, 189, 248, 0.45);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.15);
+  border-color: var(--border-accent-strong);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px var(--accent-glow-subtle);
 }
 
 .demo-viewport {
@@ -2453,7 +2464,7 @@ body.intro-revealed #section-hero .quick-links {
   background: #0d121d;
   border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.15);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px var(--accent-glow-subtle);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -2533,9 +2544,9 @@ body.intro-revealed #section-hero .quick-links {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  border: 1px solid rgba(56, 189, 248, 0.45);
-  color: #ffffff;
+  background: var(--accent);
+  border: 1px solid var(--border-accent-strong);
+  color: #0b0e17;
   padding: 0.55rem 1.1rem;
   border-radius: 6px;
   font-size: 0.78rem;
@@ -2546,9 +2557,9 @@ body.intro-revealed #section-hero .quick-links {
 }
 
 .demo-modal-link:hover {
-  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-  box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
-  color: #ffffff;
+  background: var(--accent);
+  box-shadow: 0 0 18px var(--accent-glow-strong);
+  color: #000000;
   transform: translateY(-1px);
 }
 

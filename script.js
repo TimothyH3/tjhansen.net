@@ -613,14 +613,14 @@
     const readmeDatabase = {
       'compass': {
         title: 'Come Together Compass',
-        subtitle: 'Community Aid Platform (ASU Capstone #38)',
+        subtitle: 'Community Aid Platform (ASU Capstone #38 - Team of 5 for Community Pay It Forward)',
         fileTag: 'README.md',
-        image: 'assets/images/compass-placeholder.svg',
-        repoUrl: 'https://github.com/TimothyH3/come-together-compass',
+        image: 'assets/images/compass-map-preview.jpg',
+        repoUrl: 'https://github.com/Come-Together-Compass/Come-Together-Compass-Showcase',
         contentHtml: `
           <div class="readme-header">
             <h1 class="readme-h1">Come Together Compass</h1>
-            <p class="readme-subtitle">Community Pay It Forward – ASU Capstone #38</p>
+            <p class="readme-subtitle">Community Pay It Forward – ASU Capstone #38 (Team of 5)</p>
             <div class="readme-badges">
               <span class="readme-badge">Vue 3</span>
               <span class="readme-badge">TypeScript</span>
@@ -633,7 +633,7 @@
 
           <div class="readme-section">
             <h2 class="readme-h2">Overview</h2>
-            <p>A Vue 3 + Vite web platform that connects families and individuals with verified community resources through an interactive map, conversational guidance, and administrative verification.</p>
+            <p>Senior Capstone project currently in development with a team of 5 engineers for the non-profit group Community Pay It Forward. A Vue 3 + Vite web platform that connects families and individuals with verified community resources through an interactive map, conversational guidance, and administrative verification.</p>
             <p><strong>Mission:</strong> Turn everyday support into accessible community lifelines by helping people quickly discover local assistance programs without commercial API fees or tracking.</p>
           </div>
 
