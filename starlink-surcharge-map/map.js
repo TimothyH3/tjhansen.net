@@ -26,6 +26,8 @@
   let activeSelectionHex = null;
   let surchargePoints = [];
   let surchargeMacroHexes = [];
+  let surchargeMegaHexes = [];
+  let surchargeGigaHexes = [];
   let currentlyInspected = null;
 
   const tierFilters = {
@@ -394,9 +396,16 @@
 
     ensureSvgGradients();
 
-    let lastZoomMode = map.getZoom() <= 5 ? 'overview' : 'cells';
+    function getZoomMode(z) {
+      if (z <= 3) return 'continental';
+      if (z === 4) return 'national';
+      if (z === 5) return 'regional';
+      return 'cells';
+    }
+
+    let lastZoomMode = getZoomMode(map.getZoom());
     map.on('zoomend', function () {
-      const currentMode = map.getZoom() <= 5 ? 'overview' : 'cells';
+      const currentMode = getZoomMode(map.getZoom());
       if (currentMode !== lastZoomMode) {
         lastZoomMode = currentMode;
         renderMarkers();
@@ -425,8 +434,14 @@
 
       if (mResp && mResp.ok) {
         const mData = await mResp.json();
-        if (Array.isArray(mData) && mData.length > 0) {
+        if (Array.isArray(mData)) {
           surchargeMacroHexes = mData;
+          surchargeMegaHexes = mData;
+          surchargeGigaHexes = mData;
+        } else if (mData && typeof mData === 'object') {
+          surchargeMacroHexes = mData.res4 || [];
+          surchargeMegaHexes = mData.res3 || [];
+          surchargeGigaHexes = mData.res2 || [];
         }
       }
 
@@ -564,11 +579,10 @@
     // Ensure SVG gradients exist in Leaflet SVG layer
     ensureSvgGradients();
 
-    const isOverview = map ? map.getZoom() <= 5 : true;
+    const zoom = map ? map.getZoom() : 5;
 
-    if (isOverview) {
-      // Overview mode (zoom <= 5): Precalculated Uber H3 Resolution 4 macro hexagons representing regional averages
-      for (const m of surchargeMacroHexes) {
+    function renderMacroHexList(list) {
+      for (const m of list) {
         if (m.tier === 'sold_out' && !tierFilters.tierSoldOut) continue;
         if (m.tier === 'discounted' && !tierFilters.tierDiscount) continue;
         if (m.tier === 'standard' && !tierFilters.tierStandard) continue;
@@ -586,6 +600,22 @@
         });
         markersLayer.addLayer(hex);
       }
+    }
+
+    // Outermost layer: when zoomed out to view the entire US (zoom <= 3: continental Res 2; zoom 4: national Res 3)
+    if (zoom <= 3) {
+      renderMacroHexList(surchargeGigaHexes.length > 0 ? surchargeGigaHexes : (surchargeMegaHexes.length > 0 ? surchargeMegaHexes : surchargeMacroHexes));
+      return;
+    }
+
+    if (zoom === 4) {
+      renderMacroHexList(surchargeMegaHexes.length > 0 ? surchargeMegaHexes : surchargeMacroHexes);
+      return;
+    }
+
+    if (zoom === 5) {
+      // Intermediate regional layer (zoom 5: Res 4)
+      renderMacroHexList(surchargeMacroHexes);
       return;
     }
 
