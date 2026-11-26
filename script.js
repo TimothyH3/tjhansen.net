@@ -965,9 +965,14 @@ npm run dev</code></pre>
     const badge = document.getElementById('demo-floating-badge');
     const badgePrice = document.getElementById('badge-price');
     const badgeName = document.getElementById('badge-name');
-    const expandBtn = document.getElementById('demo-expand-toggle');
     const viewport = document.getElementById('demo-viewport');
 
+    // Modal popup elements
+    const modalBackdrop = document.getElementById('demo-modal-backdrop');
+    const modalSlot = document.getElementById('demo-modal-slot');
+    const modalCloseBtn = document.getElementById('demo-modal-close');
+
+    // Authentic PostGIS database sampled cells (No synthetic red or purple cells)
     const DEMO_CELLS = [
       { cx: 311.2, cy: 470.6, polygon: "326.8,479.6 311.2,488.6 295.6,479.6 295.6,461.6 311.2,452.6 326.8,461.6", fee: 60.5, tier: "standard", color: "#38bdf8", price: "$60.50/mo", name: "Huntsville, AL" },
       { cx: 915.6, cy: 179.3, polygon: "931.2,188.3 915.6,197.3 900,188.3 900,170.3 915.6,161.3 931.2,170.3", fee: 55, tier: "discounted", color: "#10b981", price: "$55/mo", name: "Roanoke, VA" },
@@ -985,8 +990,6 @@ npm run dev</code></pre>
       { cx: 627.7, cy: 441.4, polygon: "643.3,450.4 627.7,459.4 612.1,450.4 612.1,432.4 627.7,423.4 643.3,432.4", fee: 143, tier: "congested", color: "#f97316", price: "$143/mo", name: "Oconee Foothills, SC" },
       { cx: 666.3, cy: 329.5, polygon: "681.9,338.5 666.3,347.5 650.7,338.5 650.7,320.5 666.3,311.5 681.9,320.5", fee: 143, tier: "congested", color: "#f97316", price: "$143/mo", name: "Madison County, NC" },
       { cx: 707.7, cy: 456.8, polygon: "723.3,465.8 707.7,474.8 692.1,465.8 692.1,447.8 707.7,438.8 723.3,447.8", fee: 60.5, tier: "standard", color: "#38bdf8", price: "$60.50/mo", name: "Greenville, SC" },
-      { cx: 510.8, cy: 573.3, polygon: "526.4,582.3 510.8,591.3 495.2,582.3 495.2,564.3 510.8,555.3 526.4,564.3", fee: 170, tier: "high_demand", color: "#ef4444", price: "$170/mo", name: "Atlanta Metro, GA" },
-      { cx: 810.9, cy: 710.2, polygon: "826.5,719.2 810.9,728.2 795.3,719.2 795.3,701.2 810.9,692.2 826.5,701.2", fee: 0, tier: "sold_out", color: "#c084fc", price: "Sold Out", name: "Savannah Coastal, GA" },
       { cx: 860.5, cy: 410.2, polygon: "876.1,419.2 860.5,428.2 844.9,419.2 844.9,401.2 860.5,392.2 876.1,401.2", fee: 60.5, tier: "standard", color: "#38bdf8", price: "$60.50/mo", name: "Charlotte, NC" },
       { cx: 761.6, cy: 55.1, polygon: "778.9,65.1 761.6,75.1 744.3,65.1 744.3,45.1 761.6,35.1 778.9,45.1", fee: 143, tier: "congested", color: "#f97316", price: "$143/mo", name: "Charleston, WV" }
     ];
@@ -1008,13 +1011,15 @@ npm run dev</code></pre>
     let dragStartY = 0;
     let initialDragPanX = 0;
     let initialDragPanY = 0;
+    let dragMoved = false;
 
     let isUserInteracting = false;
     let idleTimer = null;
     let panAngle = 0;
     let autopilotIdx = 0;
     let lastAutopilotTime = 0;
-    const AUTOPILOT_CYCLE = [8, 6, 1, 7, 16, 17, 5, 3]; // Key tour cells: Asheville, Gatlinburg, Roanoke, Boone, Atlanta, Savannah, Chattanooga, Dahlonega
+    let currentAutopilotHex = null;
+    let isModalOpen = false;
 
     function showBadge(cell) {
       if (!badge || !badgePrice || !badgeName) return;
@@ -1030,6 +1035,7 @@ npm run dev</code></pre>
     }
 
     function highlightHex(idx) {
+      currentAutopilotHex = idx;
       hexElements.forEach((el, i) => {
         if (i === idx) {
           el.classList.add('is-autopilot');
@@ -1045,8 +1051,10 @@ npm run dev</code></pre>
     }
 
     function setTransform(x, y) {
-      const minX = container.clientWidth - 1024;
-      const minY = container.clientHeight - 768;
+      const vpWidth = viewport.clientWidth || 400;
+      const vpHeight = viewport.clientHeight || 225;
+      const minX = vpWidth - 1024;
+      const minY = vpHeight - 768;
       currentX = Math.max(minX, Math.min(0, x));
       currentY = Math.max(minY, Math.min(0, y));
       stage.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
@@ -1055,7 +1063,23 @@ npm run dev</code></pre>
     // Initial positioning centered on Appalachian corridor
     setTransform(-310, -240);
 
-    // Animation Loop: Smooth Autopanning & Autopilot Tour
+    // Calculate which cells are strictly visible inside the active viewport
+    function getVisibleCellIndices() {
+      const visible = [];
+      const vWidth = viewport.clientWidth || 400;
+      const vHeight = viewport.clientHeight || 225;
+      DEMO_CELLS.forEach((c, idx) => {
+        const sx = c.cx + currentX;
+        const sy = c.cy + currentY;
+        // Check bounds with margins for clean badge display
+        if (sx >= 35 && sx <= vWidth - 35 && sy >= 45 && sy <= vHeight - 25) {
+          visible.push(idx);
+        }
+      });
+      return visible;
+    }
+
+    // Animation Loop: Smooth Autopanning & Autopilot Tour of Visible Locations Only
     function tick(timestamp) {
       if (!isUserInteracting && !isDragging) {
         // Slow cinematic orbit
@@ -1066,11 +1090,32 @@ npm run dev</code></pre>
         currentY += (targetPanY - currentY) * 0.04;
         setTransform(currentX, currentY);
 
-        // Advance autopilot highlight every 2.7 seconds
+        // If the currently highlighted hex drifts out of viewport bounds, dismiss badge
+        if (currentAutopilotHex !== null) {
+          const c = DEMO_CELLS[currentAutopilotHex];
+          const sx = c.cx + currentX;
+          const sy = c.cy + currentY;
+          const vWidth = viewport.clientWidth || 400;
+          const vHeight = viewport.clientHeight || 225;
+          if (sx < 20 || sx > vWidth - 20 || sy < 35 || sy > vHeight - 20) {
+            highlightHex(null);
+          }
+        }
+
+        // Advance autopilot highlight focusing strictly on visible on-screen locations
         if (!lastAutopilotTime || (timestamp - lastAutopilotTime) > 2700) {
-          const targetIdx = AUTOPILOT_CYCLE[autopilotIdx % AUTOPILOT_CYCLE.length];
-          highlightHex(targetIdx);
-          autopilotIdx++;
+          const visible = getVisibleCellIndices();
+          if (visible.length > 0) {
+            let targetIdx = visible[autopilotIdx % visible.length];
+            if (targetIdx === currentAutopilotHex && visible.length > 1) {
+              autopilotIdx++;
+              targetIdx = visible[autopilotIdx % visible.length];
+            }
+            highlightHex(targetIdx);
+            autopilotIdx++;
+          } else {
+            highlightHex(null);
+          }
           lastAutopilotTime = timestamp;
         }
       }
@@ -1121,9 +1166,10 @@ npm run dev</code></pre>
     // Drag to Pan across region
     if (viewport) {
       viewport.addEventListener('pointerdown', (e) => {
-        if (e.target.closest('.demo-expand-toggle') || e.target.closest('.demo-tray-link')) return;
+        if (e.target.closest('a') || e.target.closest('button')) return;
         pauseAutopilot();
         isDragging = true;
+        dragMoved = false;
         dragStartX = e.clientX;
         dragStartY = e.clientY;
         initialDragPanX = currentX;
@@ -1137,6 +1183,9 @@ npm run dev</code></pre>
         pauseAutopilot();
         const dx = e.clientX - dragStartX;
         const dy = e.clientY - dragStartY;
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+          dragMoved = true;
+        }
         setTransform(initialDragPanX + dx, initialDragPanY + dy);
       });
 
@@ -1152,20 +1201,60 @@ npm run dev</code></pre>
       viewport.addEventListener('pointercancel', stopDrag);
     }
 
-    // Expandable on Click
-    if (expandBtn) {
-      expandBtn.addEventListener('click', (e) => {
+    // Modal Popup Lifecycle
+    function openModal() {
+      if (isModalOpen || !modalBackdrop || !modalSlot || !viewport) return;
+      isModalOpen = true;
+      modalSlot.appendChild(viewport);
+      modalBackdrop.classList.add('is-open');
+      modalBackdrop.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        setTransform(currentX, currentY);
+      }, 40);
+    }
+
+    function closeModal() {
+      if (!isModalOpen || !container || !viewport) return;
+      isModalOpen = false;
+      container.appendChild(viewport);
+      modalBackdrop.classList.remove('is-open');
+      modalBackdrop.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      setTimeout(() => {
+        setTransform(currentX, currentY);
+      }, 40);
+    }
+
+    // Clicking demo card expands as a popup modal (unless dragging or clicking a hex)
+    container.addEventListener('click', (e) => {
+      if (isModalOpen || dragMoved || e.target.closest('.demo-hex')) {
+        return;
+      }
+      openModal();
+    });
+
+    if (modalCloseBtn) {
+      modalCloseBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const isExpanded = container.classList.toggle('is-expanded');
-        const btnText = expandBtn.querySelector('.expand-btn-text');
-        if (btnText) btnText.textContent = isExpanded ? 'Collapse' : 'Expand';
-        expandBtn.setAttribute('aria-label', isExpanded ? 'Collapse demo view' : 'Expand demo view');
-        setTimeout(() => {
-          setTransform(currentX, currentY);
-        }, 330);
+        closeModal();
       });
     }
+
+    if (modalBackdrop) {
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+          closeModal();
+        }
+      });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isModalOpen) {
+        closeModal();
+      }
+    });
   }
 
   // ===========================================================================

@@ -304,7 +304,7 @@
                    =========================================================== -->
               <article class="project-bento-card" data-project-key="starlink-tracker">
                 <!-- Interactive Lightweight Telemetry Demo (No external map API) -->
-                <div class="starlink-mini-demo" id="starlink-mini-demo">
+                <div class="starlink-mini-demo" id="starlink-mini-demo" title="Click to expand interactive preview">
                   <div class="demo-viewport" id="demo-viewport">
                     <div class="demo-stage" id="demo-stage">
                       <img src="assets/images/starlink-demo-map.jpg" alt="Regional Starlink price map" class="demo-basemap" draggable="false">
@@ -317,37 +317,6 @@
                         <div class="badge-pointer"></div>
                       </div>
                     </div>
-                  </div>
-
-                  <!-- Top HUD: Live Indicator & Expand Toggle -->
-                  <div class="demo-top-hud">
-                    <div class="demo-status-pill font-mono">
-                      <span class="status-radar-dot"></span>
-                      <span class="status-text">Interactive Demo</span>
-                    </div>
-                    <button class="demo-expand-toggle font-mono" id="demo-expand-toggle" type="button" aria-label="Expand demo view">
-                      <svg class="icon-expand" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
-                      <svg class="icon-collapse" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
-                      <span class="expand-btn-text">Expand</span>
-                    </button>
-                  </div>
-
-                  <!-- Corner Legend -->
-                  <div class="demo-corner-legend font-mono" aria-label="Color pricing tiers">
-                    <div class="legend-chip"><i class="dot" style="background:#10b981"></i><span>&le;$55</span></div>
-                    <div class="legend-chip"><i class="dot" style="background:#38bdf8"></i><span>$55–$130</span></div>
-                    <div class="legend-chip"><i class="dot" style="background:#f97316"></i><span>$130–$170</span></div>
-                    <div class="legend-chip"><i class="dot" style="background:#ef4444"></i><span>$170+</span></div>
-                    <div class="legend-chip"><i class="dot" style="background:#c084fc"></i><span>Sold Out</span></div>
-                  </div>
-
-                  <!-- Expanded Guidance & Launch Bar -->
-                  <div class="demo-expanded-tray">
-                    <p class="demo-tray-instruction font-sans">Hover over regional cells to preview monthly fees, or drag to pan across price corridors.</p>
-                    <a href="/starlink-surcharge-map" class="demo-tray-link font-mono">
-                      <span>Open Full Interactive Map</span>
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                    </a>
                   </div>
                 </div>
                 <h3 class="bento-title">Starlink Residential Cost Map</h3>
@@ -518,6 +487,28 @@
   </aside>
 
   <!-- =========================================================================
+       STARLINK DEMO POPUP MODAL
+       ========================================================================= -->
+  <div class="demo-modal-backdrop" id="demo-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="demo-modal-card">
+      <div class="demo-modal-header">
+        <span class="demo-modal-tag font-mono">Starlink Telemetry Preview</span>
+        <button class="demo-modal-close" id="demo-modal-close" aria-label="Close preview">✕</button>
+      </div>
+      <div class="demo-modal-body" id="demo-modal-slot">
+        <!-- Enlarged interactive map viewport mounts here when opened -->
+      </div>
+      <div class="demo-modal-footer">
+        <p class="demo-modal-instruction font-sans">Hover over regional cells to preview monthly fees, or drag to pan across price corridors.</p>
+        <a href="/starlink-surcharge-map" class="demo-modal-link font-mono">
+          <span>Open Full Interactive Map</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
        TOAST NOTIFICATION (Copy Email Confirmation)
        ========================================================================= -->
   <div class="toast" id="toast" role="status" aria-live="polite">
@@ -525,7 +516,7 @@
   </div>
 
   <!-- Main Engine Script -->
-  <script src="script.js?v=68"></script>
+  <script src="script.js?v=69"></script>
 </body>
 
 </html>
