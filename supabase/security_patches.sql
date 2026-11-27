@@ -1,59 +1,29 @@
 -- ============================================================================
--- SUPABASE SECURITY ADVISOR REMEDIATION SCRIPT
--- Starlink Surcharge Map - PostGIS & Function Security Hardening
+-- SUPABASE SECURITY HARDENING SCRIPT (CLEAN & ERROR-FREE)
+-- Starlink Surcharge Map - Function & RPC Security Remediation
 -- ============================================================================
 -- Run this script in your Supabase SQL Editor (Dashboard -> SQL Editor -> New Query).
--- It resolves the 5 security issues flagged by Supabase Security Advisor:
+-- It resolves the actionable security vulnerabilities on your custom functions:
 --
--- 1. Table public.spatial_ref_sys is public, but RLS has not been enabled
--- 2. Extension postgis is installed in the public schema
--- 3. Function public.upsert_starlink_surcharge has a role mutable search_path
--- 4. Function public.get_nearby_surcharge can be executed by anon role as SECURITY DEFINER
--- 5. Function public.get_nearby_surcharge can be executed by authenticated role as SECURITY DEFINER
+-- 1. Function public.upsert_starlink_surcharge has a role mutable search_path
+-- 2. Function public.get_nearby_surcharge executed by anon as SECURITY DEFINER
+-- 3. Function public.get_nearby_surcharge executed by authenticated as SECURITY DEFINER
+-- 4. Restricts write/upsert execution strictly to service_role
+--
+-- NOTE ON spatial_ref_sys & postgis in public:
+-- spatial_ref_sys is an internal PostGIS lookup table (EPSG codes) owned by
+-- supabase_admin. PostgreSQL restricts standard users from altering it (42501).
+-- It contains no user data and is a documented harmless linter false positive.
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- FIX 1 & 2: EXTENSION IN PUBLIC & RLS ON spatial_ref_sys
+-- FIX 1: FUNCTION SEARCH PATH MUTABLE & WRITE RESTRICTION
+-- (upsert_starlink_surcharge)
 -- ----------------------------------------------------------------------------
--- In Supabase, extensions should reside in the 'extensions' schema to prevent
--- polluting the public PostgREST API schema.
-
-CREATE SCHEMA IF NOT EXISTS extensions;
-
--- Attempt to relocate the postgis extension to the 'extensions' schema
-DO $$
-BEGIN
-    ALTER EXTENSION postgis SET SCHEMA extensions;
-    RAISE NOTICE 'Successfully moved postgis extension to extensions schema.';
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE NOTICE 'Could not relocate postgis extension automatically (%): ensuring fallback RLS on public.spatial_ref_sys.', SQLERRM;
-END $$;
-
--- Enable RLS and add a read-only policy on spatial_ref_sys (if it resides in public)
-DO $$
-BEGIN
-    IF EXISTS (
-        SELECT 1 FROM information_schema.tables 
-        WHERE table_schema = 'public' AND table_name = 'spatial_ref_sys'
-    ) THEN
-        EXECUTE 'ALTER TABLE public.spatial_ref_sys ENABLE ROW LEVEL SECURITY';
-        EXECUTE 'DROP POLICY IF EXISTS "Allow public read-only on spatial_ref_sys" ON public.spatial_ref_sys';
-        EXECUTE 'CREATE POLICY "Allow public read-only on spatial_ref_sys" ON public.spatial_ref_sys FOR SELECT TO public USING (true)';
-        RAISE NOTICE 'Enabled RLS and public read-only policy on public.spatial_ref_sys.';
-    END IF;
-END $$;
-
--- Grant schema usage to standard Supabase roles
-GRANT USAGE ON SCHEMA extensions TO anon, authenticated, service_role;
-
-
--- ----------------------------------------------------------------------------
--- FIX 3: FUNCTION SEARCH PATH MUTABLE (upsert_starlink_surcharge)
--- ----------------------------------------------------------------------------
--- 1. Sets a fixed search_path (public, extensions, pg_temp) to prevent search-path injection.
--- 2. Revokes EXECUTE from PUBLIC/anon/authenticated so random callers cannot overwrite data.
--- 3. Grants EXECUTE strictly to service_role (Cloudflare Worker & automated ingest).
+-- 1. Sets fixed search_path (public, extensions, pg_temp) to prevent injection.
+-- 2. Revokes EXECUTE from PUBLIC/anon/authenticated so unauthenticated visitors
+--    cannot overwrite or tamper with database records via REST.
+-- 3. Grants EXECUTE strictly to service_role (Cloudflare Worker & ingestion jobs).
 
 CREATE OR REPLACE FUNCTION public.upsert_starlink_surcharge(
     p_lat DOUBLE PRECISION,
@@ -121,12 +91,13 @@ GRANT EXECUTE ON FUNCTION public.upsert_starlink_surcharge(
 
 
 -- ----------------------------------------------------------------------------
--- FIX 4 & 5: SECURITY DEFINER EXPOSURE (get_nearby_surcharge)
+-- FIX 2: REMOVE ELEVATED PRIVILEGES FROM READ FUNCTION
+-- (get_nearby_surcharge)
 -- ----------------------------------------------------------------------------
--- 1. Changes SECURITY DEFINER to SECURITY INVOKER because this is a read-only
---    query on starlink_surcharges (which already has public read access via RLS).
+-- 1. Changes SECURITY DEFINER to SECURITY INVOKER because this is a read query
+--    against starlink_surcharges (which already has public read RLS enabled).
+--    This resolves both "Public Can Execute" and "Signed-In Users Can Execute".
 -- 2. Sets fixed search_path = public, extensions, pg_temp.
--- 3. Grants EXECUTE to anon, authenticated, and service_role.
 
 CREATE OR REPLACE FUNCTION public.get_nearby_surcharge(
     p_lat DOUBLE PRECISION,
@@ -192,7 +163,7 @@ GRANT EXECUTE ON FUNCTION public.get_nearby_surcharge(
 
 
 -- ----------------------------------------------------------------------------
--- PROACTIVE HARDENING: get_surcharges_geojson search_path
+-- PROACTIVE HARDENING: get_surcharges_geojson
 -- ----------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION public.get_surcharges_geojson()
 RETURNS JSONB
