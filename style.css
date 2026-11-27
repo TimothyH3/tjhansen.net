@@ -1015,6 +1015,64 @@ button {
   margin-bottom: 0.85rem;
 }
 
+/* Bento Card Expandable Content */
+.bento-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.32rem 0.65rem;
+  margin-bottom: 0.85rem;
+  cursor: pointer;
+  transition: all 180ms ease;
+  user-select: none;
+  -webkit-user-select: none;
+  align-self: flex-start;
+  position: relative;
+  z-index: 2;
+}
+
+.bento-expand-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-focus);
+  background: var(--border-focus);
+}
+
+.expand-chevron {
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.project-bento-card.is-expanded .expand-chevron {
+  transform: rotate(180deg);
+}
+
+.project-bento-card.is-expanded .bento-expand-btn {
+  color: var(--accent);
+  border-color: var(--border-accent);
+}
+
+.bento-expandable-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms cubic-bezier(0.16, 1, 0.3, 1), opacity 240ms ease;
+  opacity: 0;
+}
+
+.bento-expandable-inner {
+  overflow: hidden;
+}
+
+.project-bento-card.is-expanded .bento-expandable-body {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
 .bento-metric {
   font-size: 0.8rem;
   font-weight: 500;

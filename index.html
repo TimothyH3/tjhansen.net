@@ -76,7 +76,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Main Stylesheet (bump query ?v= to clear browser cache on updates) -->
-  <link rel="stylesheet" href="style.css?v=77">
+  <link rel="stylesheet" href="style.css?v=78">
 </head>
 
 <body>
@@ -390,8 +390,7 @@
 
             <!-- Section Intro Paragraph -->
             <p class="section-intro" id="act1-section-intro">
-              A few projects I have built recently, ranging from geospatial tools and community platforms to map
-              visualizers. Feel free to explore the interactive demos or look through the project details.
+              These are a few of my recent acedemic and personal projects. Expand the cards below for more information.
             </p>
 
             <!-- Projects Bento Grid (2x2 on desktop, single column on mobile) -->
@@ -415,6 +414,14 @@
                   development with a team of 5 engineers for
                   the non-profit group Community Pay It Forward.
                 </p>
+                <button class="bento-expand-btn" aria-expanded="false" aria-label="Toggle features for Come Together Compass">
+                  <span class="expand-label">Key features</span>
+                  <svg class="expand-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div class="bento-expandable-body" aria-hidden="true">
+                  <div class="bento-expandable-inner">
                 <ul class="bento-bullet-list">
                   <li><span class="bullet">•</span><span><strong>Focus on Privacy:</strong>
                       Minimal data persistence with optional user preferences. All chat features are processed locally
@@ -428,6 +435,8 @@
                       chatbot assistant, preference-scored suggestions, and an administrative portal for listing
                       verification.</span></li>
                 </ul>
+                  </div>
+                </div>
                 <div class="bento-actions">
                   <button class="inspect-btn" data-project="compass">
                     <span>README</span>
@@ -468,6 +477,14 @@
                 <p class="bento-desc">I travel full-time and move my Starlink address often. Because monthly rates vary
                   between regions ($27.50 to $170+/mo) without an official price map, I made this tool to plan internet
                   costs ahead of time.</p>
+                <button class="bento-expand-btn" aria-expanded="false" aria-label="Toggle features for Starlink Residential Cost Map">
+                  <span class="expand-label">Key features</span>
+                  <svg class="expand-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div class="bento-expandable-body" aria-hidden="true">
+                  <div class="bento-expandable-inner">
                 <ul class="bento-bullet-list">
                   <li><span class="bullet">•</span><span><strong>Visual cell map:</strong> Renders hexagonal cells and
                       pricing zones ($27.50–$55 discount, $120 standard, and congested rates) so travelers know what to
@@ -476,6 +493,8 @@
                       within 25km and a quiet 10-minute edge job so queries stay fast without burdening Starlink's
                       servers.</span></li>
                 </ul>
+                  </div>
+                </div>
                 <div class="bento-actions">
                   <button class="inspect-btn" data-project="starlink-tracker">
                     <span>README</span>
@@ -591,7 +610,7 @@
               <!-- Interactive Email Box & Direct Mail Button -->
               <div class="contact-interactive">
                 <div class="email-display">
-                  <span class="email-address" id="email-text">t@tjhansen.net</span>
+                  <span class="email-address" id="email-text">t.hansen@tjhansen.net</span>
                   <button class="minimal-btn copy-btn" id="copy-email-btn" aria-label="Copy email address"
                     title="Copy email address">
                     <svg class="copy-icon" id="copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -694,7 +713,7 @@
   </div>
 
   <!-- Main Engine Script -->
-  <script src="script.js?v=77"></script>
+  <script src="script.js?v=78"></script>
 </body>
 
 </html>

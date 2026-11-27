@@ -607,6 +607,53 @@
   }
 
   // ===========================================================================
+  // 4B. EXPANDABLE BENTO PROJECT CARDS
+  // ===========================================================================
+  function initBentoCardExpansion() {
+    const cards = document.querySelectorAll('.project-bento-card');
+    cards.forEach(card => {
+      const toggleBtn = card.querySelector('.bento-expand-btn');
+      const expandableBody = card.querySelector('.bento-expandable-body');
+
+      function toggle() {
+        const isExpanded = card.classList.toggle('is-expanded');
+        if (toggleBtn) {
+          toggleBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+          const label = toggleBtn.querySelector('.expand-label');
+          if (label) {
+            label.textContent = isExpanded ? 'Hide features' : 'Key features';
+          }
+        }
+        if (expandableBody) {
+          expandableBody.setAttribute('aria-hidden', isExpanded ? 'false' : 'true');
+        }
+        // Update document scroll geometry after height transition
+        setTimeout(() => {
+          if (typeof measureLayoutGeometry === 'function') {
+            measureLayoutGeometry();
+          }
+        }, 300);
+      }
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggle();
+        });
+      }
+
+      card.addEventListener('click', (e) => {
+        // Only toggle card expansion if user didn't click links, inspect/readme button, or interactive demo
+        if (e.target.closest('a') || e.target.closest('.inspect-btn') || e.target.closest('.starlink-mini-demo')) {
+          return;
+        }
+        toggle();
+      });
+    });
+  }
+
+  // ===========================================================================
   // 5. ARCHITECTURAL SPECIFICATION DRAWER CONTROLLER
   // ===========================================================================
   function initProjectDrawer() {
@@ -1286,6 +1333,7 @@ npm run dev</code></pre>
     initTheme();
     initIntroAnimation();
     initScrollAndZoomEngine();
+    initBentoCardExpansion();
     initProjectDrawer();
     initCopyEmail();
     initStarlinkMiniDemo();
