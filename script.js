@@ -238,10 +238,24 @@
     function onNativeScroll(scrollY) {
       const isMobile = window.innerWidth <= 768;
 
-      // Dynamic atmospheric background atmosphere (active on both mobile & desktop)
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const {
+        vh,
+        docHeight,
+        act0Top,
+        act0Scrollable,
+        travelPhase1,
+        exitDistance,
+        act1Top,
+        act2Top,
+        stackTop,
+        heroCenterShift,
+        profileSlideDistance,
+        profileCenterShift
+      } = cachedMetrics;
+
       const progress = docHeight > 0 ? Math.max(0, Math.min(1, scrollY / docHeight)) : 0;
 
+      // Dynamic atmospheric background atmosphere (active on both mobile & desktop)
       if (bgOrange) {
         const orangeOpacity = Math.max(0.18, 1.0 - progress * 0.82).toFixed(3);
         const orangeShiftY = (progress * 45).toFixed(1);
@@ -280,7 +294,6 @@
         }
 
         // Keep HUD indicator accurate on mobile
-        const { vh, act1Top, act2Top } = cachedMetrics;
         if (act2Top && scrollY + vh * 0.4 >= act2Top) {
           updateHUD(2);
         } else if (act1Top && scrollY + vh * 0.4 >= act1Top) {
@@ -289,37 +302,6 @@
           updateHUD(0);
         }
         return;
-      }
-
-      const {
-        vh,
-        docHeight,
-        act0Top,
-        act0Scrollable,
-        travelPhase1,
-        exitDistance,
-        act1Top,
-        act2Top,
-        stackTop,
-        heroCenterShift,
-        profileSlideDistance,
-        profileCenterShift
-      } = cachedMetrics;
-
-      const progress = docHeight > 0 ? Math.max(0, Math.min(1, scrollY / docHeight)) : 0;
-
-      // Ambient Background Atmosphere
-      if (bgOrange) {
-        const orangeOpacity = Math.max(0.18, 1.0 - progress * 0.82).toFixed(3);
-        const orangeShiftY = (progress * 45).toFixed(1);
-        bgOrange.style.opacity = orangeOpacity;
-        bgOrange.style.transform = `translate3d(0, ${orangeShiftY}px, 0)`;
-      }
-      if (bgBlue) {
-        const blueOpacity = Math.min(1.0, 0.12 + progress * 0.88).toFixed(3);
-        const blueShiftY = ((1 - progress) * -35).toFixed(1);
-        bgBlue.style.opacity = blueOpacity;
-        bgBlue.style.transform = `translate3d(0, ${blueShiftY}px, 0)`;
       }
 
       // Act 0 Stage Choreography & Handover
