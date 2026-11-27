@@ -611,22 +611,54 @@
   // ===========================================================================
   function initBentoCardExpansion() {
     const cards = document.querySelectorAll('.project-bento-card');
+
+    function collapseCard(c) {
+      c.classList.remove('is-expanded');
+      const btn = c.querySelector('.bento-expand-btn');
+      const body = c.querySelector('.bento-expandable-body');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        const label = btn.querySelector('.expand-label');
+        if (label) label.textContent = 'More details';
+      }
+      if (body) {
+        body.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    function expandCard(c) {
+      c.classList.add('is-expanded');
+      const btn = c.querySelector('.bento-expand-btn');
+      const body = c.querySelector('.bento-expandable-body');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'true');
+        const label = btn.querySelector('.expand-label');
+        if (label) label.textContent = 'Less details';
+      }
+      if (body) {
+        body.setAttribute('aria-hidden', 'false');
+      }
+    }
+
     cards.forEach(card => {
       const toggleBtn = card.querySelector('.bento-expand-btn');
-      const expandableBody = card.querySelector('.bento-expandable-body');
 
-      function toggle() {
-        const isExpanded = card.classList.toggle('is-expanded');
-        if (toggleBtn) {
-          toggleBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
-          const label = toggleBtn.querySelector('.expand-label');
-          if (label) {
-            label.textContent = isExpanded ? 'Hide features' : 'Key features';
+      function handleToggle() {
+        const willExpand = !card.classList.contains('is-expanded');
+
+        // Close any other open card so only one card is expanded at a time
+        cards.forEach(otherCard => {
+          if (otherCard !== card && otherCard.classList.contains('is-expanded')) {
+            collapseCard(otherCard);
           }
+        });
+
+        if (willExpand) {
+          expandCard(card);
+        } else {
+          collapseCard(card);
         }
-        if (expandableBody) {
-          expandableBody.setAttribute('aria-hidden', isExpanded ? 'false' : 'true');
-        }
+
         // Update document scroll geometry after height transition
         setTimeout(() => {
           if (typeof measureLayoutGeometry === 'function') {
@@ -639,7 +671,7 @@
         toggleBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          toggle();
+          handleToggle();
         });
       }
 
@@ -648,7 +680,7 @@
         if (e.target.closest('a') || e.target.closest('.inspect-btn') || e.target.closest('.starlink-mini-demo')) {
           return;
         }
-        toggle();
+        handleToggle();
       });
     });
   }
