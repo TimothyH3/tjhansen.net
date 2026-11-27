@@ -4,8 +4,24 @@
 -- Target Database: Supabase PostgreSQL 15+ with PostGIS
 -- ============================================================================
 
--- 1. Enable PostGIS Extension
-CREATE EXTENSION IF NOT EXISTS postgis;
+-- 1. Enable PostGIS Extension in extensions schema
+CREATE SCHEMA IF NOT EXISTS extensions;
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA extensions;
+
+-- Ensure public.spatial_ref_sys has RLS enabled if postgis was previously installed in public
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_schema = 'public' AND table_name = 'spatial_ref_sys'
+    ) THEN
+        EXECUTE 'ALTER TABLE public.spatial_ref_sys ENABLE ROW LEVEL SECURITY';
+        EXECUTE 'DROP POLICY IF EXISTS "Allow public read-only on spatial_ref_sys" ON public.spatial_ref_sys';
+        EXECUTE 'CREATE POLICY "Allow public read-only on spatial_ref_sys" ON public.spatial_ref_sys FOR SELECT TO public USING (true)';
+    END IF;
+END $$;
+
+GRANT USAGE ON SCHEMA extensions TO anon, authenticated, service_role;
 
 -- 2. Create starlink_surcharges Table
 CREATE TABLE IF NOT EXISTS starlink_surcharges (
@@ -98,6 +114,7 @@ CREATE OR REPLACE FUNCTION upsert_starlink_surcharge(
 RETURNS BIGINT
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public, extensions, pg_temp
 AS $$
 DECLARE
     v_id BIGINT;
@@ -137,6 +154,16 @@ BEGIN
 END;
 $$;
 
+-- Restrict write/upsert execution strictly to service_role
+REVOKE EXECUTE ON FUNCTION upsert_starlink_surcharge(
+    DOUBLE PRECISION, DOUBLE PRECISION, INTEGER, TEXT, TEXT, TEXT, NUMERIC, NUMERIC, NUMERIC, TEXT
+) FROM PUBLIC, anon, authenticated;
+
+GRANT EXECUTE ON FUNCTION upsert_starlink_surcharge(
+    DOUBLE PRECISION, DOUBLE PRECISION, INTEGER, TEXT, TEXT, TEXT, NUMERIC, NUMERIC, NUMERIC, TEXT
+) TO service_role;
+
+
 -- Function: Check Proximity Cache
 -- Finds the nearest sample within a given radius in kilometers and maximum age in days
 CREATE OR REPLACE FUNCTION get_nearby_surcharge(
@@ -164,7 +191,8 @@ RETURNS TABLE (
     is_cached BOOLEAN
 )
 LANGUAGE plpgsql
-SECURITY DEFINER
+SECURITY INVOKER
+SET search_path = public, extensions, pg_temp
 AS $$
 DECLARE
     v_target_geom GEOMETRY(Point, 4326);
@@ -196,12 +224,18 @@ BEGIN
 END;
 $$;
 
+GRANT EXECUTE ON FUNCTION get_nearby_surcharge(
+    DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, INTEGER
+) TO anon, authenticated, service_role;
+
+
 -- Function: Export Full GeoJSON FeatureCollection
 -- Highly optimized GeoJSON generator for MapLibre / Leaflet data sources
 CREATE OR REPLACE FUNCTION get_surcharges_geojson()
 RETURNS JSONB
 LANGUAGE sql
 STABLE
+SET search_path = public, extensions, pg_temp
 AS $$
     SELECT jsonb_build_object(
         'type', 'FeatureCollection',
@@ -233,3 +267,5 @@ AS $$
     )
     FROM starlink_surcharges s;
 $$;
+
+GRANT EXECUTE ON FUNCTION get_surcharges_geojson() TO anon, authenticated, service_role;
