@@ -1022,7 +1022,7 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
+  gap: 0;
   font-size: 0.8rem;
   font-weight: 400;
   color: var(--text-secondary);
@@ -1032,7 +1032,7 @@ button {
   padding: 0.35rem 0.5rem;
   margin: 0 auto 0.85rem auto;
   cursor: pointer;
-  transition: color 180ms ease, opacity 180ms ease;
+  transition: color 200ms ease, opacity 200ms ease;
   user-select: none;
   -webkit-user-select: none;
   align-self: center;
@@ -1040,19 +1040,43 @@ button {
   z-index: 2;
 }
 
+.project-bento-card:hover .bento-expand-btn,
 .bento-expand-btn:hover {
   color: #ffffff;
   background: transparent;
   border-color: transparent;
 }
 
+[data-theme="light"] .project-bento-card:hover .bento-expand-btn,
 [data-theme="light"] .bento-expand-btn:hover {
   color: #0f172a;
 }
 
+.expand-label {
+  display: inline-block;
+  max-width: 120px;
+  opacity: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-right: 0.35rem;
+  transition: max-width 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 220ms ease,
+              margin-right 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  vertical-align: middle;
+}
+
+.project-bento-card.is-expanded .expand-label {
+  max-width: 0;
+  opacity: 0;
+  margin-right: 0;
+  pointer-events: none;
+}
+
 .expand-chevron {
-  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-block;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
+  vertical-align: middle;
 }
 
 .project-bento-card.is-expanded .expand-chevron {
@@ -1063,10 +1087,12 @@ button {
   color: var(--text-secondary);
 }
 
+.project-bento-card.is-expanded:hover .bento-expand-btn,
 .project-bento-card.is-expanded .bento-expand-btn:hover {
   color: #ffffff;
 }
 
+[data-theme="light"] .project-bento-card.is-expanded:hover .bento-expand-btn,
 [data-theme="light"] .project-bento-card.is-expanded .bento-expand-btn:hover {
   color: #0f172a;
 }
@@ -1471,11 +1497,13 @@ button {
   .spec-drawer-backdrop {
     padding: 0.75rem;
   }
+
   .spec-drawer {
     max-height: 92vh;
     max-height: 92dvh;
     border-radius: 10px;
   }
+
   .drawer-content {
     padding: 1.25rem 1rem;
   }
@@ -2654,7 +2682,7 @@ body.intro-revealed #section-hero .quick-links {
 .demo-modal-tag {
   font-size: 0.75rem;
   letter-spacing: 0.04em;
-  color: var(--accent);
+  color: var(--text-primary);
   font-weight: 600;
   text-transform: uppercase;
 }

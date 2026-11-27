@@ -618,8 +618,6 @@
       const body = c.querySelector('.bento-expandable-body');
       if (btn) {
         btn.setAttribute('aria-expanded', 'false');
-        const label = btn.querySelector('.expand-label');
-        if (label) label.textContent = 'More details';
       }
       if (body) {
         body.setAttribute('aria-hidden', 'true');
@@ -632,8 +630,6 @@
       const body = c.querySelector('.bento-expandable-body');
       if (btn) {
         btn.setAttribute('aria-expanded', 'true');
-        const label = btn.querySelector('.expand-label');
-        if (label) label.textContent = 'Less details';
       }
       if (body) {
         body.setAttribute('aria-hidden', 'false');
