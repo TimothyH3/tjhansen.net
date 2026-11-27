@@ -106,6 +106,7 @@
         const current = document.documentElement.getAttribute('data-theme');
         const next = current === 'dark' ? 'light' : 'dark';
         applyTheme(next);
+        themeToggleBtn.blur();
       });
     }
   }
@@ -236,6 +237,23 @@
     // Native Scroll Engine (Pure Calculation Frame, Zero Layout Queries)
     function onNativeScroll(scrollY) {
       const isMobile = window.innerWidth <= 768;
+
+      // Dynamic atmospheric background atmosphere (active on both mobile & desktop)
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? Math.max(0, Math.min(1, scrollY / docHeight)) : 0;
+
+      if (bgOrange) {
+        const orangeOpacity = Math.max(0.18, 1.0 - progress * 0.82).toFixed(3);
+        const orangeShiftY = (progress * 45).toFixed(1);
+        bgOrange.style.opacity = orangeOpacity;
+        if (!isMobile) bgOrange.style.transform = `translate3d(0, ${orangeShiftY}px, 0)`;
+      }
+      if (bgBlue) {
+        const blueOpacity = Math.min(1.0, 0.12 + progress * 0.88).toFixed(3);
+        const blueShiftY = ((1 - progress) * -35).toFixed(1);
+        bgBlue.style.opacity = blueOpacity;
+        if (!isMobile) bgBlue.style.transform = `translate3d(0, ${blueShiftY}px, 0)`;
+      }
 
       // On mobile devices, skip complex scroll transforms altogether for silky-smooth 60/120fps native touch scrolling.
       if (isMobile) {
@@ -861,10 +879,23 @@ npm run dev</code></pre>
             temp.remove();
           }
 
-          if (copyBtnText) copyBtnText.textContent = 'Copied!';
-          setTimeout(() => {
-            if (copyBtnText) copyBtnText.textContent = 'Copy Email';
-          }, 2000);
+          const copyIcon = document.getElementById('copy-icon');
+          const checkIcon = document.getElementById('copy-check-icon');
+          if (copyIcon && checkIcon) {
+            copyIcon.style.display = 'none';
+            checkIcon.style.display = 'block';
+            copyBtn.classList.add('copied');
+            setTimeout(() => {
+              copyIcon.style.display = 'block';
+              checkIcon.style.display = 'none';
+              copyBtn.classList.remove('copied');
+            }, 2000);
+          } else if (copyBtnText) {
+            copyBtnText.textContent = 'Copied!';
+            setTimeout(() => {
+              copyBtnText.textContent = 'Copy Email';
+            }, 2000);
+          }
 
           showToast(`Copied ${email} to clipboard`);
         } catch (err) {
@@ -1152,23 +1183,15 @@ npm run dev</code></pre>
       }, 2600);
     }
 
-    container.addEventListener('mouseenter', pauseAutopilot);
-    container.addEventListener('mouseleave', () => {
-      highlightHex(null);
-      resumeAutopilotLater();
-    });
-
-    // Hex hover displays floating price badge; clicking a hex triggers nothing
+    // Hex hover displays floating price badge without pausing auto-pan
     hexElements.forEach(hex => {
       hex.addEventListener('mouseenter', () => {
-        pauseAutopilot();
         const idx = Number(hex.dataset.idx);
         highlightHex(idx);
       });
 
       hex.addEventListener('mouseleave', () => {
         highlightHex(null);
-        resumeAutopilotLater();
       });
 
       hex.addEventListener('click', (e) => {
@@ -1177,11 +1200,10 @@ npm run dev</code></pre>
       });
     });
 
-    // Drag to Pan across region
+    // Drag to Pan across region: only pause auto-panning when user actually clicks and drags
     if (viewport) {
       viewport.addEventListener('pointerdown', (e) => {
         if (e.target.closest('a') || e.target.closest('button')) return;
-        pauseAutopilot();
         isDragging = true;
         dragMoved = false;
         dragStartX = e.clientX;
@@ -1194,13 +1216,15 @@ npm run dev</code></pre>
 
       viewport.addEventListener('pointermove', (e) => {
         if (!isDragging) return;
-        pauseAutopilot();
         const dx = e.clientX - dragStartX;
         const dy = e.clientY - dragStartY;
-        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        if (!dragMoved && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
           dragMoved = true;
+          pauseAutopilot();
         }
-        setTransform(initialDragPanX + dx, initialDragPanY + dy);
+        if (dragMoved) {
+          setTransform(initialDragPanX + dx, initialDragPanY + dy);
+        }
       });
 
       function stopDrag(e) {
@@ -1208,7 +1232,9 @@ npm run dev</code></pre>
           isDragging = false;
           viewport.classList.remove('is-dragging');
           try { viewport.releasePointerCapture(e.pointerId); } catch (_) {}
-          resumeAutopilotLater();
+          if (dragMoved) {
+            resumeAutopilotLater();
+          }
         }
       }
       viewport.addEventListener('pointerup', stopDrag);
